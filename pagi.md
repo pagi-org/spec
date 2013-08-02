@@ -225,6 +225,7 @@ Schema Syntax {#schema-syntax}
 A PAGI Schema is defined in an xml document.
 
 Here is the general structure:
+
 ```xml
 <pagis xmlns="http://pagi.digitalreasoning.com/pagis/" 
        pagis-uri="http://www.example.com/spec-example-1">
@@ -261,12 +262,40 @@ Here is the general structure:
 
 ### Diagrammatical Representations {#diagramming}
 
-In order to fully understand a schema, visualizations are often useful and necessary. To 
+In order to fully understand a schema, visualizations are often useful and 
+necessary. To maximize the usefulness of visualizations, a standard for 
+generating them is critical.
+
+!!! todo
+    Define visualization.
+
 
 Transfer Formats {#transfer-formats}
 ------------------------------------
 
+In order to store and transfer PAGIM models, we must define formats.
+
 ### XML {#xml-format}
+
+A PAGI document can be rendered as an xml document.
+
+Here is the general structure:
+
+```xml 
+<pagif xmlns="http://pagi.digitalreasoning.com/pagif/"
+       id="">
+  <node type="" id="">
+    <property key="" integer=""/>
+    <property key="">
+      <value integer=""/>
+    </property>
+    <edge type="" target=""/>
+    <feature key="">
+      <value integer=""/>
+    </feature>
+  </node>
+</pagif>
+
 ### Binary {#binary-format}
 ### JSON {#json-format}
 
