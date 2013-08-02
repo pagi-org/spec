@@ -141,7 +141,7 @@ also references an id and the document text.
 
 ### Node Structure {#node-structure}
 
-The node is the pivotal structure in this model. 
+Nodes are the pivotal structures in this model. 
 
 * A node may represent any sort of information - a token, a sentence, a phrase,
   a category, a semantic role, a part of speech, etc. 
@@ -180,8 +180,10 @@ The node is the pivotal structure in this model.
 
 * A node-type is repsonsible for defining how nodes of that type have their IDs
   generated.
-* The generation strategy must produce unique IDs. If it does not, failures will
-  occur at runtime.
+
+* The generation strategy must produce IDs that are unique within a given
+  document. If it does not, failures will occur at runtime.
+
 * IDs are generated when a new node is created.
 
 Available generation strategies:  
@@ -251,6 +253,10 @@ Sequential
      connect to the next node of the same type within the document, according to
      the associated ordering. That is, nodes connected under the Sequential
      trait must be consecutive.
+:    A Sequence is defined as a connected set of nodes with the Sequential
+     trait. A document may contain multiple Sequences of nodes of the same type;
+     this implies that there are no "previous" or "next" edges connecting nodes
+     of different Sequences.
 
 Contains
 :    Describes a node-type whose existence is defined as a container of another 
@@ -267,7 +273,9 @@ Schema Syntax {#schema-syntax}
 
 ### Core Syntax {#core-schema}
 
-A PAGI Schema is defined in an xml document.
+A PAGI Schema is defined in an XML document. Note that this XML document, which
+represents a PAGI-compliant schema, is distinct from the XML transfer format
+used to represent a particular instance of a PAGI document graph.
 
 Here is the general structure:
 
@@ -281,6 +289,18 @@ Here is the general structure:
   </node-type>
 </pagis>
 ```
+
+The "min" and "max" XML attributes on property and edge XML elements refer to
+the number of times a property or edge of the specified name may occur on a
+single node of the specified node-type. For instance, an optional property may
+be designated by the attributes min="0", max="1". A required edge that may occur
+an arbitrary number of times (for instance, designating children of a node with
+the Contains-Sequence trait) would be designated by the attributes min="1",
+max="Inf".
+
+!!! todo
+    Jared, does the above accurately reflect the intent of the min and max 
+    attributes?
 
 ### Extending Schemas {#extending-schemas}
 
@@ -313,6 +333,10 @@ generating them is critical.
 
 !!! todo
     Define visualization.
+!!! todo 
+    Jared, I'm tempted to call this out of scope for this spec. Yes, it's a
+    graph; yes, you can visualize it; yes, we expect that people will do so; but
+    I don't think we need to spell out how it is to be done.
 
 
 Transfer Formats {#transfer-formats}
@@ -346,6 +370,13 @@ Here is the general structure:
   </node>
 </pagif>
 ```
+
+Edges need not be explicitly rendered within an XML transfer format
+representation if their existence can be inferred from the traits of the
+respective node-types.
+
+!!! todo
+    Jascha will flesh out the above.
 
 ### Binary {#binary-format}
 
