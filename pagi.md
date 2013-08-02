@@ -12,16 +12,16 @@ Portable Analytics Graphical Interchange
 Abstract
 --------
 
-The document describes a specification for the interchange of analytic 
-information on graphical textual data. It describes a model, a schema 
-format, several transfer formats, and a set of common APIs.
+The document describes a specification for the interchange of analytic
+information on textual data, represented as a graph. It describes a model, a
+schema format, several transfer formats, and a set of common APIs.
 
 Table of Contents
 -----------------
 
 1. [Introduction](#introduction)
 2. [Definitions](#definitions)
-3. [Graphical Model](#graphical-model)
+3. [Graph Representation](#graph-representation)
     1. [Document Structure](#doc-structure)
     2. [Node Structure](#node-structure)
     3. [Property Types](#property-types)
@@ -47,9 +47,17 @@ Table of Contents
 Introduction {#introduction}
 ----------------------------
 
-The basic model for the analytics on a document is a graph. Each document is a 
-graph and the nodes in that graph represent the analytic information.  Those 
-nodes may have properties and relationships to other nodes.
+The basic data model used to perform analytics on a document is a graph. Each
+document is represented as a graph, with the nodes in that graph representing
+analytic results, features, and properties. Additionally, these nodes may have
+relationships to other nodes in the graph.
+
+For example, a node may represent a single word of text (or "token"). That node
+may then have a child relationship to a node representing the phrase of which
+the word is a part (a "chunk"). The chunk node may have other children,
+representing other words in the phrase. Each of these nodes may have additional
+properties, describing the analytic component that generated the node, a
+confidence associated with the node, and so on.
 
 By defining this specification in a generic manner, we gain the ability to
 develop programs that work with any pagi-compliant schema. This provides us
@@ -70,25 +78,28 @@ node
 :   A single piece of analytic information. 
 
 node-type
-:   The type of a node -- defined in the schema.
+:   The type of a node -- defined in the schema. (Examples: token, chunk, temporal)
 
 edge
-:   A relationships between two nodes.
+:   A relationship between two nodes. 
 
 property
-:   A key-value pair attached to a node and specified in the schema.
+:   A key-value pair attached to a node and specified in the schema. (Examples:
+    "provenance"="NLPTokenizer", "confidence"=0.963, "startOffset"=15,
+    "length"=3)
 
-feature
-:   A key-value pair attached to a node that is schema-less.
+feature 
+:   A key-value pair attached to a node. Features need not be specified within a
+    schema. (Examples: "NW1"="dog")
 
-id
-:   A string that combined with the node-type can uniquely identify the node.
+id 
+:   A string associated with a node that when combined with the node-type can
+    uniquely identify the node within the current document. IDs need not be
+    globally unique.
 
-document
-:   A single instance of text that is subject to analysis.
-
-document-graph
-:   The graph of all nodes and their edges within a document.
+document-graph 
+:   The graph consisting of all nodes and edges that reference a common source
+    document.
 
 pagi
 :   Portable Analytic Graphical Interchange
@@ -115,7 +126,11 @@ schema
 :   A user-generated document that describes the node-types in use for a 
     particular application. 
 
-Graphical Model {#graphical-model}
+source-document 
+:   A single instance of text that is subject to analysis. Typically a single
+    file within a filesystem.
+
+Graph Representation {#graph-representation}
 ----------------------------------
 
 ### Document Structure {#doc-structure}
@@ -132,7 +147,7 @@ The node is the pivotal structure in this model.
   a category, a semantic role, a part of speech, etc. 
 * A node has a node-type. All node-types are defined in the schema.
 * A node has an ID. The ID is a string and is unique within the scope of a 
-  node-type.
+  node-type for a single document.
 * A node has relationships to other nodes, the types of which are defined in the
   schema. 
 * A node has properties which are additional key-value pairs of information. The
@@ -193,19 +208,49 @@ Pattern
 
 ### Traits {#traits}
 
-A trait is simply a set of characteristics that may be assigned to a node-type.
+A trait is a set of characteristics that may be assigned to a node-type.
 It includes standard attributes and edges as well characteristics of that 
 node-type that must be defined in the code. Traits are defined in the spec.
 
 Currently defined traits:
 
+Span
+:    Describes a node-type that is associated with a contiguous sequence of
+     characters within the source document.
+:    Will have a nonnegative integer-valued property named "start" that refers
+     to the character offset of the beginning of the referenced character
+     sequence within the source document.
+:    Will have a positive integer-valued property named "length" that refers to
+     the number of consecutive characters in the referenced character sequence
+     within the source document.
+:    Distinct span nodes of the same span type must be non-overlapping.
+     Specifically, for any two Span nodes A and B, of the same type and within
+     the same document, then A.start != B.start. If, without loss of generality,
+     we take A.start < B.start, then A.start + A.length <= B.start.
+:    A span must reference text that exists within the source document.
+     Specifically, if we take L to be the length of the source document in
+     characters, then for any Span node A, A.start + A.length <= L.
+
 Sequential
-:    Describes a node-type that occurs in a sequence. They do not "overlap" and
-     each node has another instance of that same type before and after it.
-:    Has the single edge named "previous" that refers to the preceding node of 
-     the same type.
-:    Has the single edge named "next" that refers to the succeeding node of the
-     same type.
+:    Describes a node-type that occurs in a sequence. 
+:    The node-type must have an associated ordering that permits the formation
+     of a strictly well-ordered set. (The natural ordering of a set of unique
+     integers satisfies this condition.) [Wikipedia: Well-
+     order](https://en.wikipedia.org/wiki/Well-order)
+:    Following from the above, each node may have another instance of that same
+     node-type before and after it.
+:    May have a single edge named "previous" that refers to the preceding node of 
+     the same type, if such a node exists.
+:    May have a single edge named "next" that refers to the succeeding node of the
+     same type, if such a node exists.
+:    Previous and next edges, if present, must be bidirectional. If A.next = B,
+     then B.previous = A, and conversely. (B.previous cannot be null and must be
+     A given A.next = B, and A.next cannot be null and must be B given
+     B.previous = A.)
+:    The "previous" and "next" edges of a Sequential node, if present, must
+     connect to the next node of the same type within the document, according to
+     the associated ordering. That is, nodes connected under the Sequential
+     trait must be consecutive.
 
 Contains
 :    Describes a node-type whose existence is defined as a container of another 
