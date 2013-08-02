@@ -273,11 +273,16 @@ generating them is critical.
 Transfer Formats {#transfer-formats}
 ------------------------------------
 
-In order to store and transfer PAGIM models, we must define formats.
+In order to store and transfer PAGIM models, we must define formats. 
+
 
 ### XML {#xml-format}
 
-A PAGI document can be rendered as an xml document.
+A PAGI document can be rendered as an xml document. This is intended as the 
+primary storage and transfer format. It is simply structured and human-
+readable. 
+
+Its Internet Media Type is `application/vnd.drs-pagif+xml`.
 
 Here is the general structure:
 
@@ -295,10 +300,58 @@ Here is the general structure:
     </feature>
   </node>
 </pagif>
+```
 
 ### Binary {#binary-format}
+
+In order to facilitate efficient transfer and storage between components of
+analytic applications, we define a binary format. Current thoughts are to
+translate the xml or json formats to one of the following:
+
+* msgpack (`application/vnd.drs-pagif+msgpack`)
+* protobuf (`application/vnd.drs-pagif+protobuf`)
+
+The decision of what binary serialization to use is still an open ended question.
+We fully expect other options than these two to be proposed and considered.
+
 ### JSON {#json-format}
 
+One common usage of PAGIF will be for inclusion in RESTful APIs and for 
+in-browser editing. To facilitate this use case, a JSON format is specified.
+
+Its Internet Media Type is `application/vnd.drs-pagif+json`.
+
+Here is the general structure:
+
+```json
+{
+  "id": "",
+  "nodes": [
+    {
+      "type": "",
+      "id": "",
+      "properties":[
+        {
+          "key": "",
+          "values": []
+        }
+      ],
+      "edges":[
+        {
+          "type": "",
+          "target": ""
+        }
+      ],
+      "features":[
+        {
+          "key": "",
+          "values": []
+        }
+      ]
+    }
+  ]
+}
+```
 Common APIs {#commons-apis}
 ---------------------------
 
