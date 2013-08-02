@@ -165,8 +165,13 @@ Nodes are the pivotal structures in this model.
     * float
     * boolean
     * string
+    * enumeration
 * A property may be single or multiple valued. Minimum and Maximum arity
   may be specified as part of the schema.
+* Some property types may allow the specification of constraints:
+    * integer - minimum and maximum values may be specified, with `unbounded` being the default
+    * float - minimum and maximum values may be specified, with `unbounded` being the default
+    * enumeration - a list of possible values must be specified
 
 ### Features {#features}
 
@@ -283,7 +288,13 @@ Here is the general structure:
        pagis-uri="http://www.example.com/spec-example-1">
   <node-type named="" id-generator="">
     <trait name=""/>
-    <property name="" type="" min="" max=""/>
+    <integer-property name="" minRange="" maxRange="" minArity="" maxArity=""/>
+    <float-property name="" minRange="" maxRange="" minArity="" maxArity=""/>
+    <boolean-property name="" minArity="" maxArity=""/>
+    <string-property name="" minArity="" maxArity=""/>
+    <enum-property name="" minArity="" maxArity="">
+      <item name=""/>
+    </enum>
     <edge name="" target-node-type="" min="" max=""/>
   </node-type>
 </pagis>
@@ -310,11 +321,23 @@ Here is the general structure:
        extends="http://pagi.digitalreasoning.com/spec-example-1">
   <node-type named="" id-generator="">
     <trait name=""/>
-    <property name="" type="" min="" max=""/>
+    <integer-property name="" minRange="" maxRange="" minArity="" maxArity=""/>
+    <float-property name="" minRange="" maxRange="" minArity="" maxArity=""/>
+    <boolean-property name="" minArity="" maxArity=""/>
+    <string-property name="" minArity="" maxArity=""/>
+    <enum-property name="" minArity="" maxArity="">
+      <item name=""/>
+    </enum>
     <edge name="" target-node-type="" min="" max=""/>
   </node-type>
   <node-type-extension name="">
-    <property name="" type="" min="" max=""/>
+    <integer-property name="" minRange="" maxRange="" minArity="" maxArity=""/>
+    <float-property name="" minRange="" maxRange="" minArity="" maxArity=""/>
+    <boolean-property name="" minArity="" maxArity=""/>
+    <string-property name="" minArity="" maxArity=""/>
+    <enum-property name="" minArity="" maxArity="">
+      <item name=""/>
+    </enum>
     <edge name="" target-node-type="" min="" max=""/>
   </node-type-extension>
 </pagis>
