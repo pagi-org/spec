@@ -9,15 +9,15 @@ Portable Analytics Graphical Interchange
 
 ##### Draft 1
 
-Abstract
---------
+Abstract {#abstract}
+-------------------
 
 The document describes a specification for the interchange of analytic
 information on textual data, represented as a graph. It describes a model, a
 schema format, several transfer formats, and a set of common APIs.
 
-Table of Contents
------------------
+Table of Contents {#toc}
+------------------------
 
 1. [Introduction](#introduction)
 2. [Definitions](#definitions)
