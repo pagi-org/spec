@@ -31,7 +31,6 @@ Table of Contents
 4. [Schema Syntax](#schema-syntax)
     1. [Core Syntax](#core-schema)
     2. [Extending Schemas](#extending-schemas)
-    3. [Diagrammatical Representations](#diagramming)
 5. [Transfer Formats](#transfer-formats)
     1. [XML](#xml-format)
     2. [Binary](#binary-format)
@@ -324,20 +323,6 @@ Here is the general structure:
   </node-type-extension>
 </pagis>
 ```
-
-### Diagrammatical Representations {#diagramming}
-
-In order to fully understand a schema, visualizations are often useful and 
-necessary. To maximize the usefulness of visualizations, a standard for 
-generating them is critical.
-
-!!! todo
-    Define visualization.
-!!! todo 
-    Jared, I'm tempted to call this out of scope for this spec. Yes, it's a
-    graph; yes, you can visualize it; yes, we expect that people will do so; but
-    I don't think we need to spell out how it is to be done.
-
 
 Transfer Formats {#transfer-formats}
 ------------------------------------
