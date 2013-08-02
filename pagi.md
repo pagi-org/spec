@@ -295,11 +295,7 @@ single node of the specified node-type. For instance, an optional property may
 be designated by the attributes min="0", max="1". A required edge that may occur
 an arbitrary number of times (for instance, designating children of a node with
 the Contains-Sequence trait) would be designated by the attributes min="1",
-max="Inf".
-
-!!! todo
-    Jared, does the above accurately reflect the intent of the min and max 
-    attributes?
+max="unbounded".
 
 ### Extending Schemas {#extending-schemas}
 
