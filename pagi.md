@@ -416,12 +416,46 @@ Here is the general structure:
 Common APIs {#commons-apis}
 ---------------------------
 
+The notion of defining Common APIs is to define a common way of working with 
+the data no matter the language, in much the same way that SAX and DOM do for
+XML. One key difference between these APIs and the XML APIs is that writing
+should be accounted for in all of these.
+
+The final spec should describe these APIs in detail. For the current draft,
+simplistic overviews are given.
+
 ### Graph Query {#graph-query}
+
+This API is intended to provide an interface against which ad-hoc queries can be
+made. The syntax should be similar to Gremlin's and no particular performance 
+guarantees are given.
+
 ### Event-Based Streaming {#event-based-streaming}
+
+This API is intended as a computationally cheap way to walk through a document 
+and make decisions based on the content. It should model either the SAX or StAX
+XML APIs - in that as it encounters each node and its properties and edges some
+manipulation is done with it.
+
 ### Streaming Graphical Querying (Hybrid) {#streaming-graphical-querying}
+
+This API is actually expected to be the most useful in production analytics. The
+notion here is to be able to provide a small set of concise queries (similar to
+the ones in the Graph Query API) and allow the library to efficiently pull back
+the requested information without incurring the overhead that would be required
+to provide ad-hoc query capabilities. This would not be an optimal API for doing
+"queries based on query results" in any depth, but the query language should be
+expressive enough to allow the important information to be gleaned in a single
+pass.
+
 
 Corpus-Scoped Analytics {#corpus-scoped-analytics}
 --------------------------------------------------
 
 Future Scope {#future-scope}
 ----------------------------
+
+ * Representing non-textual data (Audio or Visual)
+ * Stackd.io integration
+ * Visualization
+
