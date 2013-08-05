@@ -103,6 +103,10 @@ document-graph
 pagi
 :   Portable Analytic Graphical Interchange
 :   This spec and everything that it encompasses.
+:   Pronounced with a hard 'G', rhymes with 'Maggie'
+:   Derived acronyms typically have a suffix-consonant added, and are 
+    pronounced the same except for the trailing 'i' transitioning from a long 
+    "ee" sound to a short i
 
 pagis
 :   Portable Analytic Graphical Interchange Schema
@@ -113,6 +117,7 @@ pagif
 :   Any of the textual or binary formats used to represent a pagi graph. 
     Typically used with the format specified as a suffix, ie. pagif-xml, 
     pagif-json
+
 
 pagim
 :   Portable Analytic Graphical Interchange Model
