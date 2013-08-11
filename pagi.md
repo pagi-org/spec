@@ -220,8 +220,9 @@ Pattern
 ### Traits {#traits}
 
 A trait is a set of characteristics that may be assigned to a node-type.
-It includes standard attributes and edges as well characteristics of that 
-node-type that must be defined in the code. Traits are defined in the spec.
+Each trait will define properties that it imports to a node type, edge types
+that it imports to a node type, and semantic restrictions on those. Traits are
+defined in the spec.
 
 Currently defined traits:
 
