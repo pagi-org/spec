@@ -1,0 +1,151 @@
+<document xmlns="http://pagi.digitalreasoning.com/pagif"
+		  id="testDoc2">
+	<node type="MY_NODE" id="edge">
+		<edge target="1ip" type="bff"/>
+	</node>
+
+	<node type="MY_NODE" id="1ip">
+		<integer-property key="confidence" value="45"/>
+	</node>
+	<node type="MY_NODE" id="2ip">
+		<integer-property key="confidence">
+			<value integer="45"/>
+		</integer-property>
+	</node>
+	<node type="MY_NODE" id="3ip">
+		<integer-property key="confidence">
+			<value integer="45"/>
+			<value integer="88"/>
+		</integer-property>
+	</node>
+	<node type="MY_NODE" id="1if">
+		<integer-feature key="probability" value="566"/>
+	</node>
+	<node type="MY_NODE" id="2if">
+		<integer-feature key="probability">
+			<value integer="566"/>
+		</integer-feature>
+	</node>
+	<node type="MY_NODE" id="3if">
+		<integer-feature key="probability">
+			<value integer="566"/>
+			<value integer="599"/>
+		</integer-feature>
+	</node>
+
+	<node type="MY_NODE" id="1fp">
+		<float-property key="confidence" value="0.45"/>
+	</node>
+	<node type="MY_NODE" id="2fp">
+		<float-property key="confidence">
+			<value float="0.45"/>
+		</float-property>
+	</node>
+	<node type="MY_NODE" id="3fp">
+		<float-property key="confidence">
+			<value float="0.45"/>
+			<value float="0.88"/>
+		</float-property>
+	</node>
+	<node type="MY_NODE" id="1ff">
+		<float-feature key="probability" value="0.566"/>
+	</node>
+	<node type="MY_NODE" id="2ff">
+		<float-feature key="probability">
+			<value float="0.566"/>
+		</float-feature>
+	</node>
+	<node type="MY_NODE" id="3ff">
+		<float-feature key="probability">
+			<value float="0.566"/>
+			<value float="0.599"/>
+		</float-feature>
+	</node>
+
+	<node type="MY_NODE" id="1bp">
+		<boolean-property key="confidence" value="true"/>
+	</node>
+	<node type="MY_NODE" id="2bp">
+		<boolean-property key="confidence">
+			<value boolean="false"/>
+		</boolean-property>
+	</node>
+	<node type="MY_NODE" id="3bp">
+		<boolean-property key="confidence">
+			<value boolean="false"/>
+			<value boolean="true"/>
+		</boolean-property>
+	</node>
+	<node type="MY_NODE" id="1bf">
+		<boolean-feature key="probability" value="false"/>
+	</node>
+	<node type="MY_NODE" id="2bf">
+		<boolean-feature key="probability">
+			<value boolean="true"/>
+		</boolean-feature>
+	</node>
+	<node type="MY_NODE" id="3bf">
+		<boolean-feature key="probability">
+			<value boolean="true"/>
+			<value boolean="false"/>
+		</boolean-feature>
+	</node>
+
+	<node type="MY_NODE" id="1sp">
+		<string-property key="confidence" value="value1"/>
+	</node>
+	<node type="MY_NODE" id="2sp">
+		<string-property key="confidence">
+			<value string="value2"/>
+		</string-property>
+	</node>
+	<node type="MY_NODE" id="3sp">
+		<string-property key="confidence">
+			<value string="value2"/>
+			<value string="value1"/>
+		</string-property>
+	</node>
+	<node type="MY_NODE" id="1sf">
+		<string-feature key="probability" value="value2"/>
+	</node>
+	<node type="MY_NODE" id="2sf">
+		<string-feature key="probability">
+			<value string="value1"/>
+		</string-feature>
+	</node>
+	<node type="MY_NODE" id="3sf">
+		<string-feature key="probability">
+			<value string="value1"/>
+			<value string="value2"/>
+		</string-feature>
+	</node>
+
+	<node type="MY_NODE" id="1ep">
+		<enum-property key="confidence" value="value1"/>
+	</node>
+	<node type="MY_NODE" id="2ep">
+		<enum-property key="confidence">
+			<value enum="value2"/>
+		</enum-property>
+	</node>
+	<node type="MY_NODE" id="3ep">
+		<enum-property key="confidence">
+			<value enum="value2"/>
+			<value enum="value1"/>
+		</enum-property>
+	</node>
+	<node type="MY_NODE" id="1ef">
+		<enum-feature key="probability" value="value2"/>
+	</node>
+	<node type="MY_NODE" id="2ef">
+		<enum-feature key="probability">
+			<value enum="value1"/>
+		</enum-feature>
+	</node>
+	<node type="MY_NODE" id="3ef">
+		<enum-feature key="probability">
+			<value enum="value1"/>
+			<value enum="value2"/>
+		</enum-feature>
+	</node>
+</document>

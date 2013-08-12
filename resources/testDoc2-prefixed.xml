@@ -1,0 +1,151 @@
+<p:document xmlns:p="http://pagi.digitalreasoning.com/pagif"
+		  id="testDoc2">
+	<p:node type="MY_NODE" id="edge">
+		<p:edge target="1ip" type="bff"/>
+	</p:node>
+
+	<p:node type="MY_NODE" id="1ip">
+		<p:integer-property key="confidence" value="45"/>
+	</p:node>
+	<p:node type="MY_NODE" id="2ip">
+		<p:integer-property key="confidence">
+			<p:value integer="45"/>
+		</p:integer-property>
+	</p:node>
+	<p:node type="MY_NODE" id="3ip">
+		<p:integer-property key="confidence">
+			<p:value integer="45"/>
+			<p:value integer="88"/>
+		</p:integer-property>
+	</p:node>
+	<p:node type="MY_NODE" id="1if">
+		<p:integer-feature key="probability" value="566"/>
+	</p:node>
+	<p:node type="MY_NODE" id="2if">
+		<p:integer-feature key="probability">
+			<p:value integer="566"/>
+		</p:integer-feature>
+	</p:node>
+	<p:node type="MY_NODE" id="3if">
+		<p:integer-feature key="probability">
+			<p:value integer="566"/>
+			<p:value integer="599"/>
+		</p:integer-feature>
+	</p:node>
+
+	<p:node type="MY_NODE" id="1fp">
+		<p:float-property key="confidence" value="0.45"/>
+	</p:node>
+	<p:node type="MY_NODE" id="2fp">
+		<p:float-property key="confidence">
+			<p:value float="0.45"/>
+		</p:float-property>
+	</p:node>
+	<p:node type="MY_NODE" id="3fp">
+		<p:float-property key="confidence">
+			<p:value float="0.45"/>
+			<p:value float="0.88"/>
+		</p:float-property>
+	</p:node>
+	<p:node type="MY_NODE" id="1ff">
+		<p:float-feature key="probability" value="0.566"/>
+	</p:node>
+	<p:node type="MY_NODE" id="2ff">
+		<p:float-feature key="probability">
+			<p:value float="0.566"/>
+		</p:float-feature>
+	</p:node>
+	<p:node type="MY_NODE" id="3ff">
+		<p:float-feature key="probability">
+			<p:value float="0.566"/>
+			<p:value float="0.599"/>
+		</p:float-feature>
+	</p:node>
+
+	<p:node type="MY_NODE" id="1bp">
+		<p:boolean-property key="confidence" value="true"/>
+	</p:node>
+	<p:node type="MY_NODE" id="2bp">
+		<p:boolean-property key="confidence">
+			<p:value boolean="false"/>
+		</p:boolean-property>
+	</p:node>
+	<p:node type="MY_NODE" id="3bp">
+		<p:boolean-property key="confidence">
+			<p:value boolean="false"/>
+			<p:value boolean="true"/>
+		</p:boolean-property>
+	</p:node>
+	<p:node type="MY_NODE" id="1bf">
+		<p:boolean-feature key="probability" value="false"/>
+	</p:node>
+	<p:node type="MY_NODE" id="2bf">
+		<p:boolean-feature key="probability">
+			<p:value boolean="true"/>
+		</p:boolean-feature>
+	</p:node>
+	<p:node type="MY_NODE" id="3bf">
+		<p:boolean-feature key="probability">
+			<p:value boolean="true"/>
+			<p:value boolean="false"/>
+		</p:boolean-feature>
+	</p:node>
+
+	<p:node type="MY_NODE" id="1sp">
+		<p:string-property key="confidence" value="value1"/>
+	</p:node>
+	<p:node type="MY_NODE" id="2sp">
+		<p:string-property key="confidence">
+			<p:value string="value2"/>
+		</p:string-property>
+	</p:node>
+	<p:node type="MY_NODE" id="3sp">
+		<p:string-property key="confidence">
+			<p:value string="value2"/>
+			<p:value string="value1"/>
+		</p:string-property>
+	</p:node>
+	<p:node type="MY_NODE" id="1sf">
+		<p:string-feature key="probability" value="value2"/>
+	</p:node>
+	<p:node type="MY_NODE" id="2sf">
+		<p:string-feature key="probability">
+			<p:value string="value1"/>
+		</p:string-feature>
+	</p:node>
+	<p:node type="MY_NODE" id="3sf">
+		<p:string-feature key="probability">
+			<p:value string="value1"/>
+			<p:value string="value2"/>
+		</p:string-feature>
+	</p:node>
+
+	<p:node type="MY_NODE" id="1ep">
+		<p:enum-property key="confidence" value="value1"/>
+	</p:node>
+	<p:node type="MY_NODE" id="2ep">
+		<p:enum-property key="confidence">
+			<p:value enum="value2"/>
+		</p:enum-property>
+	</p:node>
+	<p:node type="MY_NODE" id="3ep">
+		<p:enum-property key="confidence">
+			<p:value enum="value2"/>
+			<p:value enum="value1"/>
+		</p:enum-property>
+	</p:node>
+	<p:node type="MY_NODE" id="1ef">
+		<p:enum-feature key="probability" value="value2"/>
+	</p:node>
+	<p:node type="MY_NODE" id="2ef">
+		<p:enum-feature key="probability">
+			<p:value enum="value1"/>
+		</p:enum-feature>
+	</p:node>
+	<p:node type="MY_NODE" id="3ef">
+		<p:enum-feature key="probability">
+			<p:value enum="value1"/>
+			<p:value enum="value2"/>
+		</p:enum-feature>
+	</p:node>
+</p:document>

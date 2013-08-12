@@ -31,14 +31,14 @@ Table of Contents {#toc}
 4. [Schema Syntax](#schema-syntax)
     1. [Core Syntax](#core-schema)
     2. [Extending Schemas](#extending-schemas)
-5. [Transfer Formats](#transfer-formats)
-    1. [XML](#xml-format)
-    2. [Binary](#binary-format)
-    3. [JSON](#json-format)
-6. [Common APIs](#commons-apis)
+5. [Common APIs](#commons-apis)
     1. [Graph Query](#graph-query)
     2. [Event-Based Streaming](#event-based-streaming)
     3. [Streaming Graphical Querying (Hybrid)](#streaming-graphical-querying)
+6. [Transfer Formats](#transfer-formats)
+    1. [XML](#xml-format)
+    2. [Binary](#binary-format)
+    3. [JSON](#json-format)
 7. [Corpus-Scoped Analytics](#corpus-scoped-analytics)
 8. [Future Scope](#future-scope)
 
@@ -348,6 +348,264 @@ Here is the general structure:
   </node-type-extension>
 </pagis>
 ```
+Common APIs {#commons-apis}
+---------------------------
+
+The notion of defining Common APIs is to define a common way of working with
+the data no matter the language, in much the same way that SAX and DOM do for
+XML. One key difference between these APIs and the XML APIs is that writing
+should be accounted for in all of these.
+
+The final spec should describe these APIs in detail. For the current draft,
+simplistic overviews are given.
+
+### Event-Based Streaming {#event-based-streaming}
+
+This API is intended as a computationally cheap way to walk through a document
+and make decisions based on the content. The Stream is the lowest level API
+for reading and writing pagi structures. This API can be though of as a stream
+of events. Each event type has a set of parameters. Some of these events define
+a "context" -- and as such come in START/END pairs. Some of these events simply
+provide values.
+
+DOC_START
+:    Indicates the start of a document.
+:    Is only valid outside of any context.
+:    Has the *id* parameter indicating the document id.
+:    Indicates the beginning of a "DOC" context.
+
+DOC_END
+:    Indicates the end of a document.
+:    Is only valid in the "DOC" context.
+:    Indicates the ending of a "DOC" context.
+
+NODE_START
+:    Represents the beginning of information about a node.
+:    Is only valid in the "DOC" context.
+:    Has the *id* parameter indicating the node id.
+:    Has the *nodeType* parameter indicating the node type.
+:    Indicates the beginning of a "NODE" context.
+
+NODE_END
+:    Indicates that there is no more information about the current node.
+:    Is only valid in the "NODE" context.
+:    Indicates the ending of a "NODE" context.
+
+EDGE
+:    Indicates an edge on the current node.
+:    Is only valid in the "NODE" context, prior to any FEATURE events.
+:    Has the *edgeType* parameter indicating the type of the edge.
+:    Has the *targetId* parameter indicating the id of the node that this edge
+     points to.
+
+PROPERTY_START
+:    Indicates the beginning of information about a property.
+:    Is only valid in the "NODE" context, prior to any EDGE events.
+:    Has the *key* parameter indicating the property key.
+:    Has the *valueType* parameter indicating the type of the property values.
+     Valid values are INTEGER, FLOAT, BOOLEAN, STRING, ENUM.
+:    Indicates the beginning of a "PROPERTY" context.
+
+PROPERTY_END
+:    Indicates that there are no more values for the current property.
+:    Is only valid in the "PROPERTY" context.
+:    Indicates the ending of a "PROPERTY" context.
+
+FEATURE_START
+:    Indicates the beginning of information about a feature.
+:    Is only valid in the "NODE" context.
+:    Has the *key* parameter indicating the feature key.
+:    Has the *valueType* parameter indicating the type of the feature values.
+     Valid values are INTEGER, FLOAT, BOOLEAN, STRING, ENUM.
+:    Indicates the beginning of a "FEATURE" context.
+
+FEATURE_END
+:    Indicates that there are no more values for the current feature.
+:    Is only valid in the "FEATURE" context.
+:    Indicates the ending of a "FEATURE" context.
+
+VALUE_INTEGER
+:    Indicates an integer value on the current property or feature.
+:    Is only valid in a "PROPERTY" or "FEATURE" context where *valueType* is "INTEGER".
+:    Has the *value* parameter that has the value.
+
+VALUE_FLOAT
+:    Indicates a float value on the current property or feature.
+:    Is only valid in a "PROPERTY" or "FEATURE" context where *valueType* is "FLOAT".
+:    Has the *value* parameter that has the value.
+
+VALUE_BOOLEAN
+:    Indicates a boolean value on the current property or feature.
+:    Is only valid in a "PROPERTY" or "FEATURE" context where *valueType* is "BOOLEAN".
+:    Has the *value* parameter that has the value.
+
+VALUE_STRING
+:    Indicates a string value on the current property or feature.
+:    Is only valid in a "PROPERTY" or "FEATURE" context where *valueType* is "STRING".
+:    Has the *value* parameter that has the value.
+
+VALUE_ENUM
+:    Indicates a enum value on the current property or feature.
+:    Is only valid in a "PROPERTY" or "FEATURE" context where *valueType* is "ENUM".
+:    Has the *value* parameter that has the value.
+
+There are two sides to interacting with a stream - a program may produce
+events or consume events.
+
+#### Event Production
+
+In order to produce events, a program will implement an EventProducer. Typical
+implementations are parsers or graph adapters. An EventProducer is a stateless
+construct that provides two methods:
+
+createState
+:    Takes some, implementation-specific input - oftentimes an in-memory data
+     structure or a file.
+:    Returns an object representing the state of the stream.
+
+nextEvent
+:    Receives the state object and a callback, provides the next event in the
+     stream via the callback.
+:    Returns the new state of the stream. This may be the same data structure,
+     modified, or a new one.
+
+#### Event Consumption -- Push Style
+
+The first of two consumer styles, in this style in order to consume events, a
+program will implement the EventConsumer. This basically serves as
+a stateless callback that is notified of every event coming from the stream, in
+order. The EventConsumer has one callback method for each event type. Each
+method is passed the consumer state and the parameters for that event. An
+EventConsumer has the option to not implement callback methods for feature
+events. If the EventConsumer does not implement callback methods for feature
+events, then the value events inside of the FEATURE context will also not be
+passed to the consumer. Dynamic languages may allow any event callback to be
+optional, provided that the absence of those that start contexts causes any
+events within that context to not be provided as well.
+
+createState
+:    Takes some, implementation-specific output - oftentimes a graph builder
+     or a output file.
+:    Returns an object representing the state of the consumer.
+
+consumeDocStart
+
+consumeDocEnd
+
+consumeNodeStart
+
+consumeNodeEnd
+
+consumePropertyStart
+
+consumePropertyEnd
+
+consumeFeatureStart
+
+consumeFeatureEnd
+
+consumeEdge
+
+consumeValueInteger
+
+consumeValueFloat
+
+consumeValueBoolean
+
+consumeValueString
+
+consumeValueEnum
+
+#### Event Consumption -- Pull Style
+
+The second of the two consumer styles, in this style the stream is represented
+as an object an a program will consume the events by repeatedly asking the
+stream for the next one.
+
+nextEvent
+:    Increments the counter in the stream to the next event.
+:    Returns the event type of the next event.
+
+getEventType
+:    Returns the event type of the current event.
+
+getId
+:    Returns the ID of the document or node.
+:    Valid in DOC_START and NODE_START.
+
+getNodeType
+:    Returns the type of the node.
+:    Valid in NODE_START.
+
+getKey
+:    Returns the key of the property or feature.
+:    Valid in PROPERTY_START or FEATURE_START.
+
+getValueType
+:    Returns the type of the property or feature.
+:    Valid in PROPERTY_START or FEATURE_START.
+
+getIntegerValue
+:    Returns the integer value.
+:    Valid in VALUE_INTEGER.
+
+getFloatValue
+:    Returns the float value.
+:    Valid in VALUE_FLOAT.
+
+getBooleanValue
+:    Returns the boolean value.
+:    Valid in VALUE_BOOLEAN.
+
+getStringValue
+:    Returns the string value.
+:    Valid in VALUE_STRING.
+
+getEnumValue
+:    Returns the enum value.
+:    Valid in VALUE_ENUM.
+
+getEdgeType
+:    Returns the type of the edge.
+:    Valid in EDGE.
+
+getEdgeTargetId
+:    Returns the id of the target node of the edge.
+:    Valid in EDGE.
+
+### Graph Query {#graph-query}
+
+This API is intended to provide an interface against which ad-hoc queries can be
+made. The syntax should be similar to Gremlin's and no particular performance
+guarantees are given.
+
+### Streaming Graphical Querying (Hybrid) {#streaming-graphical-querying}
+
+This API is actually expected to be the most useful in production analytics. The
+notion here is to be able to provide a small set of concise queries (similar to
+the ones in the Graph Query API) and allow the library to efficiently pull back
+the requested information without incurring the overhead that would be required
+to provide ad-hoc query capabilities. This would not be an optimal API for doing
+"queries based on query results" in any depth, but the query language should be
+expressive enough to allow the important information to be gleaned in a single
+pass.
+
+a document
+and make decisions based on the content. It should model either the SAX or StAX
+XML APIs - in that as it encounters each node and its properties and edges some
+manipulation is done with it.
+
+### Streaming Graphical Querying (Hybrid) {#streaming-graphical-querying}
+
+This API is actually expected to be the most useful in production analytics. The
+notion here is to be able to provide a small set of concise queries (similar to
+the ones in the Graph Query API) and allow the library to efficiently pull back
+the requested information without incurring the overhead that would be required
+to provide ad-hoc query capabilities. This would not be an optimal API for doing
+"queries based on query results" in any depth, but the query language should be
+expressive enough to allow the important information to be gleaned in a single
+pass.
+
 
 Transfer Formats {#transfer-formats}
 ------------------------------------
@@ -438,41 +696,6 @@ Here is the general structure:
   ]
 }
 ```
-Common APIs {#commons-apis}
----------------------------
-
-The notion of defining Common APIs is to define a common way of working with 
-the data no matter the language, in much the same way that SAX and DOM do for
-XML. One key difference between these APIs and the XML APIs is that writing
-should be accounted for in all of these.
-
-The final spec should describe these APIs in detail. For the current draft,
-simplistic overviews are given.
-
-### Graph Query {#graph-query}
-
-This API is intended to provide an interface against which ad-hoc queries can be
-made. The syntax should be similar to Gremlin's and no particular performance 
-guarantees are given.
-
-### Event-Based Streaming {#event-based-streaming}
-
-This API is intended as a computationally cheap way to walk through a document 
-and make decisions based on the content. It should model either the SAX or StAX
-XML APIs - in that as it encounters each node and its properties and edges some
-manipulation is done with it.
-
-### Streaming Graphical Querying (Hybrid) {#streaming-graphical-querying}
-
-This API is actually expected to be the most useful in production analytics. The
-notion here is to be able to provide a small set of concise queries (similar to
-the ones in the Graph Query API) and allow the library to efficiently pull back
-the requested information without incurring the overhead that would be required
-to provide ad-hoc query capabilities. This would not be an optimal API for doing
-"queries based on query results" in any depth, but the query language should be
-expressive enough to allow the important information to be gleaned in a single
-pass.
-
 
 Corpus-Scoped Analytics {#corpus-scoped-analytics}
 --------------------------------------------------
