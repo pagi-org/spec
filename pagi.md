@@ -31,9 +31,10 @@ Table of Contents {#toc}
 4. [Schema Syntax](#schema-syntax)
     1. [Core Syntax](#core-schema)
     2. [Extending Schemas](#extending-schemas)
+    3. [Schema API](#schema-api)
 5. [Common APIs](#commons-apis)
-    1. [Graph Query](#graph-query)
-    2. [Event-Based Streaming](#event-based-streaming)
+    1. [Event-Based Streaming](#event-based-streaming)
+    2. [Graph Query](#graph-query)
     3. [Streaming Graphical Querying (Hybrid)](#streaming-graphical-querying)
 6. [Transfer Formats](#transfer-formats)
     1. [XML](#xml-format)
@@ -332,20 +333,20 @@ Here is the general structure:
 ```xml
 <pagis xmlns="http://pagi.digitalreasoning.com/pagis/" 
        pagis-uri="http://www.example.com/spec-example-1">
-  <node-type named="" id-generator="">
+  <nodeType name="" idGenerator="">
     <span/>
     <sequence/>
     <container edge-type=""/>
-    <span-container spanType=""/>
-    <integer-property name="" minRange="" maxRange="" minArity="" maxArity=""/>
-    <float-property name="" minRange="" maxRange="" minArity="" maxArity=""/>
-    <boolean-property name="" minArity="" maxArity=""/>
-    <string-property name="" minArity="" maxArity=""/>
-    <enum-property name="" minArity="" maxArity="">
+    <spanContainer spanType=""/>
+    <integerProperty name="" minRange="" maxRange="" minArity="" maxArity=""/>
+    <floatProperty name="" minRange="" maxRange="" minArity="" maxArity=""/>
+    <booleanProperty name="" minArity="" maxArity=""/>
+    <stringProperty name="" minArity="" maxArity=""/>
+    <enumProperty name="" minArity="" maxArity="">
       <item name=""/>
     </enum>
-    <edge name="" target-node-type="" min="" max=""/>
-  </node-type>
+    <edgeType name="" targetNodeType="" minArity="" maxArity=""/>
+  </nodeType>
 </pagis>
 ```
 
@@ -368,34 +369,95 @@ Here is the general structure:
 <pagis xmlns="http://pagi.digitalreasoning.com/pagis/"
        pagis-uri="http://www.example.com/spec-extension-example-1"
        extends="http://pagi.digitalreasoning.com/spec-example-1">
-  <node-type named="" id-generator="">
+  <nodeType name="" id-generator="">
     <span/>
     <sequence/>
-    <container>
-      <container-edge-type value=""/>
-    </container>
-    <span-container spanType=""/>
-    <integer-property name="" minRange="" maxRange="" minArity="" maxArity=""/>
-    <float-property name="" minRange="" maxRange="" minArity="" maxArity=""/>
-    <boolean-property name="" minArity="" maxArity=""/>
-    <string-property name="" minArity="" maxArity=""/>
-    <enum-property name="" minArity="" maxArity="">
+    <container edgeType=""/>
+    <spanContainer spanType=""/>
+    <integerProperty name="" minRange="" maxRange="" minArity="" maxArity=""/>
+    <floatProperty name="" minRange="" maxRange="" minArity="" maxArity=""/>
+    <booleanProperty name="" minArity="" maxArity=""/>
+    <stringProperty name="" minArity="" maxArity=""/>
+    <enumProperty name="" minArity="" maxArity="">
       <item name=""/>
-    </enum>
-    <edge name="" target-node-type="" min="" max=""/>
+    </enumProperty>
+    <edgeType name="" targetNodeType="" minArity="" maxArity=""/>
   </node-type>
-  <node-type-extension name="">
-    <integer-property name="" minRange="" maxRange="" minArity="" maxArity=""/>
-    <float-property name="" minRange="" maxRange="" minArity="" maxArity=""/>
-    <boolean-property name="" minArity="" maxArity=""/>
-    <string-property name="" minArity="" maxArity=""/>
-    <enum-property name="" minArity="" maxArity="">
+  <nodeTypeExtension extends="">
+    <integerProperty name="" minRange="" maxRange="" minArity="" maxArity=""/>
+    <floatProperty name="" minRange="" maxRange="" minArity="" maxArity=""/>
+    <booleanProperty name="" minArity="" maxArity=""/>
+    <stringProperty name="" minArity="" maxArity=""/>
+    <enumProperty name="" minArity="" maxArity="">
       <item name=""/>
-    </enum>
-    <edge name="" target-node-type="" min="" max=""/>
-  </node-type-extension>
+    </enumProperty>
+    <edgeType name="" targetNodeType="" min="" max=""/>
+  </nodeTypeExtension>
 </pagis>
 ```
+
+### Schema API {#schema-api}
+
+For the purposes of interacting with a graph within code, it is necessary to have
+knowledge of the schema that applies to that graph. It is necessary that a schema
+be available for introspection along with the [common apis](#common-apis) defined
+in the following section.
+
+A schema is represented as a collection of "nodeType" objects. Each NodeType object
+provides all specified information for that node type, and seamlessly merges properties
+and edges provided by traits as well as extensions.
+
+Following is a general notion of the types and methods available in the Schema API:
+
+#### Schema
+
+* String getName()
+* Map<String, NodeType> getNodeTypes()
+* Schema getParentSchema()
+
+#### NodeType
+
+* String getName()
+* boolean isSpan()
+* boolean isSequence()
+* boolean isContainer()
+* String[] getContainerEdgeTypes()
+* boolean isSpanContainer()
+* String getSpanType()
+* Map<String, PropertySpec> getPropertySpecs()
+* Map<String, EdgeSpec> getEdgeSpecs()
+
+#### PropertySpec
+
+* ValueType getValueType()
+* String getName()
+* int getMinArity()
+* int getMaxArity() // -1 represents unbounded unless a language has a better representation
+* IntegerRestrictions getIntegerRestrictions()
+* FloatRestrictions getFloatRestrictions()
+* EnumRestrictions getEnumRestrictions()
+
+#### IntegerRestrictions
+
+* int getMinRange()
+* int getMaxRange()
+
+#### FloatRestrictions
+
+* float getMinRange()
+* float getMaxRange()
+
+#### EnumRestrictions
+
+* String[] getItems()
+
+#### EdgeSpec
+
+* String getName()
+* String getTargetNodeType()
+* int getMinArity()
+* int getMaxArity()
+
 Common APIs {#commons-apis}
 ---------------------------
 

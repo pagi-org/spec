@@ -10,6 +10,7 @@
             </xsd:choice>
         </xsd:sequence>
         <xsd:attribute name="name" type="xsd:string"/>
+        <xsd:attribute name="extends" type="xsd:string" use="optional"/>
     </xsd:complexType>
 
     <xsd:complexType name="nodeType">
@@ -21,7 +22,7 @@
                     <xsd:attribute name="edgeType" type="xsd:string"/>
                 </xsd:complexType>
             </xsd:element>
-            <xsd:element name="span-container" minOccurs="0" maxOccurs="1">
+            <xsd:element name="spanContainer" minOccurs="0" maxOccurs="1">
                 <xsd:complexType>
                     <xsd:attribute name="spanType" type="xsd:string"/>
                 </xsd:complexType>
@@ -50,6 +51,7 @@
             </xsd:choice>
             <xsd:element name="edgeType" type="edgeType" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
+        <xsd:attribute name="extends" type="xsd:string"/>
     </xsd:complexType>
 
     <xsd:complexType name="integerProperty">
@@ -86,13 +88,13 @@
     <xsd:attributeGroup name="propertyBase">
         <xsd:attribute name="name" type="xsd:string"/>
         <xsd:attribute name="minArity" type="xsd:nonNegativeInteger"/>
-        <xsd:attribute name="maxArity" type="xsd:nonNegativeInteger"/>
+        <xsd:attribute name="maxArity" type="xsd:allNNI"/>
     </xsd:attributeGroup>
 
     <xsd:complexType name="edgeType">
         <xsd:attribute name="name" type="xsd:string"/>
         <xsd:attribute name="targetNodeType" type="xsd:string"/>
-        <xsd:attribute name="min" type="xsd:nonNegativeInteger"/>
-        <xsd:attribute name="max" type="xsd:nonNegativeInteger"/>
+        <xsd:attribute name="minArity" type="xsd:nonNegativeInteger"/>
+        <xsd:attribute name="maxArity" type="xsd:allNNI"/>
     </xsd:complexType>
 </xsd:schema>
