@@ -287,8 +287,8 @@ Currently defined traits:
 
 #### Container
 * Parameters
-    * **edgeTypes** -- a list of edgeTypes that should be considered as referring
-                       to "contained" nodes
+    * **edgeType** -- the edgeType that should be considered as referring
+                      to "contained" nodes
 * Properties
     * *none*
 * Edges
@@ -296,9 +296,12 @@ Currently defined traits:
 * Semantic Description
     * Describes a node-type whose existence is defined as a container of another
       node-type.
-    * Parameter **edgeTypes** specifies edges which refer to "contained" nodes
+    * Parameter **edgeType** specifies the edge which refer to "contained" nodes
+    * May be specified more than once on a given node-type, each with a different
+      **edgeType**.
     * Traversal APIs must enable referring to all "contained" edge types as a single
       construct.
+
 
 #### Span-Container
 * Parameters
@@ -332,9 +335,7 @@ Here is the general structure:
   <node-type named="" id-generator="">
     <span/>
     <sequence/>
-    <container>
-      <container-edge-type value=""/>
-    </container>
+    <container edge-type=""/>
     <span-container spanType=""/>
     <integer-property name="" minRange="" maxRange="" minArity="" maxArity=""/>
     <float-property name="" minRange="" maxRange="" minArity="" maxArity=""/>
@@ -368,7 +369,12 @@ Here is the general structure:
        pagis-uri="http://www.example.com/spec-extension-example-1"
        extends="http://pagi.digitalreasoning.com/spec-example-1">
   <node-type named="" id-generator="">
-    <trait name=""/>
+    <span/>
+    <sequence/>
+    <container>
+      <container-edge-type value=""/>
+    </container>
+    <span-container spanType=""/>
     <integer-property name="" minRange="" maxRange="" minArity="" maxArity=""/>
     <float-property name="" minRange="" maxRange="" minArity="" maxArity=""/>
     <boolean-property name="" minArity="" maxArity=""/>
