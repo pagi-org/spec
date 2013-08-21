@@ -224,62 +224,96 @@ Pattern
 
 A trait is a set of characteristics that may be assigned to a node-type.
 Each trait will define properties that it imports to a node type, edge types
-that it imports to a node type, and semantic restrictions on those. Traits are
-defined in the spec.
+that it imports to a node type, and semantic restrictions on those. Traits may
+also define parameters that must be supplied when they are defined on a node type.
+Traits are only defined in the spec.
 
 Currently defined traits:
 
-Span
-:    Describes a node-type that is associated with a contiguous sequence of
-     characters within the source document.
-:    Will have a nonnegative integer-valued property named "start" that refers
-     to the character offset of the beginning of the referenced character
-     sequence within the source document.
-:    Will have a positive integer-valued property named "length" that refers to
-     the number of consecutive characters in the referenced character sequence
-     within the source document.
-:    Distinct span nodes of the same span type must be non-overlapping.
-     Specifically, for any two Span nodes A and B, of the same type and within
-     the same document, then A.start != B.start. If, without loss of generality,
-     we take A.start < B.start, then A.start + A.length <= B.start.
-:    A span must reference text that exists within the source document.
-     Specifically, if we take L to be the length of the source document in
-     characters, then for any Span node A, A.start + A.length <= L.
+#### Span
+* Parameters
+    * *none*
+* Properties
+    * **start** -- the offset from the beginning of the referenced character
+                   sequence within the document
+    * **length** -- the length of the referenced character sequence
+* Edges
+    * *none*
+* Semantic Description
+    * Describes a node-type that is associated with a contiguous sequence of
+      characters within the source document.
+    * Will have a nonnegative integer-valued property named "start" that refers
+      to the character offset of the beginning of the referenced character
+      sequence within the source document.
+    * Will have a positive integer-valued property named "length" that refers to
+      the number of consecutive characters in the referenced character sequence
+      within the source document.
+    * A span must reference text that exists within the source document.
+      Specifically, if we take L to be the length of the source document in
+      characters, then for any Span node A, A.start + A.length <= L.
 
-Sequential
-:    Describes a node-type that occurs in a sequence. 
-:    The node-type must have an associated ordering that permits the formation
-     of a strictly well-ordered set. (The natural ordering of a set of unique
-     integers satisfies this condition.) [Wikipedia: Well-
-     order](https://en.wikipedia.org/wiki/Well-order)
-:    Following from the above, each node may have another instance of that same
-     node-type before and after it.
-:    May have a single edge named "previous" that refers to the preceding node of 
-     the same type, if such a node exists.
-:    May have a single edge named "next" that refers to the succeeding node of the
-     same type, if such a node exists.
-:    Previous and next edges, if present, must be bidirectional. If A.next = B,
-     then B.previous = A, and conversely. (B.previous cannot be null and must be
-     A given A.next = B, and A.next cannot be null and must be B given
-     B.previous = A.)
-:    The "previous" and "next" edges of a Sequential node, if present, must
-     connect to the next node of the same type within the document, according to
-     the associated ordering. That is, nodes connected under the Sequential
-     trait must be consecutive.
-:    A Sequence is defined as a connected set of nodes with the Sequential
-     trait. A document may contain multiple Sequences of nodes of the same type;
-     this implies that there are no "previous" or "next" edges connecting nodes
-     of different Sequences.
+#### Sequence
+* Parameters
+    * *none*
+* Properties
+    * *none*
+* Edges
+    * **next** -- refers to a node of the same type, has a maximum of 1, and
+                  has the option to not exist
+* Semantic Description
+    * Describes a node-type that occurs in a sequence.
+    * The node-type must have an associated ordering that permits the formation
+      of a strictly well-ordered set. (The natural ordering of a set of unique
+      integers satisfies this condition.) [Wikipedia: Well-
+      order](https://en.wikipedia.org/wiki/Well-order)
+    * Following from the above, each node may have another instance of that same
+      node-type before and after it.
+    * May have a single edge named "previous" that refers to the preceding node of
+      the same type, if such a node exists.
+    * May have a single edge named "next" that refers to the succeeding node of the
+      same type, if such a node exists.
+    * Previous and next edges, if present, must be bidirectional. If A.next = B,
+      then B.previous = A, and conversely. (B.previous cannot be null and must be
+      A given A.next = B, and A.next cannot be null and must be B given
+      B.previous = A.)
+    * The "previous" and "next" edges of a Sequential node, if present, must
+      connect to the next node of the same type within the document, according to
+      the associated ordering. That is, nodes connected under the Sequential
+      trait must be consecutive.
+    * A Sequence is defined as a connected set of nodes with the Sequential
+      trait. A document may contain multiple Sequences of nodes of the same type;
+      this implies that there are no "previous" or "next" edges connecting nodes
+      of different Sequences.
 
-Contains
-:    Describes a node-type whose existence is defined as a container of another 
-     node-type. 
-:    Has the multi-valued edge named "contains" that refer to nodes of the 
-     contained type.
+#### Container
+* Parameters
+    * **edgeTypes** -- a list of edgeTypes that should be considered as referring
+                       to "contained" nodes
+* Properties
+    * *none*
+* Edges
+    * *none*
+* Semantic Description
+    * Describes a node-type whose existence is defined as a container of another
+      node-type.
+    * Parameter **edgeTypes** specifies edges which refer to "contained" nodes
+    * Traversal APIs must enable referring to all "contained" edge types as a single
+      construct.
 
-Contains-Sequence
-:    A special case of Contains where the contained node-type is Sequential. All
-     contained nodes must be a single sequence.
+#### Span-Container
+* Parameters
+    * **spanType** -- the node type that is spanned/contained by this one - must be a
+                      "Sequence" and one of either "Span" or "Span-Container"
+* Properties
+    * *none*
+* Edges
+    * **first** -- refers to the first node in the contained span
+    * **last** -- refers to the last node in the contained span
+* Semantic Description
+    * Describes a node-type whose existence is defined as a span over other nodes that
+      define a span. These may be direct "Span" nodes, or other "Span-Container" nodes.
+      In both cases, the contained node type must also be "Sequential".
+    * Traversal APIs must enable referring to the entire spanned text of a "Span-Container".
 
 Schema Syntax {#schema-syntax}
 ------------------------------
@@ -296,7 +330,12 @@ Here is the general structure:
 <pagis xmlns="http://pagi.digitalreasoning.com/pagis/" 
        pagis-uri="http://www.example.com/spec-example-1">
   <node-type named="" id-generator="">
-    <trait name=""/>
+    <span/>
+    <sequence/>
+    <container>
+      <container-edge-type value=""/>
+    </container>
+    <span-container spanType=""/>
     <integer-property name="" minRange="" maxRange="" minArity="" maxArity=""/>
     <float-property name="" minRange="" maxRange="" minArity="" maxArity=""/>
     <boolean-property name="" minArity="" maxArity=""/>
@@ -581,7 +620,6 @@ Transfer Formats {#transfer-formats}
 
 In order to store and transfer PAGIM models, we must define formats. 
 
-
 ### XML {#xml-format}
 
 A PAGI document can be rendered as an xml document. This is intended as the 
@@ -608,67 +646,19 @@ Here is the general structure:
 </pagif>
 ```
 
-Here is the xml schema:
-
-```xml
-
-Edges need not be explicitly rendered within an XML transfer format
-representation if their existence can be inferred from the traits of the
-respective node-types.
-
-!!! todo
-    Jascha will flesh out the above.
+The actual xsd is referenced [in the appendix](#xml-format-xsd).
 
 ### Binary {#binary-format}
 
 In order to facilitate efficient transfer and storage between components of
 analytic applications, we define a binary format. Current thoughts are to
-translate the xml or json formats to one of the following:
+translate the xml format to one of the following:
 
 * msgpack (`application/vnd.drs-pagif+msgpack`)
 * protobuf (`application/vnd.drs-pagif+protobuf`)
 
 The decision of what binary serialization to use is still an open ended question.
 We fully expect other options than these two to be proposed and considered.
-
-### JSON {#json-format}
-
-One common usage of PAGIF will be for inclusion in RESTful APIs and for 
-in-browser editing. To facilitate this use case, a JSON format is specified.
-
-Its Internet Media Type is `application/vnd.drs-pagif+json`.
-
-Here is the general structure:
-
-```json
-{
-  "id": "",
-  "nodes": [
-    {
-      "type": "",
-      "id": "",
-      "properties":[
-        {
-          "key": "",
-          "values": []
-        }
-      ],
-      "edges":[
-        {
-          "type": "",
-          "target": ""
-        }
-      ],
-      "features":[
-        {
-          "key": "",
-          "values": []
-        }
-      ]
-    }
-  ]
-}
-```
 
 Corpus-Scoped Analytics {#corpus-scoped-analytics}
 --------------------------------------------------
@@ -679,237 +669,17 @@ Future Scope {#future-scope}
  * Representing non-textual data (Audio or Visual)
  * Stackd.io integration
  * Visualization
+ * Views in CSV and GraphML
 
 Appendices {#appendices}
 ------------------------
 
 ###XML Format XSD {#xml-format-xsd}
 ```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1.0-draft1" targetNamespace="http://pagi.digitalreasoning.com/pagif">
-    <!-- the root element 'document' -->
-    <xsd:element name="document" type="document"/>
-
-    <!-- An annotated document has optional text, meta and annotation elements, and documentId and schemaVersion attributes -->
-    <xsd:complexType name="document">
-        <xsd:sequence>
-            <xsd:element name="node" type="node" minOccurs="0" maxOccurs="unbounded"/>
-        </xsd:sequence>
-        <xsd:attribute name="id" type="xsd:string" use="required"/>
-    </xsd:complexType>
-
-    <xsd:complexType name="node">
-        <xsd:sequence>
-            <xsd:choice minOccurs="0" maxOccurs="unbounded">
-                <xsd:element name="integer-property" type="integerValued"/>
-                <xsd:element name="float-property" type="floatValued"/>
-                <xsd:element name="boolean-property" type="booleanValued"/>
-                <xsd:element name="string-property" type="stringValued"/>
-                <xsd:element name="enum-property" type="enumValued"/>
-            </xsd:choice>
-            <xsd:element name="edge" type="edge" minOccurs="0" maxOccurs="unbounded"/>
-            <xsd:choice minOccurs="0" maxOccurs="unbounded">
-                <xsd:element name="integer-feature" type="integerValued"/>
-                <xsd:element name="float-feature" type="floatValued"/>
-                <xsd:element name="boolean-feature" type="booleanValued"/>
-                <xsd:element name="string-feature" type="stringValued"/>
-                <xsd:element name="enum-feature" type="enumValued"/>
-            </xsd:choice>
-        </xsd:sequence>
-        <xsd:attribute name="type" type="xsd:string" use="required"/>
-        <xsd:attribute name="id" type="xsd:string" use="required"/>
-    </xsd:complexType>
-
-    <xsd:complexType name="edge">
-        <xsd:attribute name="type" type="xsd:string" use="required"/>
-        <xsd:attribute name="target" type="xsd:string" use="required"/>
-    </xsd:complexType>
-
-    <xsd:complexType name="valued">
-        <xsd:attribute name="key" type="xsd:string" use="required"/>
-    </xsd:complexType>
-
-    <xsd:complexType name="integerValued">
-        <xsd:complexContent>
-            <xsd:extension base="valued">
-                <xsd:sequence>
-                    <xsd:element name="value">
-                        <xsd:complexType>
-                            <xsd:attribute name="integer" type="xsd:integer" use="required"/>
-                        </xsd:complexType>
-                    </xsd:element>
-                </xsd:sequence>
-                <xsd:attribute name="value" type="xsd:integer"/>
-            </xsd:extension>
-        </xsd:complexContent>
-    </xsd:complexType>
-
-    <xsd:complexType name="floatValued">
-        <xsd:complexContent>
-            <xsd:extension base="valued">
-                <xsd:sequence>
-                    <xsd:element name="value">
-                        <xsd:complexType>
-                            <xsd:attribute name="float" type="xsd:float" use="required"/>
-                        </xsd:complexType>
-                    </xsd:element>
-                </xsd:sequence>
-                <xsd:attribute name="value" type="xsd:float"/>
-            </xsd:extension>
-        </xsd:complexContent>
-    </xsd:complexType>
-
-    <xsd:complexType name="booleanValued">
-        <xsd:complexContent>
-            <xsd:extension base="valued">
-                <xsd:sequence>
-                    <xsd:element name="value">
-                        <xsd:complexType>
-                            <xsd:attribute name="boolean" type="xsd:boolean" use="required"/>
-                        </xsd:complexType>
-                    </xsd:element>
-                </xsd:sequence>
-                <xsd:attribute name="value" type="xsd:boolean"/>
-            </xsd:extension>
-        </xsd:complexContent>
-    </xsd:complexType>
-
-    <xsd:complexType name="stringValued">
-        <xsd:complexContent>
-            <xsd:extension base="valued">
-                <xsd:sequence>
-                    <xsd:element name="value">
-                        <xsd:complexType>
-                            <xsd:attribute name="string" type="xsd:string" use="required"/>
-                        </xsd:complexType>
-                    </xsd:element>
-                </xsd:sequence>
-                <xsd:attribute name="value" type="xsd:string"/>
-            </xsd:extension>
-        </xsd:complexContent>
-    </xsd:complexType>
-
-    <xsd:complexType name="enumValued">
-        <xsd:complexContent>
-            <xsd:extension base="valued">
-                <xsd:sequence>
-                    <xsd:element name="value">
-                        <xsd:complexType>
-                            <xsd:attribute name="enum" type="xsd:string" use="required"/>
-                        </xsd:complexType>
-                    </xsd:element>
-                </xsd:sequence>
-                <xsd:attribute name="value" type="xsd:string"/>
-            </xsd:extension>
-        </xsd:complexContent>
-    </xsd:complexType>
-</xsd:schema>
+<<<<pagif-xml.xsd>>>>
 ```
 
 ###PAGI Schema XSD {#pagi-schema-xsd}
 ```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1.0-draft1" targetNamespace="http://pagi.digitalreasoning.com/pagis">
-    <!-- the root element 'document' -->
-    <xsd:element name="pagis" type="pagis"/>
-
-    <xsd:complexType name="pagis">
-        <xsd:sequence>
-            <xsd:choice minOccurs="0" maxOccurs="unbounded">
-                <xsd:element name="nodeType" type="nodeType" minOccurs="0" maxOccurs="unbounded"/>
-                <xsd:element name="nodeTypeExtension" type="nodeTypeExtension" minOccurs="0" maxOccurs="unbounded"/>
-            </xsd:choice>
-        </xsd:sequence>
-        <xsd:attribute name="name" type="xsd:string"/>
-    </xsd:complexType>
-
-    <xsd:complexType name="nodeType">
-        <xsd:sequence>
-            <xsd:choice>
-                <xsd:element name="span" minOccurs="0" maxOccurs="1"/>
-            </xsd:choice>
-            <xsd:element name="trait" minOccurs="0" maxOccurs="unbounded">
-                <xsd:complexType>
-                    <xsd:attribute name="name" type="traitName"/>
-                </xsd:complexType>
-            </xsd:element>
-            <xsd:choice minOccurs="0" maxOccurs="unbounded">
-                <xsd:element name="integerProperty" type="integerProperty"/>
-                <xsd:element name="floatProperty" type="floatProperty"/>
-                <xsd:element name="booleanProperty" type="booleanProperty"/>
-                <xsd:element name="stringProperty" type="stringProperty"/>
-                <xsd:element name="enumProperty" type="enumProperty"/>
-            </xsd:choice>
-            <xsd:element name="edgeType" type="edgeType" minOccurs="0" maxOccurs="unbounded"/>
-        </xsd:sequence>
-        <xsd:attribute name="name" type="xsd:string"/>
-        <xsd:attribute name="idGenerator" type="xsd:string"/>
-    </xsd:complexType>
-
-    <xsd:complexType name="nodeTypeExtension">
-        <xsd:sequence>
-            <xsd:choice minOccurs="0" maxOccurs="unbounded">
-                <xsd:element name="integerProperty" type="integerProperty"/>
-                <xsd:element name="floatProperty" type="floatProperty"/>
-                <xsd:element name="booleanProperty" type="booleanProperty"/>
-                <xsd:element name="stringProperty" type="stringProperty"/>
-                <xsd:element name="enumProperty" type="enumProperty"/>
-            </xsd:choice>
-            <xsd:element name="edgeType" type="edgeType" minOccurs="0" maxOccurs="unbounded"/>
-        </xsd:sequence>
-    </xsd:complexType>
-
-    <xsd:simpleType name="traitName">
-        <xsd:restriction base="xsd:string">
-            <xsd:enumeration value="span"/>
-            <xsd:enumeration value="sequence"/>
-            <xsd:enumeration value="container"/>
-            <xsd:enumeration value="sequenceContainer"/>
-        </xsd:restriction>
-    </xsd:simpleType>
-
-    <xsd:complexType name="integerProperty">
-        <xsd:attribute name="minRange" type="xsd:integer"/>
-        <xsd:attribute name="maxRange" type="xsd:integer"/>
-        <xsd:attributeGroup ref="propertyBase"/>
-    </xsd:complexType>
-
-    <xsd:complexType name="floatProperty">
-        <xsd:attribute name="minRange" type="xsd:float"/>
-        <xsd:attribute name="maxRange" type="xsd:float"/>
-        <xsd:attributeGroup ref="propertyBase"/>
-    </xsd:complexType>
-
-    <xsd:complexType name="booleanProperty">
-        <xsd:attributeGroup ref="propertyBase"/>
-    </xsd:complexType>
-
-    <xsd:complexType name="stringProperty">
-        <xsd:attributeGroup ref="propertyBase"/>
-    </xsd:complexType>
-
-    <xsd:complexType name="enumProperty">
-        <xsd:sequence>
-            <xsd:element name="item">
-                <xsd:complexType>
-                    <xsd:attribute name="name" type="xsd:string"/>
-                </xsd:complexType>
-            </xsd:element>
-        </xsd:sequence>
-        <xsd:attributeGroup ref="propertyBase"/>
-    </xsd:complexType>
-
-    <xsd:attributeGroup name="propertyBase">
-        <xsd:attribute name="name" type="xsd:string"/>
-        <xsd:attribute name="minArity" type="xsd:nonNegativeInteger"/>
-        <xsd:attribute name="maxArity" type="xsd:nonNegativeInteger"/>
-    </xsd:attributeGroup>
-
-    <xsd:complexType name="edgeType">
-        <xsd:attribute name="name" type="xsd:string"/>
-        <xsd:attribute name="targetNodeType" type="xsd:string"/>
-        <xsd:attribute name="min" type="xsd:nonNegativeInteger"/>
-        <xsd:attribute name="max" type="xsd:nonNegativeInteger"/>
-    </xsd:complexType>
-</xsd:schema>
+<<<<pagis.xsd>>>>
 ```
