@@ -80,7 +80,7 @@ Definitions {#definitions}
 node
 :   A single piece of analytic information. 
 
-node-type
+nodeType
 :   The type of a node -- defined in the schema. (Examples: token, chunk, temporal)
 
 edge
@@ -96,7 +96,7 @@ feature
     schema. (Examples: "NW1"="dog")
 
 id 
-:   A string associated with a node that when combined with the node-type can
+:   A string associated with a node that when combined with the nodeType can
     uniquely identify the node within the current document. IDs need not be
     globally unique.
 
@@ -131,7 +131,7 @@ spec
 :   This document.
 
 schema
-:   A user-generated document that describes the node-types in use for a 
+:   A user-generated document that describes the nodeTypes in use for a 
     particular application. 
 
 source-document 
@@ -153,9 +153,9 @@ Nodes are the pivotal structures in this model.
 
 * A node may represent any sort of information - a token, a sentence, a phrase,
   a category, a semantic role, a part of speech, etc. 
-* A node has a node-type. All node-types are defined in the schema.
+* A node has a nodeType. All nodeTypes are defined in the schema.
 * A node has an ID. The ID is a string and is unique within the scope of a 
-  node-type for a single document.
+  nodeType for a single document.
 * A node has relationships to other nodes, the types of which are defined in the
   schema. 
 * A node has properties which are additional key-value pairs of information. The
@@ -195,10 +195,10 @@ Nodes are the pivotal structures in this model.
 
 ### ID Generation {#id-generation}
 
-* A node-type is repsonsible for defining how IDs are to be generated for nodes
+* A nodeType is repsonsible for defining how IDs are to be generated for nodes
   of that type.
 * The generation strategy must produce IDs that are unique within a given
-  document and node-type. If it does not, failures will occur at runtime.
+  document and nodeType. If it does not, failures will occur at runtime.
 * IDs are generated when a new node is created.
 
 Available generation strategies:  
@@ -225,7 +225,7 @@ Pattern
 
 ### Traits {#traits}
 
-A trait is a set of characteristics that may be assigned to a node-type.
+A trait is a set of characteristics that may be assigned to a nodeType.
 Each trait will define properties that it imports to a node type, edge types
 that it imports to a node type, and semantic restrictions on those. Traits may
 also define parameters that must be supplied when they are defined on a node type.
@@ -243,7 +243,7 @@ Currently defined traits:
 * Edges
     * *none*
 * Semantic Description
-    * Describes a node-type that is associated with a contiguous sequence of
+    * Describes a nodeType that is associated with a contiguous sequence of
       characters within the source document.
     * Will have a nonnegative integer-valued property named "start" that refers
       to the character offset of the beginning of the referenced character
@@ -265,13 +265,13 @@ Currently defined traits:
       If absent, indicates the final node of the sequence.
 
 * Semantic Description
-    * Describes a node-type that occurs in a sequence.
-    * The node-type must have an associated ordering that permits the formation
+    * Describes a nodeType that occurs in a sequence.
+    * The nodeType must have an associated ordering that permits the formation
       of a strictly well-ordered set. (The natural ordering of a set of unique
       integers satisfies this condition.) [Wikipedia: Well-
       order](https://en.wikipedia.org/wiki/Well-order)
     * Following from the above, each node may have another instance of that 
-      same node-type before and after it.
+      same nodeType before and after it.
     * May have a single edge named "previous" that refers to the preceding node
       of the same type, if such a node exists.
     * May have a single edge named "next" that refers to the succeeding node of
@@ -292,7 +292,7 @@ Currently defined traits:
 #### Container
 * Parameters
     * **edgeType** -- edgeType to consider as referring to "contained" nodes. 
-      Exactly one edgeType must be specified. (A node-type may have multiple
+      Exactly one edgeType must be specified. (A nodeType may have multiple
       instances of the Container trait, together specifying multiple 
       edgeTypes).
 
@@ -301,13 +301,13 @@ Currently defined traits:
 * Edges
     * *none*
 * Semantic Description
-    * Describes a node-type whose existence is defined as a container of 
-      another node-type.
+    * Describes a nodeType whose existence is defined as a container of 
+      another nodeType.
     * Parameter **edgeType** specifies names of edges which refer to 
       "contained" nodes.
-    * May be specified more than once on a given node-type, each with a different
+    * May be specified more than once on a given nodeType, each with a different
       **edgeType**.
-    * Where multiple edgeTypes are specified for a node-type by multiple 
+    * Where multiple edgeTypes are specified for a nodeType by multiple 
       instances of the Container trait, traversal APIs must enable referring to
       all "contained" edge types as a single construct. 
 
@@ -321,7 +321,7 @@ Currently defined traits:
     * **first** -- refers to the first node in the contained span
     * **last** -- refers to the last node in the contained span
 * Semantic Description
-    * Describes a node-type whose existence is defined as a span over other 
+    * Describes a nodeType whose existence is defined as a span over other 
       nodes that define a span. These may be direct "Span" nodes, or other 
       "Span-Container" nodes. In both cases, the contained node type must also
       be "Sequential".
@@ -345,7 +345,7 @@ Here is the general structure:
   <nodeType name="" idGenerator="">
     <span/>
     <sequence/>
-    <container edge-type=""/>
+    <container edgeType=""/>
     <spanContainer spanType=""/>
     <integerProperty name="" minRange="" maxRange="" minArity="" maxArity=""/>
     <floatProperty name="" minRange="" maxRange="" minArity="" maxArity=""/>
@@ -361,7 +361,7 @@ Here is the general structure:
 
 The "min" and "max" XML attributes on property and edge XML elements refer to
 the number of times a property or edge of the specified name may occur on a
-single node of the specified node-type. For instance, an optional property may
+single node of the specified nodeType. For instance, an optional property may
 be designated by the attributes min="0", max="1". A required edge that may occur
 an arbitrary number of times (for instance, designating children of a node with
 the Contains-Sequence trait) would be designated by the attributes min="1",
@@ -370,7 +370,7 @@ max="unbounded".
 ### Extending Schemas {#extending-schemas}
 
 Any schema can be extended.  This is done by specifying the `extends` attribute in 
-the root `pagis` element. The new schema may specify new node-types or add edges
+the root `pagis` element. The new schema may specify new nodeTypes or add edges
 and properties to an existing node type.
 
 Here is the general structure:
@@ -391,7 +391,7 @@ Here is the general structure:
       <item name=""/>
     </enumProperty>
     <edgeType name="" targetNodeType="" minArity="" maxArity=""/>
-  </node-type>
+  </nodeType>
   <nodeTypeExtension extends="">
     <integerProperty name="" minRange="" maxRange="" minArity="" maxArity=""/>
     <floatProperty name="" minRange="" maxRange="" minArity="" maxArity=""/>
