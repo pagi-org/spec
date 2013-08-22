@@ -177,9 +177,13 @@ Nodes are the pivotal structures in this model.
     * enumeration
 * A property may be single or multiple valued. Minimum and Maximum arity
   may be specified as part of the schema.
+
 * Some property types may allow the specification of constraints:
-    * integer - minimum and maximum values may be specified, with `unbounded` being the default
-    * float - minimum and maximum values may be specified, with `unbounded` being the default
+
+    * integer - minimum and maximum values may be specified, with `unbounded`
+      being the default
+    * float - minimum and maximum values may be specified, with `unbounded`
+      being the default
     * enumeration - a list of possible values must be specified
 
 ### Features {#features}
@@ -191,12 +195,10 @@ Nodes are the pivotal structures in this model.
 
 ### ID Generation {#id-generation}
 
-* A node-type is repsonsible for defining how nodes of that type have their IDs
-  generated.
-
+* A node-type is repsonsible for defining how IDs are to be generated for nodes
+  of that type.
 * The generation strategy must produce IDs that are unique within a given
-  document. If it does not, failures will occur at runtime.
-
+  document and node-type. If it does not, failures will occur at runtime.
 * IDs are generated when a new node is created.
 
 Available generation strategies:  
@@ -259,65 +261,72 @@ Currently defined traits:
 * Properties
     * *none*
 * Edges
-    * **next** -- refers to a node of the same type, has a maximum of 1, and
-                  has the option to not exist
+    * **next** -- refers to a node of the same type, has a maximum arity of 1. 
+      If absent, indicates the final node of the sequence.
+
 * Semantic Description
     * Describes a node-type that occurs in a sequence.
     * The node-type must have an associated ordering that permits the formation
       of a strictly well-ordered set. (The natural ordering of a set of unique
       integers satisfies this condition.) [Wikipedia: Well-
       order](https://en.wikipedia.org/wiki/Well-order)
-    * Following from the above, each node may have another instance of that same
-      node-type before and after it.
-    * May have a single edge named "previous" that refers to the preceding node of
+    * Following from the above, each node may have another instance of that 
+      same node-type before and after it.
+    * May have a single edge named "previous" that refers to the preceding node
+      of the same type, if such a node exists.
+    * May have a single edge named "next" that refers to the succeeding node of
       the same type, if such a node exists.
-    * May have a single edge named "next" that refers to the succeeding node of the
-      same type, if such a node exists.
-    * Previous and next edges, if present, must be bidirectional. If A.next = B,
-      then B.previous = A, and conversely. (B.previous cannot be null and must be
-      A given A.next = B, and A.next cannot be null and must be B given
-      B.previous = A.)
+    * Previous and next edges, if present, must be bidirectional. If A.next=B,
+      then B.previous=A, and conversely. (B.previous cannot be null and must be
+      A given A.next=B, and A.next cannot be null and must be B given
+      B.previous=A.)
     * The "previous" and "next" edges of a Sequential node, if present, must
-      connect to the next node of the same type within the document, according to
-      the associated ordering. That is, nodes connected under the Sequential
-      trait must be consecutive.
+      connect to the next node of the same type within the document, according
+      to the associated ordering. That is, nodes connected under the 
+      Sequential trait must be consecutive.
     * A Sequence is defined as a connected set of nodes with the Sequential
-      trait. A document may contain multiple Sequences of nodes of the same type;
-      this implies that there are no "previous" or "next" edges connecting nodes
-      of different Sequences.
+      trait. A document may contain multiple Sequences of nodes of the same 
+      type; this implies that there are no "previous" or "next" edges 
+      connecting nodes of different Sequences.
 
 #### Container
 * Parameters
-    * **edgeType** -- the edgeType that should be considered as referring
-                      to "contained" nodes
+    * **edgeType** -- edgeType to consider as referring to "contained" nodes. 
+      Exactly one edgeType must be specified. (A node-type may have multiple
+      instances of the Container trait, together specifying multiple 
+      edgeTypes).
+
 * Properties
     * *none*
 * Edges
     * *none*
 * Semantic Description
-    * Describes a node-type whose existence is defined as a container of another
-      node-type.
-    * Parameter **edgeType** specifies the edge which refer to "contained" nodes
+    * Describes a node-type whose existence is defined as a container of 
+      another node-type.
+    * Parameter **edgeType** specifies names of edges which refer to 
+      "contained" nodes.
     * May be specified more than once on a given node-type, each with a different
       **edgeType**.
-    * Traversal APIs must enable referring to all "contained" edge types as a single
-      construct.
-
+    * Where multiple edgeTypes are specified for a node-type by multiple 
+      instances of the Container trait, traversal APIs must enable referring to
+      all "contained" edge types as a single construct. 
 
 #### Span-Container
 * Parameters
-    * **spanType** -- the node type that is spanned/contained by this one - must be a
-                      "Sequence" and one of either "Span" or "Span-Container"
+    * **spanType** -- the node type that is spanned/contained by this one - 
+      must be a "Sequence" and one of either "Span" or "Span-Container"
 * Properties
     * *none*
 * Edges
     * **first** -- refers to the first node in the contained span
     * **last** -- refers to the last node in the contained span
 * Semantic Description
-    * Describes a node-type whose existence is defined as a span over other nodes that
-      define a span. These may be direct "Span" nodes, or other "Span-Container" nodes.
-      In both cases, the contained node type must also be "Sequential".
-    * Traversal APIs must enable referring to the entire spanned text of a "Span-Container".
+    * Describes a node-type whose existence is defined as a span over other 
+      nodes that define a span. These may be direct "Span" nodes, or other 
+      "Span-Container" nodes. In both cases, the contained node type must also
+      be "Sequential".
+    * Traversal APIs must enable referring to the entire spanned text of a 
+      "Span-Container".
 
 Schema Syntax {#schema-syntax}
 ------------------------------

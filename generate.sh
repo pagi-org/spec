@@ -10,11 +10,12 @@ TEMPMD=$OUTDIR/pagi.tmp.md
 cat $BASEDIR/header.htmlf > $OUTFILE
 
 sed -e "/<<<<pagis.xsd>>>>/ {
-r pagis.xsd
-d }" -e "/<<<<pagif-xml.xsd>>>>/ {
-r pagif-xml.xsd
-d }" < $BASEDIR/pagi.md > $TEMPMD
-
+	r pagis.xsd
+	d
+}" -e "/<<<<pagif-xml.xsd>>>>/ {
+	r pagif-xml.xsd
+	d
+}" < $BASEDIR/pagi.md > $TEMPMD
 
 markdown_py -x codehilite -x extra $TEMPMD >> $BASEDIR/$OUTFILE
 
