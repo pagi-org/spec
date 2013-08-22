@@ -81,7 +81,8 @@ node
 :   A single piece of analytic information. 
 
 nodeType
-:   The type of a node -- defined in the schema. (Examples: token, chunk, temporal)
+:   The type of a node -- defined in the schema. (Examples: token, chunk,
+    temporal)
 
 edge
 :   A relationship between two nodes. 
@@ -225,10 +226,10 @@ Pattern
 
 ### Traits {#traits}
 
-A trait is a set of characteristics that may be assigned to a nodeType.
-Each trait will define properties that it imports to a node type, edge types
-that it imports to a node type, and semantic restrictions on those. Traits may
-also define parameters that must be supplied when they are defined on a node type.
+A trait is a set of characteristics that may be assigned to a nodeType. Each
+trait will define properties that it imports to a node type, edge types that it
+imports to a node type, and semantic restrictions on those. Traits may also
+define parameters that must be supplied when they are defined on a node type.
 Traits are only defined in the spec.
 
 Currently defined traits:
@@ -311,10 +312,10 @@ Currently defined traits:
       instances of the Container trait, traversal APIs must enable referring to
       all "contained" edge types as a single construct. 
 
-#### Span-Container
+#### SpanContainer
 * Parameters
     * **spanType** -- the node type that is spanned/contained by this one - 
-      must be a "Sequence" and one of either "Span" or "Span-Container"
+      must be a "Sequence" and one of either "Span" or "SpanContainer"
 * Properties
     * *none*
 * Edges
@@ -323,10 +324,10 @@ Currently defined traits:
 * Semantic Description
     * Describes a nodeType whose existence is defined as a span over other 
       nodes that define a span. These may be direct "Span" nodes, or other 
-      "Span-Container" nodes. In both cases, the contained node type must also
+      "SpanContainer" nodes. In both cases, the contained node type must also
       be "Sequential".
     * Traversal APIs must enable referring to the entire spanned text of a 
-      "Span-Container".
+      "SpanContainer".
 
 Schema Syntax {#schema-syntax}
 ------------------------------
@@ -369,9 +370,9 @@ max="unbounded".
 
 ### Extending Schemas {#extending-schemas}
 
-Any schema can be extended.  This is done by specifying the `extends` attribute in 
-the root `pagis` element. The new schema may specify new nodeTypes or add edges
-and properties to an existing node type.
+Any schema can be extended.  This is done by specifying the `extends` attribute
+in  the root `pagis` element. The new schema may specify new nodeTypes or add
+edges and properties to an existing node type.
 
 Here is the general structure:
 ```xml
@@ -407,16 +408,19 @@ Here is the general structure:
 
 ### Schema API {#schema-api}
 
-For the purposes of interacting with a graph within code, it is necessary to have
-knowledge of the schema that applies to that graph. It is necessary that a schema
-be available for introspection along with the [common apis](#common-apis) defined
-in the following section.
+For the purposes of interacting with a graph within code, it is necessary to
+have knowledge of the schema that applies to that graph. It is necessary that a
+schema be available for introspection along with the [common apis](#common-apis)
+defined in the following section.
 
-A schema is represented as a collection of "nodeType" objects. Each NodeType object
-provides all specified information for that node type, and seamlessly merges properties
-and edges provided by traits as well as extensions.
+A schema is represented as a collection of "nodeType" objects. Each NodeType
+object provides all specified information for that node type, and seamlessly
+merges properties and edges provided by traits as well as extensions.
 
-Following is a general notion of the types and methods available in the Schema API:
+Following is a general outline of the types and methods expected to be available
+in implementations of the Schema API. Method signatures are intended to be
+representative, not prescriptive; implementations should adhere to idiomatic
+style conventions in the appropriate language.
 
 #### Schema
 
@@ -441,7 +445,8 @@ Following is a general notion of the types and methods available in the Schema A
 * ValueType getValueType()
 * String getName()
 * int getMinArity()
-* int getMaxArity() // -1 represents unbounded unless a language has a better representation
+* int getMaxArity() // -1 represents unbounded unless a language has a better 
+  representation
 * IntegerRestrictions getIntegerRestrictions()
 * FloatRestrictions getFloatRestrictions()
 * EnumRestrictions getEnumRestrictions()
@@ -514,15 +519,15 @@ EDGE
 :    Indicates an edge on the current node.
 :    Is only valid in the "NODE" context, prior to any FEATURE events.
 :    Has the string-typed *edgeType* parameter indicating the type of the edge.
-:    Has the string-typed *targetId* parameter indicating the id of the node that this edge
-     points to.
+:    Has the string-typed *targetId* parameter indicating the id of the node
+     that this edge points to.
 
 PROPERTY_START
 :    Indicates the beginning of information about a property.
 :    Is only valid in the "NODE" context, prior to any EDGE events.
 :    Has the string-typed *key* parameter indicating the property key.
-:    Has the ValueType-typed *valueType* parameter indicating the type of the property values.
-     Valid values are INTEGER, FLOAT, BOOLEAN, STRING, ENUM.
+:    Has the ValueType-typed *valueType* parameter indicating the type of the
+     property values. Valid values are INTEGER, FLOAT, BOOLEAN, STRING, ENUM.
 :    Indicates the beginning of a "PROPERTY" context.
 
 PROPERTY_END
@@ -534,8 +539,8 @@ FEATURE_START
 :    Indicates the beginning of information about a feature.
 :    Is only valid in the "NODE" context.
 :    Has the string-typed *key* parameter indicating the feature key.
-:    Has the ValueType-typed *valueType* parameter indicating the type of the feature values.
-     Valid values are INTEGER, FLOAT, BOOLEAN, STRING, ENUM.
+:    Has the ValueType-typed *valueType* parameter indicating the type of the
+     feature values. Valid values are INTEGER, FLOAT, BOOLEAN, STRING, ENUM.
 :    Indicates the beginning of a "FEATURE" context.
 
 FEATURE_END
@@ -545,31 +550,36 @@ FEATURE_END
 
 VALUE_INTEGER
 :    Indicates an integer value on the current property or feature.
-:    Is only valid in a "PROPERTY" or "FEATURE" context where *valueType* is "INTEGER".
+:    Is only valid in a "PROPERTY" or "FEATURE" context where *valueType* is
+     "INTEGER".
 :    Has the int-typed *value* parameter that has the value.
 
 VALUE_FLOAT
 :    Indicates a float value on the current property or feature.
-:    Is only valid in a "PROPERTY" or "FEATURE" context where *valueType* is "FLOAT".
+:    Is only valid in a "PROPERTY" or "FEATURE" context where *valueType* is
+     "FLOAT".
 :    Has the float-typed *value* parameter that has the value.
 
 VALUE_BOOLEAN
 :    Indicates a boolean value on the current property or feature.
-:    Is only valid in a "PROPERTY" or "FEATURE" context where *valueType* is "BOOLEAN".
+:    Is only valid in a "PROPERTY" or "FEATURE" context where *valueType* is
+     "BOOLEAN".
 :    Has the boolean-typed *value* parameter that has the value.
 
 VALUE_STRING
 :    Indicates a string value on the current property or feature.
-:    Is only valid in a "PROPERTY" or "FEATURE" context where *valueType* is "STRING".
+:    Is only valid in a "PROPERTY" or "FEATURE" context where *valueType* is
+     "STRING".
 :    Has the string-typed *value* parameter that has the value.
 
 VALUE_ENUM
 :    Indicates a enum value on the current property or feature.
-:    Is only valid in a "PROPERTY" or "FEATURE" context where *valueType* is "ENUM".
+:    Is only valid in a "PROPERTY" or "FEATURE" context where *valueType* is 
+     "ENUM".
 :    Has the string-typed *value* parameter that has the value.
 
-There are two sides to interacting with a stream - a program may produce
-events or consume events.
+There are two sides to interacting with a stream - a program may produce events
+or consume events.
 
 #### Event Generation
 
@@ -583,12 +593,13 @@ notify
 
 #### Event Listener -- Push Style
 
-The first of two consumer styles, a program will implement the EventListener. This
-basically serves as a stateful callback that is notified of every event coming
-from the stream, in order. The EventListener has one callback method for each event
-type. Each method is passed the parameters for that event. Dynamic languages may
-allow any event callback to be optional, provided that the absence of those that
-start contexts causes any events within that context to not be provided as well.
+The first of two consumer styles, a program will implement the EventListener.
+This basically serves as a stateful callback that is notified of every event
+coming from the stream, in order. The EventListener has one callback method for
+each event type. Each method is passed the parameters for that event. Dynamic
+languages may allow any event callback to be optional, provided that the absence
+of those that start contexts causes any events within that context to not be
+provided as well.
 
 handleDocStart(id)
 
@@ -678,7 +689,8 @@ getEdgeTargetId
 ### Graph Query {#graph-query}
 
 This API is intended to provide an interface against which ad-hoc queries can be
-made. The syntax should be similar to Gremlin's and no particular performance
+made. The syntax should be similar to that of 
+[Gremlin](https://github.com/tinkerpop/gremlin/wiki). No particular performance
 guarantees are given.
 
 ### Streaming Graphical Querying (Hybrid) {#streaming-graphical-querying}
@@ -699,9 +711,9 @@ In order to store and transfer PAGIM models, we must define formats.
 
 ### XML {#xml-format}
 
-A PAGI document can be rendered as an xml document. This is intended as the 
+A PAGI document can be rendered as an xml document. This is intended as the
 primary storage and transfer format. It is simply structured and human-
-readable. 
+readable.
 
 Its Internet Media Type is `application/vnd.drs-pagif+xml`.
 
@@ -734,8 +746,9 @@ translate the xml format to one of the following:
 * msgpack (`application/vnd.drs-pagif+msgpack`)
 * protobuf (`application/vnd.drs-pagif+protobuf`)
 
-The decision of what binary serialization to use is still an open ended question.
-We fully expect other options than these two to be proposed and considered.
+The decision of what binary serialization to use is still an open ended
+question. We fully expect other options than these two to be proposed and
+considered.
 
 Corpus-Scoped Analytics {#corpus-scoped-analytics}
 --------------------------------------------------
