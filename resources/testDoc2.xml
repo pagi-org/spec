@@ -5,147 +5,147 @@
 	</node>
 
 	<node type="MY_NODE" id="1ip">
-		<integer-property key="confidence" value="45"/>
+		<integerProperty key="confidence" value="45"/>
 	</node>
 	<node type="MY_NODE" id="2ip">
-		<integer-property key="confidence">
+		<integerProperty key="confidence">
 			<value integer="45"/>
-		</integer-property>
+		</integerProperty>
 	</node>
 	<node type="MY_NODE" id="3ip">
-		<integer-property key="confidence">
+		<integerProperty key="confidence">
 			<value integer="45"/>
 			<value integer="88"/>
-		</integer-property>
+		</integerProperty>
 	</node>
 	<node type="MY_NODE" id="1if">
-		<integer-feature key="probability" value="566"/>
+		<integerFeature key="probability" value="566"/>
 	</node>
 	<node type="MY_NODE" id="2if">
-		<integer-feature key="probability">
+		<integerFeature key="probability">
 			<value integer="566"/>
-		</integer-feature>
+		</integerFeature>
 	</node>
 	<node type="MY_NODE" id="3if">
-		<integer-feature key="probability">
+		<integerFeature key="probability">
 			<value integer="566"/>
 			<value integer="599"/>
-		</integer-feature>
+		</integerFeature>
 	</node>
 
 	<node type="MY_NODE" id="1fp">
-		<float-property key="confidence" value="0.45"/>
+		<floatProperty key="confidence" value="0.45"/>
 	</node>
 	<node type="MY_NODE" id="2fp">
-		<float-property key="confidence">
+		<floatProperty key="confidence">
 			<value float="0.45"/>
-		</float-property>
+		</floatProperty>
 	</node>
 	<node type="MY_NODE" id="3fp">
-		<float-property key="confidence">
+		<floatProperty key="confidence">
 			<value float="0.45"/>
 			<value float="0.88"/>
-		</float-property>
+		</floatProperty>
 	</node>
 	<node type="MY_NODE" id="1ff">
-		<float-feature key="probability" value="0.566"/>
+		<floatFeature key="probability" value="0.566"/>
 	</node>
 	<node type="MY_NODE" id="2ff">
-		<float-feature key="probability">
+		<floatFeature key="probability">
 			<value float="0.566"/>
-		</float-feature>
+		</floatFeature>
 	</node>
 	<node type="MY_NODE" id="3ff">
-		<float-feature key="probability">
+		<floatFeature key="probability">
 			<value float="0.566"/>
 			<value float="0.599"/>
-		</float-feature>
+		</floatFeature>
 	</node>
 
 	<node type="MY_NODE" id="1bp">
-		<boolean-property key="confidence" value="true"/>
+		<booleanProperty key="confidence" value="true"/>
 	</node>
 	<node type="MY_NODE" id="2bp">
-		<boolean-property key="confidence">
+		<booleanProperty key="confidence">
 			<value boolean="false"/>
-		</boolean-property>
+		</booleanProperty>
 	</node>
 	<node type="MY_NODE" id="3bp">
-		<boolean-property key="confidence">
+		<booleanProperty key="confidence">
 			<value boolean="false"/>
 			<value boolean="true"/>
-		</boolean-property>
+		</booleanProperty>
 	</node>
 	<node type="MY_NODE" id="1bf">
-		<boolean-feature key="probability" value="false"/>
+		<booleanFeature key="probability" value="false"/>
 	</node>
 	<node type="MY_NODE" id="2bf">
-		<boolean-feature key="probability">
+		<booleanFeature key="probability">
 			<value boolean="true"/>
-		</boolean-feature>
+		</booleanFeature>
 	</node>
 	<node type="MY_NODE" id="3bf">
-		<boolean-feature key="probability">
+		<booleanFeature key="probability">
 			<value boolean="true"/>
 			<value boolean="false"/>
-		</boolean-feature>
+		</booleanFeature>
 	</node>
 
 	<node type="MY_NODE" id="1sp">
-		<string-property key="confidence" value="value1"/>
+		<stringProperty key="confidence" value="value1"/>
 	</node>
 	<node type="MY_NODE" id="2sp">
-		<string-property key="confidence">
+		<stringProperty key="confidence">
 			<value string="value2"/>
-		</string-property>
+		</stringProperty>
 	</node>
 	<node type="MY_NODE" id="3sp">
-		<string-property key="confidence">
+		<stringProperty key="confidence">
 			<value string="value2"/>
 			<value string="value1"/>
-		</string-property>
+		</stringProperty>
 	</node>
 	<node type="MY_NODE" id="1sf">
-		<string-feature key="probability" value="value2"/>
+		<stringFeature key="probability" value="value2"/>
 	</node>
 	<node type="MY_NODE" id="2sf">
-		<string-feature key="probability">
+		<stringFeature key="probability">
 			<value string="value1"/>
-		</string-feature>
+		</stringFeature>
 	</node>
 	<node type="MY_NODE" id="3sf">
-		<string-feature key="probability">
+		<stringFeature key="probability">
 			<value string="value1"/>
 			<value string="value2"/>
-		</string-feature>
+		</stringFeature>
 	</node>
 
 	<node type="MY_NODE" id="1ep">
-		<enum-property key="confidence" value="value1"/>
+		<enumProperty key="confidence" value="value1"/>
 	</node>
 	<node type="MY_NODE" id="2ep">
-		<enum-property key="confidence">
+		<enumProperty key="confidence">
 			<value enum="value2"/>
-		</enum-property>
+		</enumProperty>
 	</node>
 	<node type="MY_NODE" id="3ep">
-		<enum-property key="confidence">
+		<enumProperty key="confidence">
 			<value enum="value2"/>
 			<value enum="value1"/>
-		</enum-property>
+		</enumProperty>
 	</node>
 	<node type="MY_NODE" id="1ef">
-		<enum-feature key="probability" value="value2"/>
+		<enumFeature key="probability" value="value2"/>
 	</node>
 	<node type="MY_NODE" id="2ef">
-		<enum-feature key="probability">
+		<enumFeature key="probability">
 			<value enum="value1"/>
-		</enum-feature>
+		</enumFeature>
 	</node>
 	<node type="MY_NODE" id="3ef">
-		<enum-feature key="probability">
+		<enumFeature key="probability">
 			<value enum="value1"/>
 			<value enum="value2"/>
-		</enum-feature>
+		</enumFeature>
 	</node>
 </document>

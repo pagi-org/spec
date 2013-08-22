@@ -1,61 +1,61 @@
 <document xmlns="http://pagi.digitalreasoning.com/pagif"
 	   id="testDoc1">
 	<node type="TOK" id="0:4">
-		<integer-property key="prop1" value="42"/>
-		<boolean-property key="prop2">
+		<integerProperty key="prop1" value="42"/>
+		<booleanProperty key="prop2">
 			<value boolean="true"/>
 			<value boolean="false"/>
-		</boolean-property>
+		</booleanProperty>
 		<edge type="next" target="6:3"/>
-		<integer-feature key="f1" value="42"/>
+		<integerFeature key="f1" value="42"/>
 	</node>
 	<node type="TOK" id="6:3">
-		<integer-property key="prop1" value="42"/>
-		<boolean-property key="prop2">
+		<integerProperty key="prop1" value="42"/>
+		<booleanProperty key="prop2">
 			<value boolean="true"/>
 			<value boolean="false"/>
-		</boolean-property>
+		</booleanProperty>
 		<edge type="prev" target="0:4"/>
 		<edge type="next" target="10:1"/>
-		<integer-feature key="f1" value="42"/>
+		<integerFeature key="f1" value="42"/>
 	</node>
 	<node type="TOK" id="10:1">
-		<integer-property key="prop1" value="42"/>
-		<boolean-property key="prop2">
+		<integerProperty key="prop1" value="42"/>
+		<booleanProperty key="prop2">
 			<value boolean="true"/>
 			<value boolean="false"/>
-		</boolean-property>
+		</booleanProperty>
 		<edge type="prev" target="6:3"/>
 		<edge type="next" target="12:6"/>
-		<integer-feature key="f1" value="42"/>
+		<integerFeature key="f1" value="42"/>
 	</node>
 	<node type="TOK" id="12:6">
-		<integer-property key="prop1" value="42"/>
-		<boolean-property key="prop2">
+		<integerProperty key="prop1" value="42"/>
+		<booleanProperty key="prop2">
 			<value boolean="true"/>
 			<value boolean="false"/>
-		</boolean-property>
+		</booleanProperty>
 		<edge type="prev" target="10:1"/>
 		<edge type="next" target="19:4"/>
-		<integer-feature key="f1" value="42"/>
+		<integerFeature key="f1" value="42"/>
 	</node>
 	<node type="TOK" id="19:4">
-		<integer-property key="prop1" value="42"/>
-		<boolean-property key="prop2">
+		<integerProperty key="prop1" value="42"/>
+		<booleanProperty key="prop2">
 			<value boolean="true"/>
 			<value boolean="false"/>
-		</boolean-property>
+		</booleanProperty>
 		<edge type="prev" target="12:6"/>
 		<edge type="next" target="23:1"/>
-		<integer-feature key="f1" value="42"/>
+		<integerFeature key="f1" value="42"/>
 	</node>
 	<node type="TOK" id="23:1">
-		<integer-property key="prop1" value="42"/>
-		<boolean-property key="prop2">
+		<integerProperty key="prop1" value="42"/>
+		<booleanProperty key="prop2">
 			<value boolean="true"/>
 			<value boolean="false"/>
-		</boolean-property>
+		</booleanProperty>
 		<edge type="prev" target="19:4"/>
-		<integer-feature key="f1" value="42"/>
+		<integerFeature key="f1" value="42"/>
 	</node>
 </document>

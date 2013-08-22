@@ -12,7 +12,7 @@
         <xsl:element name="{local-name()}" namespace="{namespace-uri()}">
             <xsl:attribute name="key"><xsl:value-of select="@key"/></xsl:attribute>
             <xsl:element name="value" namespace="{namespace-uri()}">
-                <xsl:attribute name="{substring-before(local-name(), '-')}">
+                <xsl:attribute name="{concat(substring-before(local-name(), 'Property'),substring-before(local-name(), 'Feature'))}">
                     <xsl:value-of select="@value"/>
                 </xsl:attribute>
             </xsl:element>
