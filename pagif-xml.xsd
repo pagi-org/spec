@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1.0-draft1" targetNamespace="http://pagi.digitalreasoning.com/pagif">
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            version="1.0-draft1"
+            targetNamespace="http://pagi.digitalreasoning.com/pagif"
+            xmlns="http://pagi.digitalreasoning.com/pagif"
+            elementFormDefault="qualified">
     <!-- the root element 'document' -->
     <xsd:element name="document" type="document"/>
 
@@ -9,7 +13,7 @@
         </xsd:sequence>
         <xsd:attribute name="id" type="xsd:string" use="required"/>
     </xsd:complexType>
-    
+
     <xsd:complexType name="node">
         <xsd:sequence>
             <xsd:choice minOccurs="0" maxOccurs="unbounded">
@@ -45,7 +49,7 @@
         <xsd:complexContent>
             <xsd:extension base="valued">
                 <xsd:sequence>
-                    <xsd:element name="value">
+                    <xsd:element name="value" minOccurs="0" maxOccurs="unbounded">
                         <xsd:complexType>
                             <xsd:attribute name="integer" type="xsd:integer" use="required"/>
                         </xsd:complexType>
@@ -60,7 +64,7 @@
         <xsd:complexContent>
             <xsd:extension base="valued">
                 <xsd:sequence>
-                    <xsd:element name="value">
+                    <xsd:element name="value" minOccurs="0" maxOccurs="unbounded">
                         <xsd:complexType>
                             <xsd:attribute name="float" type="xsd:float" use="required"/>
                         </xsd:complexType>
@@ -75,7 +79,7 @@
         <xsd:complexContent>
             <xsd:extension base="valued">
                 <xsd:sequence>
-                    <xsd:element name="value">
+                    <xsd:element name="value" minOccurs="0" maxOccurs="unbounded">
                         <xsd:complexType>
                             <xsd:attribute name="boolean" type="xsd:boolean" use="required"/>
                         </xsd:complexType>
@@ -90,7 +94,7 @@
         <xsd:complexContent>
             <xsd:extension base="valued">
                 <xsd:sequence>
-                    <xsd:element name="value">
+                    <xsd:element name="value" minOccurs="0" maxOccurs="unbounded">
                         <xsd:complexType>
                             <xsd:attribute name="string" type="xsd:string" use="required"/>
                         </xsd:complexType>
@@ -105,7 +109,7 @@
         <xsd:complexContent>
             <xsd:extension base="valued">
                 <xsd:sequence>
-                    <xsd:element name="value">
+                    <xsd:element name="value" minOccurs="0" maxOccurs="unbounded">
                         <xsd:complexType>
                             <xsd:attribute name="enum" type="xsd:string" use="required"/>
                         </xsd:complexType>
