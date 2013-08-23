@@ -425,7 +425,7 @@ style conventions in the appropriate language.
 #### Schema
 
 * String getName()
-* Map<String, NodeType> getNodeTypes()
+* Map(String, NodeType) getNodeTypes()
 * Schema getParentSchema()
 
 #### NodeType
