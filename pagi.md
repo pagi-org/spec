@@ -368,6 +368,25 @@ an arbitrary number of times (for instance, designating children of a node with
 the Contains-Sequence trait) would be designated by the attributes min="1",
 max="unbounded".
 
+#### Id Generator
+
+The specification of the id generator necessitates some description. The
+idGenerator is specified as a pattern, consisting of some combination of one
+or more of the following tokens:
+
+* any alphanumeric string excluding `{`, and `}`
+* one of the "special" tokens, enclosed in `{` and `}`
+    * `seq` - indicating a sequential number
+    * `random[:{len}[/{base}]]` - that is, a random string with an optional
+      specification the optional spec may contain the length of the random
+      string or the length of the random string and the size of the character
+      set used
+      * default length is 8
+      * default character set size is 10
+    * `prop[:{delim}]:{name}` - the value of the named property, separated by
+      optional specification `delim`
+      * default delim is `,`
+
 ### Extending Schemas {#extending-schemas}
 
 Any schema can be extended.  This is done by specifying the `extends` attribute

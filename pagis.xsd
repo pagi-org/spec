@@ -9,22 +9,22 @@
                 <xsd:element name="nodeTypeExtension" type="nodeTypeExtension" minOccurs="0" maxOccurs="unbounded"/>
             </xsd:choice>
         </xsd:sequence>
-        <xsd:attribute name="name" type="xsd:string"/>
-        <xsd:attribute name="extends" type="xsd:string" use="optional"/>
+        <xsd:attribute name="name" type="identifier" use="required"/>
+        <xsd:attribute name="extends" type="identifier" use="optional"/>
     </xsd:complexType>
 
     <xsd:complexType name="nodeType">
         <xsd:sequence>
             <xsd:element name="container" minOccurs="0" maxOccurs="unbounded">
                 <xsd:complexType>
-                    <xsd:attribute name="edgeType" type="xsd:string"/>
+                    <xsd:attribute name="edgeType" type="identifier"/>
                 </xsd:complexType>
             </xsd:element>
             <xsd:element name="sequence" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="span" minOccurs="0" maxOccurs="1"/>
             <xsd:element name="spanContainer" minOccurs="0" maxOccurs="1">
                 <xsd:complexType>
-                    <xsd:attribute name="spanType" type="xsd:string"/>
+                    <xsd:attribute name="spanType" type="identifier"/>
                 </xsd:complexType>
             </xsd:element>
             <xsd:choice minOccurs="0" maxOccurs="unbounded">
@@ -36,9 +36,21 @@
             </xsd:choice>
             <xsd:element name="edgeType" type="edgeType" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
-        <xsd:attribute name="name" type="xsd:string"/>
-        <xsd:attribute name="idGenerator" type="xsd:string"/>
+        <xsd:attribute name="name" type="identifier" use="required"/>
+        <xsd:attribute name="idGenerator" type="idGenerator" use="required"/>
     </xsd:complexType>
+
+    <xsd:simpleType name="idGenerator">
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="([^\{\}]+|\{random(:[0-9]+(/[0-9]+)?)?\}|\{seq\}|\{prop(:[^:\{\}]*)?:[^:\{\}]+\})+"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="identifier">
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="[^:\{\}]+"/>
+        </xsd:restriction>
+    </xsd:simpleType>
 
     <xsd:complexType name="nodeTypeExtension">
         <xsd:sequence>
@@ -51,7 +63,7 @@
             </xsd:choice>
             <xsd:element name="edgeType" type="edgeType" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
-        <xsd:attribute name="extends" type="xsd:string"/>
+        <xsd:attribute name="extends" type="identifier"/>
     </xsd:complexType>
 
     <xsd:complexType name="integerProperty">
@@ -86,14 +98,14 @@
     </xsd:complexType>
 
     <xsd:attributeGroup name="propertyBase">
-        <xsd:attribute name="name" type="xsd:string"/>
+        <xsd:attribute name="name" type="identifier"/>
         <xsd:attribute name="minArity" type="xsd:nonNegativeInteger"/>
         <xsd:attribute name="maxArity" type="maxArity"/>
     </xsd:attributeGroup>
 
     <xsd:complexType name="edgeType">
-        <xsd:attribute name="name" type="xsd:string"/>
-        <xsd:attribute name="targetNodeType" type="xsd:string"/>
+        <xsd:attribute name="name" type="identifier"/>
+        <xsd:attribute name="targetNodeType" type="identifier"/>
         <xsd:attribute name="minArity" type="xsd:nonNegativeInteger"/>
         <xsd:attribute name="maxArity" type="maxArity"/>
     </xsd:complexType>

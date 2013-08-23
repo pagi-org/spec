@@ -1,0 +1,35 @@
+<pagis xmlns="http://pagi.digitalreasoning.com/pagis" name="testSchema1">
+
+    <nodeType name="nt1" idGenerator="{seq}"/>
+    <nodeType name="nt2" idGenerator="{random}"/>
+    <nodeType name="nt3" idGenerator="{prop:p1}">
+        <stringProperty name="p1" minArity="1" maxArity="1"/>
+    </nodeType>
+    <nodeType name="nt4" idGenerator="myNode"/>
+
+    <nodeType name="nt5" idGenerator="myNode-{seq}-stuff"/>
+    <nodeType name="nt6" idGenerator="myNode-{random}-stuff"/>
+    <nodeType name="nt7" idGenerator="myNode-{prop:p1}-stuff">
+        <stringProperty name="p1" minArity="1" maxArity="1"/>
+    </nodeType>
+
+    <nodeType name="nt8" idGenerator="my-{seq}-{random}-{prop:p1}-{prop:p2}-stuff">
+        <stringProperty name="p1" minArity="1" maxArity="1"/>
+        <stringProperty name="p2" minArity="1" maxArity="1"/>
+    </nodeType>
+
+    <nodeType name="nt9" idGenerator="{random:4}"/>
+    <nodeType name="nt10" idGenerator="{random:4/36}"/>
+    <nodeType name="nt11" idGenerator="{random:6}"/>
+
+
+    <nodeType name="nt12" idGenerator="{prop:,:p1}">
+        <stringProperty name="p1" minArity="1" maxArity="1"/>
+    </nodeType>
+    <nodeType name="nt13" idGenerator="{prop::p1}">
+        <stringProperty name="p1" minArity="1" maxArity="1"/>
+    </nodeType>
+    <nodeType name="nt14" idGenerator="{prop: __ :p1}">
+        <stringProperty name="p1" minArity="1" maxArity="1"/>
+    </nodeType>
+</pagis>
