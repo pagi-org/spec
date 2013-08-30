@@ -1,122 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1.0-draft2" targetNamespace="http://pagi.digitalreasoning.com/pagis" xmlns="http://pagi.digitalreasoning.com/pagis" elementFormDefault="qualified">
-    <xsd:element name="pagis" type="pagis"/>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1.0-draft2" targetNamespace="http://pagi.digitalreasoning.com/pagis"
+            xmlns="http://pagi.digitalreasoning.com/pagis" elementFormDefault="qualified">
+	<xsd:element name="pagis" type="pagis"/>
 
-    <xsd:complexType name="pagis">
-        <xsd:sequence>
-            <xsd:choice minOccurs="0" maxOccurs="unbounded">
-                <xsd:element name="nodeType" type="nodeType" minOccurs="0" maxOccurs="unbounded"/>
-                <xsd:element name="nodeTypeExtension" type="nodeTypeExtension" minOccurs="0" maxOccurs="unbounded"/>
-            </xsd:choice>
-        </xsd:sequence>
-        <xsd:attribute name="name" type="identifier" use="required"/>
-        <xsd:attribute name="extends" type="identifier" use="optional"/>
-    </xsd:complexType>
+	<xsd:complexType name="pagis">
+		<xsd:sequence>
+			<xsd:choice minOccurs="0" maxOccurs="unbounded">
+				<xsd:element name="nodeType" type="nodeType" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="nodeTypeExtension" type="nodeTypeExtension" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:choice>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="identifier" use="required"/>
+		<xsd:attribute name="extends" type="identifier" use="optional"/>
+	</xsd:complexType>
 
-    <xsd:complexType name="nodeType">
-        <xsd:sequence>
-            <xsd:element name="container" minOccurs="0" maxOccurs="unbounded">
-                <xsd:complexType>
-                    <xsd:attribute name="edgeType" type="identifier"/>
-                </xsd:complexType>
-            </xsd:element>
-            <xsd:element name="sequence" minOccurs="0" maxOccurs="1"/>
-            <xsd:element name="span" minOccurs="0" maxOccurs="1"/>
-            <xsd:element name="spanContainer" minOccurs="0" maxOccurs="1">
-                <xsd:complexType>
-                    <xsd:attribute name="spanType" type="identifier"/>
-                </xsd:complexType>
-            </xsd:element>
-            <xsd:choice minOccurs="0" maxOccurs="unbounded">
-                <xsd:element name="integerProperty" type="integerProperty"/>
-                <xsd:element name="floatProperty" type="floatProperty"/>
-                <xsd:element name="booleanProperty" type="booleanProperty"/>
-                <xsd:element name="stringProperty" type="stringProperty"/>
-                <xsd:element name="enumProperty" type="enumProperty"/>
-            </xsd:choice>
-            <xsd:element name="edgeType" type="edgeType" minOccurs="0" maxOccurs="unbounded"/>
-        </xsd:sequence>
-        <xsd:attribute name="name" type="identifier" use="required"/>
-        <xsd:attribute name="idGenerator" type="idGenerator" use="required"/>
-    </xsd:complexType>
+	<xsd:complexType name="nodeType">
+		<xsd:sequence>
+			<xsd:element name="container" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:attribute name="edgeType" type="identifier"/>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="sequence" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="span" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="spanContainer" minOccurs="0" maxOccurs="1">
+				<xsd:complexType>
+					<xsd:attribute name="spanType" type="identifier"/>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:choice minOccurs="0" maxOccurs="unbounded">
+				<xsd:element name="integerProperty" type="integerProperty"/>
+				<xsd:element name="floatProperty" type="floatProperty"/>
+				<xsd:element name="booleanProperty" type="booleanProperty"/>
+				<xsd:element name="stringProperty" type="stringProperty"/>
+				<xsd:element name="enumProperty" type="enumProperty"/>
+			</xsd:choice>
+			<xsd:element name="edgeType" type="edgeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="identifier" use="required"/>
+		<xsd:attribute name="idGenerator" type="idGenerator" use="required"/>
+	</xsd:complexType>
 
-    <xsd:simpleType name="idGenerator">
-        <xsd:restriction base="xsd:string">
-            <xsd:pattern value="([^\{\}]+|\{random(:[0-9]+(/[0-9]+)?)?\}|\{seq\}|\{prop(:[^:\{\}]*)?:[^:\{\}]+\})+"/>
-        </xsd:restriction>
-    </xsd:simpleType>
+	<xsd:simpleType name="idGenerator">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="([^\{\}]+|\{random(:[0-9]+(/[0-9]+)?)?\}|\{seq\}|\{prop(:[^:\{\}]*)?:[^:\{\}]+\})+"/>
+		</xsd:restriction>
+	</xsd:simpleType>
 
-    <xsd:simpleType name="identifier">
-        <xsd:restriction base="xsd:string">
-            <xsd:pattern value="[^:\{\}]+"/>
-        </xsd:restriction>
-    </xsd:simpleType>
+	<xsd:simpleType name="identifier">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="[^:\{\}]+"/>
+		</xsd:restriction>
+	</xsd:simpleType>
 
-    <xsd:complexType name="nodeTypeExtension">
-        <xsd:sequence>
-            <xsd:choice minOccurs="0" maxOccurs="unbounded">
-                <xsd:element name="integerProperty" type="integerProperty"/>
-                <xsd:element name="floatProperty" type="floatProperty"/>
-                <xsd:element name="booleanProperty" type="booleanProperty"/>
-                <xsd:element name="stringProperty" type="stringProperty"/>
-                <xsd:element name="enumProperty" type="enumProperty"/>
-            </xsd:choice>
-            <xsd:element name="edgeType" type="edgeType" minOccurs="0" maxOccurs="unbounded"/>
-        </xsd:sequence>
-        <xsd:attribute name="extends" type="identifier"/>
-    </xsd:complexType>
+	<xsd:complexType name="nodeTypeExtension">
+		<xsd:sequence>
+			<xsd:choice minOccurs="0" maxOccurs="unbounded">
+				<xsd:element name="integerProperty" type="integerProperty"/>
+				<xsd:element name="floatProperty" type="floatProperty"/>
+				<xsd:element name="booleanProperty" type="booleanProperty"/>
+				<xsd:element name="stringProperty" type="stringProperty"/>
+				<xsd:element name="enumProperty" type="enumProperty"/>
+			</xsd:choice>
+			<xsd:element name="edgeType" type="edgeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="extends" type="identifier"/>
+	</xsd:complexType>
 
-    <xsd:complexType name="integerProperty">
-        <xsd:attribute name="minRange" type="xsd:integer"/>
-        <xsd:attribute name="maxRange" type="xsd:integer"/>
-        <xsd:attributeGroup ref="propertyBase"/>
-    </xsd:complexType>
+	<xsd:complexType name="integerProperty">
+		<xsd:attribute name="minRange" type="xsd:integer"/>
+		<xsd:attribute name="maxRange" type="xsd:integer"/>
+		<xsd:attributeGroup ref="propertyBase"/>
+	</xsd:complexType>
 
-    <xsd:complexType name="floatProperty">
-        <xsd:attribute name="minRange" type="xsd:float"/>
-        <xsd:attribute name="maxRange" type="xsd:float"/>
-        <xsd:attributeGroup ref="propertyBase"/>
-    </xsd:complexType>
+	<xsd:complexType name="floatProperty">
+		<xsd:attribute name="minRange" type="xsd:float"/>
+		<xsd:attribute name="maxRange" type="xsd:float"/>
+		<xsd:attributeGroup ref="propertyBase"/>
+	</xsd:complexType>
 
-    <xsd:complexType name="booleanProperty">
-        <xsd:attributeGroup ref="propertyBase"/>
-    </xsd:complexType>
+	<xsd:complexType name="booleanProperty">
+		<xsd:attributeGroup ref="propertyBase"/>
+	</xsd:complexType>
 
-    <xsd:complexType name="stringProperty">
-        <xsd:attributeGroup ref="propertyBase"/>
-    </xsd:complexType>
+	<xsd:complexType name="stringProperty">
+		<xsd:attributeGroup ref="propertyBase"/>
+	</xsd:complexType>
 
-    <xsd:complexType name="enumProperty">
-        <xsd:sequence>
-            <xsd:element name="item" minOccurs="1" maxOccurs="unbounded">
-                <xsd:complexType>
-                    <xsd:attribute name="name" type="xsd:string"/>
-                </xsd:complexType>
-            </xsd:element>
-        </xsd:sequence>
-        <xsd:attributeGroup ref="propertyBase"/>
-    </xsd:complexType>
+	<xsd:complexType name="enumProperty">
+		<xsd:sequence>
+			<xsd:element name="item" minOccurs="1" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:attribute name="name" type="xsd:string"/>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+		<xsd:attributeGroup ref="propertyBase"/>
+	</xsd:complexType>
 
-    <xsd:attributeGroup name="propertyBase">
-        <xsd:attribute name="name" type="identifier"/>
-        <xsd:attribute name="minArity" type="xsd:nonNegativeInteger"/>
-        <xsd:attribute name="maxArity" type="maxArity"/>
-    </xsd:attributeGroup>
+	<xsd:attributeGroup name="propertyBase">
+		<xsd:attribute name="name" type="identifier"/>
+		<xsd:attribute name="minArity" type="xsd:nonNegativeInteger"/>
+		<xsd:attribute name="maxArity" type="maxArity"/>
+	</xsd:attributeGroup>
 
-    <xsd:complexType name="edgeType">
-        <xsd:attribute name="name" type="identifier"/>
-        <xsd:attribute name="targetNodeType" type="identifier"/>
-        <xsd:attribute name="minArity" type="xsd:nonNegativeInteger"/>
-        <xsd:attribute name="maxArity" type="maxArity"/>
-    </xsd:complexType>
+	<xsd:complexType name="edgeType">
+		<xsd:attribute name="name" type="identifier"/>
+		<xsd:attribute name="targetNodeType" type="identifier"/>
+		<xsd:attribute name="minArity" type="xsd:nonNegativeInteger"/>
+		<xsd:attribute name="maxArity" type="maxArity"/>
+	</xsd:complexType>
 
-    <xsd:simpleType name="maxArity">
-        <xsd:union memberTypes="xsd:nonNegativeInteger">
-            <xsd:simpleType>
-                <xsd:restriction base="xsd:NMTOKEN">
-                    <xsd:enumeration value="unbounded"/>
-                </xsd:restriction>
-            </xsd:simpleType>
-        </xsd:union>
-    </xsd:simpleType>
+	<xsd:simpleType name="maxArity">
+		<xsd:union memberTypes="xsd:nonNegativeInteger">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:NMTOKEN">
+					<xsd:enumeration value="unbounded"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:union>
+	</xsd:simpleType>
 </xsd:schema>
