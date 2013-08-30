@@ -88,7 +88,7 @@
 
     <xsd:complexType name="enumProperty">
         <xsd:sequence>
-            <xsd:element name="item" minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="item" minOccurs="1" maxOccurs="unbounded">
                 <xsd:complexType>
                     <xsd:attribute name="name" type="xsd:string"/>
                 </xsd:complexType>
