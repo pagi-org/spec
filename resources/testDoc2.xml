@@ -1,151 +1,182 @@
 <document xmlns="http://pagi.digitalreasoning.com/pagif"
-		  id="testDoc2">
+          id="testDoc2">
 	<node type="MY_NODE" id="edge">
-		<edge target="1ip" type="bff"/>
+		<strProp k="value" v="edge"/>
+		<edge to="1ip" type="bff"/>
 	</node>
 
 	<node type="MY_NODE" id="1ip">
-		<integerProperty key="confidence" value="45"/>
+		<strProp k="value" v="1ip"/>
+		<intProp k="confidence" v="45"/>
 	</node>
 	<node type="MY_NODE" id="2ip">
-		<integerProperty key="confidence">
-			<value integer="45"/>
-		</integerProperty>
+		<strProp k="value" v="2ip"/>
+		<intProp k="confidence">
+			<val int="45"/>
+		</intProp>
 	</node>
 	<node type="MY_NODE" id="3ip">
-		<integerProperty key="confidence">
-			<value integer="45"/>
-			<value integer="88"/>
-		</integerProperty>
+		<strProp k="value" v="3ip"/>
+		<intProp k="confidence">
+			<val int="45"/>
+			<val int="88"/>
+		</intProp>
 	</node>
 	<node type="MY_NODE" id="1if">
-		<integerFeature key="probability" value="566"/>
+		<strProp k="value" v="1if"/>
+		<intFeat k="probability" v="566"/>
 	</node>
 	<node type="MY_NODE" id="2if">
-		<integerFeature key="probability">
-			<value integer="566"/>
-		</integerFeature>
+		<strProp k="value" v="2if"/>
+		<intFeat k="probability">
+			<val int="566"/>
+		</intFeat>
 	</node>
 	<node type="MY_NODE" id="3if">
-		<integerFeature key="probability">
-			<value integer="566"/>
-			<value integer="599"/>
-		</integerFeature>
+		<strProp k="value" v="3if"/>
+		<intFeat k="probability">
+			<val int="566"/>
+			<val int="599"/>
+		</intFeat>
 	</node>
 
 	<node type="MY_NODE" id="1fp">
-		<floatProperty key="confidence" value="0.45"/>
+		<strProp k="value" v="1fp"/>
+		<floatProp k="precision" v="0.45"/>
 	</node>
 	<node type="MY_NODE" id="2fp">
-		<floatProperty key="confidence">
-			<value float="0.45"/>
-		</floatProperty>
+		<strProp k="value" v="2fp"/>
+		<floatProp k="precision">
+			<val float="0.45"/>
+		</floatProp>
 	</node>
 	<node type="MY_NODE" id="3fp">
-		<floatProperty key="confidence">
-			<value float="0.45"/>
-			<value float="0.88"/>
-		</floatProperty>
+		<strProp k="value" v="3fp"/>
+		<floatProp k="precision">
+			<val float="0.45"/>
+			<val float="0.88"/>
+		</floatProp>
 	</node>
 	<node type="MY_NODE" id="1ff">
-		<floatFeature key="probability" value="0.566"/>
+		<strProp k="value" v="1ff"/>
+		<floatFeat k="probability" v="0.566"/>
 	</node>
 	<node type="MY_NODE" id="2ff">
-		<floatFeature key="probability">
-			<value float="0.566"/>
-		</floatFeature>
+		<strProp k="value" v="2ff"/>
+		<floatFeat k="probability">
+			<val float="0.566"/>
+		</floatFeat>
 	</node>
 	<node type="MY_NODE" id="3ff">
-		<floatFeature key="probability">
-			<value float="0.566"/>
-			<value float="0.599"/>
-		</floatFeature>
+		<strProp k="value" v="3ff"/>
+		<floatFeat k="probability">
+			<val float="0.566"/>
+			<val float="0.599"/>
+		</floatFeat>
 	</node>
 
 	<node type="MY_NODE" id="1bp">
-		<booleanProperty key="confidence" value="true"/>
+		<strProp k="value" v="1bp"/>
+		<boolProp k="enabled" v="true"/>
 	</node>
 	<node type="MY_NODE" id="2bp">
-		<booleanProperty key="confidence">
-			<value boolean="false"/>
-		</booleanProperty>
+		<strProp k="value" v="2bp"/>
+		<boolProp k="enabled">
+			<val bool="false"/>
+		</boolProp>
 	</node>
 	<node type="MY_NODE" id="3bp">
-		<booleanProperty key="confidence">
-			<value boolean="false"/>
-			<value boolean="true"/>
-		</booleanProperty>
+		<strProp k="value" v="3bp"/>
+		<boolProp k="enabled">
+			<val bool="false"/>
+			<val bool="true"/>
+		</boolProp>
 	</node>
 	<node type="MY_NODE" id="1bf">
-		<booleanFeature key="probability" value="false"/>
+		<strProp k="value" v="1bf"/>
+		<boolFeat k="probability" v="false"/>
 	</node>
 	<node type="MY_NODE" id="2bf">
-		<booleanFeature key="probability">
-			<value boolean="true"/>
-		</booleanFeature>
+		<strProp k="value" v="2bf"/>
+		<boolFeat k="probability">
+			<val bool="true"/>
+		</boolFeat>
 	</node>
 	<node type="MY_NODE" id="3bf">
-		<booleanFeature key="probability">
-			<value boolean="true"/>
-			<value boolean="false"/>
-		</booleanFeature>
+		<strProp k="value" v="3bf"/>
+		<boolFeat k="probability">
+			<val bool="true"/>
+			<val bool="false"/>
+		</boolFeat>
 	</node>
 
 	<node type="MY_NODE" id="1sp">
-		<stringProperty key="confidence" value="value1"/>
+		<strProp k="value" v="1sp"/>
+		<strProp k="labeled" v="value1"/>
 	</node>
 	<node type="MY_NODE" id="2sp">
-		<stringProperty key="confidence">
-			<value string="value2"/>
-		</stringProperty>
+		<strProp k="value" v="2sp"/>
+		<strProp k="labeled">
+			<val str="value2"/>
+		</strProp>
 	</node>
 	<node type="MY_NODE" id="3sp">
-		<stringProperty key="confidence">
-			<value string="value2"/>
-			<value string="value1"/>
-		</stringProperty>
+		<strProp k="value" v="3sp"/>
+		<strProp k="labeled">
+			<val str="value2"/>
+			<val str="value1"/>
+		</strProp>
 	</node>
 	<node type="MY_NODE" id="1sf">
-		<stringFeature key="probability" value="value2"/>
+		<strProp k="value" v="1sf"/>
+		<strFeat k="probability" v="value2"/>
 	</node>
 	<node type="MY_NODE" id="2sf">
-		<stringFeature key="probability">
-			<value string="value1"/>
-		</stringFeature>
+		<strProp k="value" v="2sf"/>
+		<strFeat k="probability">
+			<val str="value1"/>
+		</strFeat>
 	</node>
 	<node type="MY_NODE" id="3sf">
-		<stringFeature key="probability">
-			<value string="value1"/>
-			<value string="value2"/>
-		</stringFeature>
+		<strProp k="value" v="3sf"/>
+		<strFeat k="probability">
+			<val str="value1"/>
+			<val str="value2"/>
+		</strFeat>
 	</node>
 
 	<node type="MY_NODE" id="1ep">
-		<enumProperty key="confidence" value="value1"/>
+		<strProp k="value" v="1ep"/>
+		<enumProp k="selected" v="value1"/>
 	</node>
 	<node type="MY_NODE" id="2ep">
-		<enumProperty key="confidence">
-			<value enum="value2"/>
-		</enumProperty>
+		<strProp k="value" v="2ep"/>
+		<enumProp k="selected">
+			<val enum="value2"/>
+		</enumProp>
 	</node>
 	<node type="MY_NODE" id="3ep">
-		<enumProperty key="confidence">
-			<value enum="value2"/>
-			<value enum="value1"/>
-		</enumProperty>
+		<strProp k="value" v="3ep"/>
+		<enumProp k="selected">
+			<val enum="value2"/>
+			<val enum="value1"/>
+		</enumProp>
 	</node>
 	<node type="MY_NODE" id="1ef">
-		<enumFeature key="probability" value="value2"/>
+		<strProp k="value" v="1ef"/>
+		<enumFeat k="probability" v="value2"/>
 	</node>
 	<node type="MY_NODE" id="2ef">
-		<enumFeature key="probability">
-			<value enum="value1"/>
-		</enumFeature>
+		<strProp k="value" v="2ef"/>
+		<enumFeat k="probability">
+			<val enum="value1"/>
+		</enumFeat>
 	</node>
 	<node type="MY_NODE" id="3ef">
-		<enumFeature key="probability">
-			<value enum="value1"/>
-			<value enum="value2"/>
-		</enumFeature>
+		<strProp k="value" v="3ef"/>
+		<enumFeat k="probability">
+			<val enum="value1"/>
+			<val enum="value2"/>
+		</enumFeat>
 	</node>
 </document>

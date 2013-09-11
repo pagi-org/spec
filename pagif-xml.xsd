@@ -17,19 +17,19 @@
     <xsd:complexType name="node">
         <xsd:sequence>
             <xsd:choice minOccurs="0" maxOccurs="unbounded">
-                <xsd:element name="integerProperty" type="integerValued"/>
-                <xsd:element name="floatProperty" type="floatValued"/>
-                <xsd:element name="booleanProperty" type="booleanValued"/>
-                <xsd:element name="stringProperty" type="stringValued"/>
-                <xsd:element name="enumProperty" type="enumValued"/>
+                <xsd:element name="intProp" type="integerValued"/>
+                <xsd:element name="floatProp" type="floatValued"/>
+                <xsd:element name="boolProp" type="booleanValued"/>
+                <xsd:element name="strProp" type="stringValued"/>
+                <xsd:element name="enumProp" type="enumValued"/>
             </xsd:choice>
             <xsd:element name="edge" type="edge" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:choice minOccurs="0" maxOccurs="unbounded">
-                <xsd:element name="integerFeature" type="integerValued"/>
-                <xsd:element name="floatFeature" type="floatValued"/>
-                <xsd:element name="booleanFeature" type="booleanValued"/>
-                <xsd:element name="stringFeature" type="stringValued"/>
-                <xsd:element name="enumFeature" type="enumValued"/>
+                <xsd:element name="intFeat" type="integerValued"/>
+                <xsd:element name="floatFeat" type="floatValued"/>
+                <xsd:element name="boolFeat" type="booleanValued"/>
+                <xsd:element name="strFeat" type="stringValued"/>
+                <xsd:element name="enumFeat" type="enumValued"/>
             </xsd:choice>
         </xsd:sequence>
         <xsd:attribute name="type" type="xsd:string" use="required"/>
@@ -38,24 +38,24 @@
 
     <xsd:complexType name="edge">
         <xsd:attribute name="type" type="xsd:string" use="required"/>
-        <xsd:attribute name="target" type="xsd:string" use="required"/>
+        <xsd:attribute name="to" type="xsd:string" use="required"/>
     </xsd:complexType>
 
     <xsd:complexType name="valued">
-        <xsd:attribute name="key" type="xsd:string" use="required"/>
+        <xsd:attribute name="k" type="xsd:string" use="required"/>
     </xsd:complexType>
 
     <xsd:complexType name="integerValued">
         <xsd:complexContent>
             <xsd:extension base="valued">
                 <xsd:sequence>
-                    <xsd:element name="value" minOccurs="0" maxOccurs="unbounded">
+                    <xsd:element name="val" minOccurs="0" maxOccurs="unbounded">
                         <xsd:complexType>
-                            <xsd:attribute name="integer" type="xsd:integer" use="required"/>
+                            <xsd:attribute name="int" type="xsd:integer" use="required"/>
                         </xsd:complexType>
                     </xsd:element>
                 </xsd:sequence>
-                <xsd:attribute name="value" type="xsd:integer"/>
+                <xsd:attribute name="v" type="xsd:integer"/>
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
@@ -64,13 +64,13 @@
         <xsd:complexContent>
             <xsd:extension base="valued">
                 <xsd:sequence>
-                    <xsd:element name="value" minOccurs="0" maxOccurs="unbounded">
+                    <xsd:element name="val" minOccurs="0" maxOccurs="unbounded">
                         <xsd:complexType>
                             <xsd:attribute name="float" type="xsd:float" use="required"/>
                         </xsd:complexType>
                     </xsd:element>
                 </xsd:sequence>
-                <xsd:attribute name="value" type="xsd:float"/>
+                <xsd:attribute name="v" type="xsd:float"/>
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
@@ -79,13 +79,13 @@
         <xsd:complexContent>
             <xsd:extension base="valued">
                 <xsd:sequence>
-                    <xsd:element name="value" minOccurs="0" maxOccurs="unbounded">
+                    <xsd:element name="val" minOccurs="0" maxOccurs="unbounded">
                         <xsd:complexType>
-                            <xsd:attribute name="boolean" type="xsd:boolean" use="required"/>
+                            <xsd:attribute name="bool" type="xsd:boolean" use="required"/>
                         </xsd:complexType>
                     </xsd:element>
                 </xsd:sequence>
-                <xsd:attribute name="value" type="xsd:boolean"/>
+                <xsd:attribute name="v" type="xsd:boolean"/>
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
@@ -94,13 +94,13 @@
         <xsd:complexContent>
             <xsd:extension base="valued">
                 <xsd:sequence>
-                    <xsd:element name="value" minOccurs="0" maxOccurs="unbounded">
+                    <xsd:element name="val" minOccurs="0" maxOccurs="unbounded">
                         <xsd:complexType>
-                            <xsd:attribute name="string" type="xsd:string" use="required"/>
+                            <xsd:attribute name="str" type="xsd:string" use="required"/>
                         </xsd:complexType>
                     </xsd:element>
                 </xsd:sequence>
-                <xsd:attribute name="value" type="xsd:string"/>
+                <xsd:attribute name="v" type="xsd:string"/>
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
@@ -109,13 +109,13 @@
         <xsd:complexContent>
             <xsd:extension base="valued">
                 <xsd:sequence>
-                    <xsd:element name="value" minOccurs="0" maxOccurs="unbounded">
+                    <xsd:element name="val" minOccurs="0" maxOccurs="unbounded">
                         <xsd:complexType>
                             <xsd:attribute name="enum" type="xsd:string" use="required"/>
                         </xsd:complexType>
                     </xsd:element>
                 </xsd:sequence>
-                <xsd:attribute name="value" type="xsd:string"/>
+                <xsd:attribute name="v" type="xsd:string"/>
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>

@@ -1,61 +1,73 @@
 <p:document xmlns:p="http://pagi.digitalreasoning.com/pagif"
-       id="testDoc1">
+          id="testDoc1">
 	<p:node type="TOK" id="0:4">
-		<p:integerProperty key="prop1" value="42"/>
-		<p:booleanProperty key="prop2">
-			<p:value boolean="true"/>
-			<p:value boolean="false"/>
-		</p:booleanProperty>
-		<p:edge type="next" target="6:3"/>
-		<p:integerFeature key="f1" value="42"/>
+		<p:intProp k="start" v="0"/>
+		<p:intProp k="length" v="4"/>
+		<p:intProp k="prop1" v="42"/>
+		<p:boolProp k="prop2">
+			<p:val bool="true"/>
+			<p:val bool="false"/>
+		</p:boolProp>
+		<p:edge type="next" to="6:3"/>
+		<p:intFeat k="f1" v="42"/>
 	</p:node>
 	<p:node type="TOK" id="6:3">
-        <p:integerProperty key="prop1" value="42"/>
-        <p:booleanProperty key="prop2">
-            <p:value boolean="true"/>
-            <p:value boolean="false"/>
-        </p:booleanProperty>
-		<p:edge type="prev" target="0:4"/>
-		<p:edge type="next" target="10:1"/>
-        <p:integerFeature key="f1" value="42"/>
+		<p:intProp k="start" v="6"/>
+		<p:intProp k="length" v="3"/>
+		<p:intProp k="prop1" v="42"/>
+		<p:boolProp k="prop2">
+			<p:val bool="true"/>
+			<p:val bool="false"/>
+		</p:boolProp>
+		<p:edge type="prev" to="0:4"/>
+		<p:edge type="next" to="10:1"/>
+		<p:intFeat k="f1" v="42"/>
 	</p:node>
 	<p:node type="TOK" id="10:1">
-        <p:integerProperty key="prop1" value="42"/>
-        <p:booleanProperty key="prop2">
-            <p:value boolean="true"/>
-            <p:value boolean="false"/>
-        </p:booleanProperty>
-		<p:edge type="prev" target="6:3"/>
-		<p:edge type="next" target="12:6"/>
-        <p:integerFeature key="f1" value="42"/>
+		<p:intProp k="start" v="10"/>
+		<p:intProp k="length" v="1"/>
+		<p:intProp k="prop1" v="42"/>
+		<p:boolProp k="prop2">
+			<p:val bool="true"/>
+			<p:val bool="false"/>
+		</p:boolProp>
+		<p:edge type="prev" to="6:3"/>
+		<p:edge type="next" to="12:6"/>
+		<p:intFeat k="f1" v="42"/>
 	</p:node>
 	<p:node type="TOK" id="12:6">
-        <p:integerProperty key="prop1" value="42"/>
-        <p:booleanProperty key="prop2">
-            <p:value boolean="true"/>
-            <p:value boolean="false"/>
-        </p:booleanProperty>
-		<p:edge type="prev" target="10:1"/>
-		<p:edge type="next" target="19:4"/>
-        <p:integerFeature key="f1" value="42"/>
+		<p:intProp k="start" v="12"/>
+		<p:intProp k="length" v="6"/>
+		<p:intProp k="prop1" v="42"/>
+		<p:boolProp k="prop2">
+			<p:val bool="true"/>
+			<p:val bool="false"/>
+		</p:boolProp>
+		<p:edge type="prev" to="10:1"/>
+		<p:edge type="next" to="19:4"/>
+		<p:intFeat k="f1" v="42"/>
 	</p:node>
 	<p:node type="TOK" id="19:4">
-        <p:integerProperty key="prop1" value="42"/>
-        <p:booleanProperty key="prop2">
-            <p:value boolean="true"/>
-            <p:value boolean="false"/>
-        </p:booleanProperty>
-		<p:edge type="prev" target="12:6"/>
-		<p:edge type="next" target="23:1"/>
-        <p:integerFeature key="f1" value="42"/>
+		<p:intProp k="start" v="19"/>
+		<p:intProp k="length" v="4"/>
+		<p:intProp k="prop1" v="42"/>
+		<p:boolProp k="prop2">
+			<p:val bool="true"/>
+			<p:val bool="false"/>
+		</p:boolProp>
+		<p:edge type="prev" to="12:6"/>
+		<p:edge type="next" to="23:1"/>
+		<p:intFeat k="f1" v="42"/>
 	</p:node>
 	<p:node type="TOK" id="23:1">
-        <p:integerProperty key="prop1" value="42"/>
-        <p:booleanProperty key="prop2">
-            <p:value boolean="true"/>
-            <p:value boolean="false"/>
-        </p:booleanProperty>
-		<p:edge type="prev" target="19:4"/>
-        <p:integerFeature key="f1" value="42"/>
+		<p:intProp k="start" v="23"/>
+		<p:intProp k="length" v="1"/>
+		<p:intProp k="prop1" v="42"/>
+		<p:boolProp k="prop2">
+			<p:val bool="true"/>
+			<p:val bool="false"/>
+		</p:boolProp>
+		<p:edge type="prev" to="19:4"/>
+		<p:intFeat k="f1" v="42"/>
 	</p:node>
 </p:document>

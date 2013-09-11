@@ -5,9 +5,9 @@ Portable Analytics Graphical Interchange
 
 #### J. Bunting, J. Swisher
 
-#### 20 August 2013
+#### 10 September 2013
 
-##### Draft 2
+##### Draft 3
 
 Abstract {#abstract}
 -------------------
@@ -742,14 +742,14 @@ Here is the general structure:
 <pagif xmlns="http://pagi.digitalreasoning.com/pagif/"
        id="">
   <node type="" id="">
-    <property key="" integer=""/>
-    <property key="">
-      <value integer=""/>
-    </property>
-    <edge type="" target=""/>
-    <feature key="">
-      <value integer=""/>
-    </feature>
+    <prop k="" int=""/>
+    <prop k="">
+      <value int=""/>
+    </prop>
+    <edge type="" to=""/>
+    <feat k="">
+      <val int=""/>
+    </feat>
   </node>
 </pagif>
 ```
