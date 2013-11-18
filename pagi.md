@@ -759,15 +759,72 @@ The actual xsd is referenced [in the appendix](#xml-format-xsd).
 ### Binary {#binary-format}
 
 In order to facilitate efficient transfer and storage between components of
-analytic applications, we define a binary format. Current thoughts are to
-translate the xml format to one of the following:
+analytic applications, we define a binary format.  The binary format is a
+simple, byte-wise representation of the event stream.  We have taken some
+steps to ensure robustness and future adaptability.
 
-* msgpack (`application/vnd.drs-pagif+msgpack`)
-* protobuf (`application/vnd.drs-pagif+protobuf`)
+Its Internet Media Type is `application/vnd.drs-pagif+bin`.
+Its extension is `pbf`.
 
-The decision of what binary serialization to use is still an open ended
-question. We fully expect other options than these two to be proposed and
-considered.
+A `pbf` file is made up of three sections. The __preamble__, the the
+__header-block__, and the __event-stream__.
+
+Many records in this format leverage LRC as defined in [ISO-1155][].
+
+   [ISO-1155]: http://www.iso.org/iso/iso_catalogue/catalogue_tc/catalogue_detail.htm?csnumber=5723
+
+
+#### Preamble
+
+The preamble itself is composed of two pieces. The first is the __signature__,
+and the second is the __version-number__. The __signature__ is fixed and always
+the same. The __version-number__ is a two-byte integer that will increment as
+this specification evolves. The current value is *1*. The signature is:
+
+```
+  0x87 0x50 0x41 0x47
+  0x49 0x0D 0x0A 0x1A
+  0x0A 0x1A
+```
+
+#### Header Block
+
+The header block is composed of a __header-length__ followed by a series of
+__headers__. The __header-length__ is a two-byte integer indicating the total
+number of bytes in the series of __headers__. Note that the __header-length__
+bytes themselves are **NOT** included in this length. Each __header__ in the
+series is a __header-code__ followed by a __string__ filed by a __lrc-byte__.
+The __string__ itself is a two-byte integer indicating length followed by
+*UTF-8*-encoded bytes. The __lrc-byte__ is determined by an [LRC][ISO-1155]
+checksum on all previous bytes in the __header__. Compliant implementations are
+expected to write out all headers currenlty defined. Defined __header-codes__ are
+defined below:
+
+ * __0x01__ : *DATE CREATED*
+ * __0x02__ : *CREATING USER*
+ * __0x03__ : *CREATING MACHINE*
+ * __0x04__ : *TOOL NAME*
+ * __0x05__ : *TOOL VERSION*
+ * __0x06__ : *LIB NAME*
+ * __0x07__ : *LIB VERSION*
+ * __0x08__ : *PLATFORM DETAILS*
+
+#### Event Stream
+
+The __event-stream__ is a series of event records. Each event record is composed
+of a 1-byte __event-code__, followed by some __event-code__-specific data, follow by
+an __lrc-byte__ over both the __event-code__ and the __event-code__-specific
+data. The event stream maintains a string cache. There is one *special*
+__event-code__ that injects a string into the cache. The string cache holds
+65536 strings. Each string is the code ``0xFF`` followed by a two-byte __string-ref__,
+followed by a __string__.  String references are typically defined in an on-demand
+basis, and the references will roll over once the maximum is reached. Given this
+behavior, it is not uncommon to see strings repeated in very large files. It is
+presumed that this cache is large enough to prevent repetition to the point of
+a severe degredation to performance. The other events are defined below:
+
+
+
 
 Corpus-Scoped Analytics {#corpus-scoped-analytics}
 --------------------------------------------------
