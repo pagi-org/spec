@@ -769,16 +769,32 @@ Its extension is `pbf`.
 A `pbf` file is made up of three sections. The __preamble__, the the
 __header-block__, and the __event-stream__.
 
-Many records in this format leverage LRC as defined in [ISO-1155][].
+#### Primitive Data Types
+
+Several primitive data types are referenced repeatedly in the rest of this spec.
+
+short
+:    a 2-byte integer-type number
+
+string-ref
+:    a short value that is a pointer into the string cache
+
+string
+:    a short value [``l``]
+:    followed by ``l`` *UTF-8* encoded bytes
+
+lrc
+:    a 1-byte checksum for a short record
+:    comes at the end of a record, and input is the entire preceding portion of the record
+:    as defined in [ISO-1155][].
 
    [ISO-1155]: http://www.iso.org/iso/iso_catalogue/catalogue_tc/catalogue_detail.htm?csnumber=5723
-
 
 #### Preamble
 
 The preamble itself is composed of two pieces. The first is the __signature__,
-and the second is the __version-number__. The __signature__ is fixed and always
-the same. The __version-number__ is a two-byte integer that will increment as
+and the second is the __version-number__. The __signature__ is a fixed literal
+and does not change. The __version-number__ is a *short* that will increment as
 this specification evolves. The current value is *1*. The signature is:
 
 ```
@@ -790,15 +806,12 @@ this specification evolves. The current value is *1*. The signature is:
 #### Header Block
 
 The header block is composed of a __header-length__ followed by a series of
-__headers__. The __header-length__ is a two-byte integer indicating the total
+__headers__. The __header-length__ is a *short* indicating the total
 number of bytes in the series of __headers__. Note that the __header-length__
 bytes themselves are **NOT** included in this length. Each __header__ in the
-series is a __header-code__ followed by a __string__ filed by a __lrc-byte__.
-The __string__ itself is a two-byte integer indicating length followed by
-*UTF-8*-encoded bytes. The __lrc-byte__ is determined by an [LRC][ISO-1155]
-checksum on all previous bytes in the __header__. Compliant implementations are
-expected to write out all headers currenlty defined. Defined __header-codes__ are
-defined below:
+series is a __header-code__ followed by a *string*, and terminated by a *lrc*.
+Compliant implementations are expected to write out all headers currenlty
+defined. Defined __header-codes__ are defined below:
 
  * __0x01__ : *DATE CREATED*
  * __0x02__ : *CREATING USER*
@@ -813,17 +826,47 @@ defined below:
 
 The __event-stream__ is a series of event records. Each event record is composed
 of a 1-byte __event-code__, followed by some __event-code__-specific data, follow by
-an __lrc-byte__ over both the __event-code__ and the __event-code__-specific
+a *lrc* over both the __event-code__ and the __event-code__-specific
 data. The event stream maintains a string cache. There is one *special*
-__event-code__ that injects a string into the cache. The string cache holds
-65536 strings. Each string is the code ``0xFF`` followed by a two-byte __string-ref__,
-followed by a __string__.  String references are typically defined in an on-demand
+__event-code__, __NEW_STRING__ that adds a string into the cache. The string cache holds
+2^16 strings. Each __NEW_STRING__ event is the code ``0xFF`` followed by a *string-ref*,
+followed by a *string*.  String references are typically defined in an on-demand
 basis, and the references will roll over once the maximum is reached. Given this
 behavior, it is not uncommon to see strings repeated in very large files. It is
 presumed that this cache is large enough to prevent repetition to the point of
 a severe degredation to performance. The other events are defined below:
 
 
+| Code        | Name               | Event-Code-Specific Data                               |
+| ----------- | ------------------ | ------------------------------------------------------ |
+| ``0x01``    | __DOC_START__      | <__docId__[*string-ref*]>                              |
+| ``0x02``    | __DOC_END__        | <*empty*>                                              |
+| ``0x03``    | __NODE_START__     | <__nodeType__[*string-ref*]><__nodeId__[*string-ref*]> |
+| ``0x04``    | __NODE_END__       | <*empty*>                                              |
+| ``0x05``    | __PROPERTY_START__ | <__key__[*string-ref*]><__valueType__[*value-type*]>   |
+| ``0x06``    | __PROPERTY_END__   | <*empty*>                                              |
+| ``0x07``    | __EDGE__           | <__type__[*string-ref*]><__target__[*string-ref*]>     |
+| ``0x08``    | __FEATURE_START__  | <__key__[*string-ref*]><__valueType__[*value-type*]>   |
+| ``0x09``    | __FEATURE_END__    | <*empty*>                                              |
+| ``0x0A``    | __VALUE_INTEGER__  | 4-byte integer                                         |
+| ``0x0B``    | __VALUE_FLOAT__    | 4-byte [IEEE-754-2008][] floating-point                |
+| ``0x0C``    | __VALUE_BOOLEAN__  | ``0x0F`` (true) or ``0xF0`` (false)                    |
+| ``0x0D``    | __VALUE_STRING__   | <*string-ref*>                                         |
+| ``0x0E``    | __VALUE_ENUM__     | <*string-ref*>                                         |
+
+
+The __valueType__ that is referenced in __PROPERTY_START__ and __PROPERTY_END__ is as follows:
+
+| Code        | Name          |
+| ----------- | ------------- |
+| ``0x01``    | __INTEGER__   |
+| ``0x02``    | __FLOAT__     |
+| ``0x03``    | __BOOLEAN__   |
+| ``0x04``    | __STRING__    |
+| ``0x05``    | __ENUM__      |
+
+
+   [IEEE-754-2008]: http://ieeexplore.ieee.org/xpl/mostRecentIssue.jsp?punumber=4610933
 
 
 Corpus-Scoped Analytics {#corpus-scoped-analytics}
