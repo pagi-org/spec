@@ -772,6 +772,7 @@ __header-block__, and the __event-stream__.
 #### Primitive Data Types
 
 Several primitive data types are referenced repeatedly in the rest of this spec.
+All multi-byte numbers are big-endian.
 
 short
 :    a 2-byte integer-type number
