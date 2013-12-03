@@ -196,7 +196,7 @@ Nodes are the pivotal structures in this model.
 
 ### ID Generation {#id-generation}
 
-* A nodeType is repsonsible for defining how IDs are to be generated for nodes
+* A nodeType is responsible for defining how IDs are to be generated for nodes
   of that type.
 * The generation strategy must produce IDs that are unique within a given
   document and nodeType. If it does not, failures will occur at runtime.
