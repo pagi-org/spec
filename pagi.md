@@ -499,9 +499,6 @@ the data no matter the language, in much the same way that SAX and DOM do for
 XML. One key difference between these APIs and the XML APIs is that writing
 should be accounted for in all of these.
 
-The final spec should describe these APIs in detail. For the current draft,
-simplistic overviews are given.
-
 ### Event-Based Streaming {#event-based-streaming}
 
 This API is intended as a computationally cheap way to walk through a document
