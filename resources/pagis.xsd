@@ -5,13 +5,17 @@
 
 	<xsd:complexType name="pagis">
 		<xsd:sequence>
+			<xsd:element name="extends" type="extendsType" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:choice minOccurs="0" maxOccurs="unbounded">
 				<xsd:element name="nodeType" type="nodeType" minOccurs="0" maxOccurs="unbounded"/>
 				<xsd:element name="nodeTypeExtension" type="nodeTypeExtension" minOccurs="0" maxOccurs="unbounded"/>
 			</xsd:choice>
 		</xsd:sequence>
-		<xsd:attribute name="name" type="identifier" use="required"/>
-		<xsd:attribute name="extends" type="identifier" use="optional"/>
+		<xsd:attribute name="id" type="xsd:anyURI" use="required"/>
+	</xsd:complexType>
+
+	<xsd:complexType name="extendsType">
+		<xsd:attribute name="id" type="xsd:anyURI" use="required"/>
 	</xsd:complexType>
 
 	<xsd:complexType name="nodeType">
