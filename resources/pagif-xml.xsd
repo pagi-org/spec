@@ -9,10 +9,15 @@
 
     <xsd:complexType name="document">
         <xsd:sequence>
+        	<xsd:element name="schema" type="schema" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="node" type="node" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
         <xsd:attribute name="id" type="xsd:string" use="required"/>
     </xsd:complexType>
+
+	<xsd:complexType name="schema">
+		<xsd:attribute name="uri" type="xsd:string" use="required"/>
+	</xsd:complexType>
 
     <xsd:complexType name="node">
         <xsd:sequence>

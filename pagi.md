@@ -519,6 +519,12 @@ DOC_END
 :    Is only valid in the "DOC" context.
 :    Indicates the ending of a "DOC" context.
 
+USES_SCHEMA
+:    Indicates that this document uses a particular pagi schema.
+:    Is only valid in the "DOC" context and before any "NODE_START" events.
+:    Has the string-typed *uri* parameter indicating the pagi schema id.
+:    This event can occur 0 or more times with different schema ids.
+
 NODE_START
 :    Represents the beginning of information about a node.
 :    Is only valid in the "DOC" context.
@@ -621,6 +627,8 @@ handleDocStart(id)
 
 handleDocEnd()
 
+handleUsesSchema(uri)
+
 handleNodeStart(nodeType, id)
 
 handleNodeEnd()
@@ -661,6 +669,10 @@ getEventType
 getId
 :    Returns the ID of the document or node.
 :    Valid in DOC_START and NODE_START.
+
+getSchemaId
+:    Returns a pagi schema uri.
+:    Valid in USES_SCHEMA.
 
 getNodeType
 :    Returns the type of the node.
@@ -738,6 +750,7 @@ Here is the general structure:
 ```xml 
 <pagif xmlns="http://pagi.digitalreasoning.com/pagif/"
        id="">
+  <schema uri="drs-pagis"/>
   <node type="" id="">
     <prop k="" int=""/>
     <prop k="">
@@ -851,7 +864,7 @@ a severe degredation to performance. The other events are defined below:
 | ``0x0C``    | __VALUE_BOOLEAN__  | ``0x0F`` (true) or ``0xF0`` (false)                    |
 | ``0x0D``    | __VALUE_STRING__   | <*string-ref*>                                         |
 | ``0x0E``    | __VALUE_ENUM__     | <*string-ref*>                                         |
-
+| ``0xOF``    | __USES_SCHEMA__    | <__schemaId__[*string-ref*]>
 
 The __valueType__ that is referenced in __PROPERTY_START__ and __PROPERTY_END__ is as follows:
 
