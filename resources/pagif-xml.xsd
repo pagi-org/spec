@@ -4,125 +4,125 @@
             targetNamespace="http://pagi.digitalreasoning.com/pagif"
             xmlns="http://pagi.digitalreasoning.com/pagif"
             elementFormDefault="qualified">
-    <!-- the root element 'document' -->
-    <xsd:element name="document" type="document"/>
+	<!-- the root element 'document' -->
+	<xsd:element name="document" type="document"/>
 
-    <xsd:complexType name="document">
-        <xsd:sequence>
-        	<xsd:element name="schema" type="schema" minOccurs="0" maxOccurs="unbounded"/>
-            <xsd:element name="node" type="node" minOccurs="0" maxOccurs="unbounded"/>
-        </xsd:sequence>
-        <xsd:attribute name="id" type="xsd:string" use="required"/>
-    </xsd:complexType>
+	<xsd:complexType name="document">
+		<xsd:sequence>
+			<xsd:element name="schema" type="schema" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="node" type="node" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="xsd:string" use="required"/>
+	</xsd:complexType>
 
 	<xsd:complexType name="schema">
 		<xsd:attribute name="uri" type="xsd:string" use="required"/>
 	</xsd:complexType>
 
-    <xsd:complexType name="node">
-        <xsd:sequence>
-            <xsd:choice minOccurs="0" maxOccurs="unbounded">
-                <xsd:element name="intProp" type="integerValued"/>
-                <xsd:element name="floatProp" type="floatValued"/>
-                <xsd:element name="boolProp" type="booleanValued"/>
-                <xsd:element name="strProp" type="stringValued"/>
-                <xsd:element name="enumProp" type="enumValued"/>
-            </xsd:choice>
-            <xsd:element name="edge" type="edge" minOccurs="0" maxOccurs="unbounded"/>
-            <xsd:choice minOccurs="0" maxOccurs="unbounded">
-                <xsd:element name="intFeat" type="integerValued"/>
-                <xsd:element name="floatFeat" type="floatValued"/>
-                <xsd:element name="boolFeat" type="booleanValued"/>
-                <xsd:element name="strFeat" type="stringValued"/>
-                <xsd:element name="enumFeat" type="enumValued"/>
-            </xsd:choice>
-        </xsd:sequence>
-        <xsd:attribute name="type" type="xsd:string" use="required"/>
-        <xsd:attribute name="id" type="xsd:string" use="required"/>
-    </xsd:complexType>
+	<xsd:complexType name="node">
+		<xsd:sequence>
+			<xsd:choice minOccurs="0" maxOccurs="unbounded">
+				<xsd:element name="intProp" type="integerValued"/>
+				<xsd:element name="floatProp" type="floatValued"/>
+				<xsd:element name="boolProp" type="booleanValued"/>
+				<xsd:element name="strProp" type="stringValued"/>
+				<xsd:element name="enumProp" type="enumValued"/>
+			</xsd:choice>
+			<xsd:element name="edge" type="edge" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:choice minOccurs="0" maxOccurs="unbounded">
+				<xsd:element name="intFeat" type="integerValued"/>
+				<xsd:element name="floatFeat" type="floatValued"/>
+				<xsd:element name="boolFeat" type="booleanValued"/>
+				<xsd:element name="strFeat" type="stringValued"/>
+				<xsd:element name="enumFeat" type="enumValued"/>
+			</xsd:choice>
+		</xsd:sequence>
+		<xsd:attribute name="type" type="xsd:string" use="required"/>
+		<xsd:attribute name="id" type="xsd:string" use="required"/>
+	</xsd:complexType>
 
-    <xsd:complexType name="edge">
-        <xsd:attribute name="type" type="xsd:string" use="required"/>
-        <xsd:attribute name="to" type="xsd:string" use="required"/>
-    </xsd:complexType>
+	<xsd:complexType name="edge">
+		<xsd:attribute name="type" type="xsd:string" use="required"/>
+		<xsd:attribute name="to" type="xsd:string" use="required"/>
+	</xsd:complexType>
 
-    <xsd:complexType name="valued">
-        <xsd:attribute name="k" type="xsd:string" use="required"/>
-    </xsd:complexType>
+	<xsd:complexType name="valued">
+		<xsd:attribute name="k" type="xsd:string" use="required"/>
+	</xsd:complexType>
 
-    <xsd:complexType name="integerValued">
-        <xsd:complexContent>
-            <xsd:extension base="valued">
-                <xsd:sequence>
-                    <xsd:element name="val" minOccurs="0" maxOccurs="unbounded">
-                        <xsd:complexType>
-                            <xsd:attribute name="int" type="xsd:integer" use="required"/>
-                        </xsd:complexType>
-                    </xsd:element>
-                </xsd:sequence>
-                <xsd:attribute name="v" type="xsd:integer"/>
-            </xsd:extension>
-        </xsd:complexContent>
-    </xsd:complexType>
+	<xsd:complexType name="integerValued">
+		<xsd:complexContent>
+			<xsd:extension base="valued">
+				<xsd:sequence>
+					<xsd:element name="val" minOccurs="0" maxOccurs="unbounded">
+						<xsd:complexType>
+							<xsd:attribute name="int" type="xsd:integer" use="required"/>
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:sequence>
+				<xsd:attribute name="v" type="xsd:integer"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
 
-    <xsd:complexType name="floatValued">
-        <xsd:complexContent>
-            <xsd:extension base="valued">
-                <xsd:sequence>
-                    <xsd:element name="val" minOccurs="0" maxOccurs="unbounded">
-                        <xsd:complexType>
-                            <xsd:attribute name="float" type="xsd:float" use="required"/>
-                        </xsd:complexType>
-                    </xsd:element>
-                </xsd:sequence>
-                <xsd:attribute name="v" type="xsd:float"/>
-            </xsd:extension>
-        </xsd:complexContent>
-    </xsd:complexType>
+	<xsd:complexType name="floatValued">
+		<xsd:complexContent>
+			<xsd:extension base="valued">
+				<xsd:sequence>
+					<xsd:element name="val" minOccurs="0" maxOccurs="unbounded">
+						<xsd:complexType>
+							<xsd:attribute name="float" type="xsd:float" use="required"/>
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:sequence>
+				<xsd:attribute name="v" type="xsd:float"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
 
-    <xsd:complexType name="booleanValued">
-        <xsd:complexContent>
-            <xsd:extension base="valued">
-                <xsd:sequence>
-                    <xsd:element name="val" minOccurs="0" maxOccurs="unbounded">
-                        <xsd:complexType>
-                            <xsd:attribute name="bool" type="xsd:boolean" use="required"/>
-                        </xsd:complexType>
-                    </xsd:element>
-                </xsd:sequence>
-                <xsd:attribute name="v" type="xsd:boolean"/>
-            </xsd:extension>
-        </xsd:complexContent>
-    </xsd:complexType>
+	<xsd:complexType name="booleanValued">
+		<xsd:complexContent>
+			<xsd:extension base="valued">
+				<xsd:sequence>
+					<xsd:element name="val" minOccurs="0" maxOccurs="unbounded">
+						<xsd:complexType>
+							<xsd:attribute name="bool" type="xsd:boolean" use="required"/>
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:sequence>
+				<xsd:attribute name="v" type="xsd:boolean"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
 
-    <xsd:complexType name="stringValued">
-        <xsd:complexContent>
-            <xsd:extension base="valued">
-                <xsd:sequence>
-                    <xsd:element name="val" minOccurs="0" maxOccurs="unbounded">
-                        <xsd:complexType>
-                            <xsd:attribute name="str" type="xsd:string" use="required"/>
-                        </xsd:complexType>
-                    </xsd:element>
-                </xsd:sequence>
-                <xsd:attribute name="v" type="xsd:string"/>
-            </xsd:extension>
-        </xsd:complexContent>
-    </xsd:complexType>
+	<xsd:complexType name="stringValued">
+		<xsd:complexContent>
+			<xsd:extension base="valued">
+				<xsd:sequence>
+					<xsd:element name="val" minOccurs="0" maxOccurs="unbounded">
+						<xsd:complexType>
+							<xsd:attribute name="str" type="xsd:string" use="required"/>
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:sequence>
+				<xsd:attribute name="v" type="xsd:string"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
 
-    <xsd:complexType name="enumValued">
-        <xsd:complexContent>
-            <xsd:extension base="valued">
-                <xsd:sequence>
-                    <xsd:element name="val" minOccurs="0" maxOccurs="unbounded">
-                        <xsd:complexType>
-                            <xsd:attribute name="enum" type="xsd:string" use="required"/>
-                        </xsd:complexType>
-                    </xsd:element>
-                </xsd:sequence>
-                <xsd:attribute name="v" type="xsd:string"/>
-            </xsd:extension>
-        </xsd:complexContent>
-    </xsd:complexType>
+	<xsd:complexType name="enumValued">
+		<xsd:complexContent>
+			<xsd:extension base="valued">
+				<xsd:sequence>
+					<xsd:element name="val" minOccurs="0" maxOccurs="unbounded">
+						<xsd:complexType>
+							<xsd:attribute name="enum" type="xsd:string" use="required"/>
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:sequence>
+				<xsd:attribute name="v" type="xsd:string"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
 
 </xsd:schema>
