@@ -390,8 +390,7 @@ or more of the following tokens:
 ### Extending Schemas {#extending-schemas}
 
 Any schema can be extended.  This is done by specifying the `extends` attribute
-in  the root `pagis` element. The new schema may specify new nodeTypes or add
-edges and properties to an existing node type.
+in  the root `pagis` element. The new schema may only specify new nodeTypes or add edges and properties to an existing node type.  It may not modify existing properties.
 
 Here is the general structure:
 ```xml
