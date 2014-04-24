@@ -1,0 +1,55 @@
+.hg
+# eclipse
+.classpath
+.project
+.settings
+
+# maven
+target/
+*.versionsBackup
+build.number
+
+# common junk
+*.log
+*.swp
+*.diff
+*.patch
+*.bak
+
+# intellij
+*.iml
+*.ipr
+*.iws
+.idea/
+atlassian-ide-plugin.xml
+
+# Mac filesystem dust
+.DS_Store
+
+# pmd
+.pmdruleset
+.pmd
+
+# vim
+.*.sw[a-p]
+
+#maven
+*.versionsBackup
+
+#C compile artifacts
+*.o
+*.a
+*.lo
+*.la
+*.Plo
+Makefile
+*.Po
+*.so
+*.lai
+nlpstack-qcrf-binaries/config.h
+nlpstack-qcrf-binaries/config.status
+nlpstack-qcrf-binaries/frontend/crfsuite
+nlpstack-qcrf-binaries/libtool
+nlpstack-qcrf-binaries/stamp-h1
+nlpstack-qcrf-binaries/jni/.deps/
+
