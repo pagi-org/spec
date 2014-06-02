@@ -290,28 +290,6 @@ Currently defined traits:
       type; this implies that there are no "previous" or "next" edges 
       connecting nodes of different Sequences.
 
-#### Container
-* Parameters
-    * **edgeType** -- edgeType to consider as referring to "contained" nodes. 
-      Exactly one edgeType must be specified. (A nodeType may have multiple
-      instances of the Container trait, together specifying multiple 
-      edgeTypes).
-
-* Properties
-    * *none*
-* Edges
-    * *none*
-* Semantic Description
-    * Describes a nodeType whose existence is defined as a container of 
-      another nodeType.
-    * Parameter **edgeType** specifies names of edges which refer to 
-      "contained" nodes.
-    * May be specified more than once on a given nodeType, each with a different
-      **edgeType**.
-    * Where multiple edgeTypes are specified for a nodeType by multiple 
-      instances of the Container trait, traversal APIs must enable referring to
-      all "contained" edge types as a single construct. 
-
 #### SpanContainer
 * Parameters
     * **spanType** -- the node type that is spanned/contained by this one - 

@@ -20,11 +20,6 @@
 
 	<xsd:complexType name="nodeType">
 		<xsd:sequence>
-			<xsd:element name="container" minOccurs="0" maxOccurs="unbounded">
-				<xsd:complexType>
-					<xsd:attribute name="edgeType" type="identifier"/>
-				</xsd:complexType>
-			</xsd:element>
 			<xsd:element name="sequence" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="span" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="spanContainer" minOccurs="0" maxOccurs="1">
