@@ -42,7 +42,7 @@
 
 	<xsd:simpleType name="idGenerator">
 		<xsd:restriction base="xsd:string">
-			<xsd:pattern value="([^\{\}]+|\{random(:[0-9]+(/[0-9]+)?)?\}|\{seq\}|\{prop(:[^:\{\}]*)?:[^:\{\}]+\})+"/>
+			<xsd:pattern value="([^\{\}]+|\{random(:[0-9]+(/[0-9]+)?)?\}|\{seq\}|\{prop(:[^:\{\}]*)?:[^:\{\}]+\}|\{edge(:[^:\{\}]*)?:[^:\{\}]+\})+"/>
 		</xsd:restriction>
 	</xsd:simpleType>
 

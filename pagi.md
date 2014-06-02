@@ -370,6 +370,9 @@ or more of the following tokens:
     * `prop[:{delim}]:{name}` - the value of the named property, separated by
       optional specification `delim`
       * default delim is `,`
+    * `edge[:{delim}]:{name}` - the id of the node targeted by the named edge,
+      separated by optional specification `delim`
+      * default delim is `,`
 
 ### Extending Schemas {#extending-schemas}
 
