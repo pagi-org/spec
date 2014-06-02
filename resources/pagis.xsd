@@ -114,6 +114,7 @@
 		</xsd:sequence>
 		<xsd:attribute name="extends" type="identifier"/>
 	</xsd:complexType>
+
 	<xsd:complexType name="edgeType">
 		<xsd:sequence>
 			<xsd:element name="targetNodeType" minOccurs="0" maxOccurs="unbounded">
@@ -126,6 +127,8 @@
 		<xsd:attribute name="targetNodeType" type="identifier"/>
 		<xsd:attribute name="minArity" type="xsd:nonNegativeInteger"/>
 		<xsd:attribute name="maxArity" type="maxArity"/>
+		<xsd:attribute name="targetMinArity" type="xsd:nonNegativeInteger"/>
+		<xsd:attribute name="targetMaxArity" type="maxArity"/>
 	</xsd:complexType>
 
 	<xsd:simpleType name="maxArity">

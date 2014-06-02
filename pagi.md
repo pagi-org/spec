@@ -333,8 +333,8 @@ Here is the general structure:
     <enumProperty name="" minArity="" maxArity="">
       <item name=""/>
     </enum>
-    <edgeType name="" targetNodeType="" minArity="" maxArity=""/>
-    <edgeType name="" minArity="" maxArity="">
+    <edgeType name="" targetNodeType="" minArity="" maxArity="" targetMinArity="" targetMaxArity=""/>
+    <edgeType name="" minArity="" maxArity="" targetMinArity="" targetMaxArity="">
       <targetNodeType name=""/>
       <targetNodeType name=""/>
     </edgeType>
@@ -348,7 +348,9 @@ on a single node of the specified nodeType. For instance, an optional property
 may be designated by the attributes min="0", max="1". A required edge that may
 occur an arbitrary number of times (for instance, designating children of a
 node with the Contains-Sequence trait) would be designated by the attributes
-min="1", max="unbounded".
+min="1", max="unbounded". The "targetMinArity" and "targetMaxArity" attributes
+on the edge element specify the same limitations, except on the node type that
+the edge is targeting.
 
 #### Id Generator
 
@@ -393,7 +395,7 @@ Here is the general structure:
     <enumProperty name="" minArity="" maxArity="">
       <item name=""/>
     </enumProperty>
-    <edgeType name="" targetNodeType="" minArity="" maxArity=""/>
+    <edgeType name="" targetNodeType="" minArity="" maxArity="" targetMinArity="" targetMaxArity=""/>
   </nodeType>
   <nodeTypeExtension extends="">
     <integerProperty name="" minRange="" maxRange="" minArity="" maxArity=""/>
@@ -403,7 +405,7 @@ Here is the general structure:
     <enumProperty name="" minArity="" maxArity="">
       <item name=""/>
     </enumProperty>
-    <edgeType name="" targetNodeType="" min="" max=""/>
+    <edgeType name="" targetNodeType="" min="" max="" targetMinArity="" targetMaxArity=""/>
     <edgeTypeExtension extends="">
       <targetNodeType name=""/>
     </edgeTypeExtension>
@@ -476,6 +478,8 @@ style conventions in the appropriate language.
 * String[] getTargetNodeTypes()
 * int getMinArity()
 * int getMaxArity()
+* int getTargetMinArity()
+* int getTargetMaxArity()
 
 Common APIs {#commons-apis}
 ---------------------------
