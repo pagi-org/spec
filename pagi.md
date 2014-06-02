@@ -334,17 +334,21 @@ Here is the general structure:
       <item name=""/>
     </enum>
     <edgeType name="" targetNodeType="" minArity="" maxArity=""/>
+    <edgeType name="" minArity="" maxArity="">
+      <targetNodeType name=""/>
+      <targetNodeType name=""/>
+    </edgeType>
   </nodeType>
 </pagis>
 ```
 
-The "min" and "max" XML attributes on property and edge XML elements refer to
-the number of times a property or edge of the specified name may occur on a
-single node of the specified nodeType. For instance, an optional property may
-be designated by the attributes min="0", max="1". A required edge that may occur
-an arbitrary number of times (for instance, designating children of a node with
-the Contains-Sequence trait) would be designated by the attributes min="1",
-max="unbounded".
+The "minArity" and "maxArity" XML attributes on property and edge XML elements
+refer to the number of times a property or edge of the specified name may occur
+on a single node of the specified nodeType. For instance, an optional property
+may be designated by the attributes min="0", max="1". A required edge that may
+occur an arbitrary number of times (for instance, designating children of a
+node with the Contains-Sequence trait) would be designated by the attributes
+min="1", max="unbounded".
 
 #### Id Generator
 
@@ -368,7 +372,10 @@ or more of the following tokens:
 ### Extending Schemas {#extending-schemas}
 
 Any schema can be extended.  This is done by specifying the `extends` attribute
-in  the root `pagis` element. The new schema may only specify new nodeTypes or add edges and properties to an existing node type.  It may not modify existing properties.
+in  the root `pagis` element. The new schema may only specify new nodeTypes, add
+edges and properties to an existing node type, or add new target types to an
+edge. It may not modify existing
+properties.
 
 Here is the general structure:
 ```xml
@@ -378,7 +385,6 @@ Here is the general structure:
   <nodeType name="" id-generator="">
     <span/>
     <sequence/>
-    <container edgeType=""/>
     <spanContainer spanType=""/>
     <integerProperty name="" minRange="" maxRange="" minArity="" maxArity=""/>
     <floatProperty name="" minRange="" maxRange="" minArity="" maxArity=""/>
@@ -398,6 +404,9 @@ Here is the general structure:
       <item name=""/>
     </enumProperty>
     <edgeType name="" targetNodeType="" min="" max=""/>
+    <edgeTypeExtension extends="">
+      <targetNodeType name=""/>
+    </edgeTypeExtension>
   </nodeTypeExtension>
 </pagis>
 ```
@@ -464,7 +473,7 @@ style conventions in the appropriate language.
 #### EdgeSpec
 
 * String getName()
-* String getTargetNodeType()
+* String[] getTargetNodeTypes()
 * int getMinArity()
 * int getMaxArity()
 
@@ -518,6 +527,8 @@ EDGE
 :    Indicates an edge on the current node.
 :    Is only valid in the "NODE" context, prior to any FEATURE events.
 :    Has the string-typed *edgeType* parameter indicating the type of the edge.
+:    Has the string-typed "targetNodeType* parameter indicating the type of the
+     node that this edge points to.
 :    Has the string-typed *targetId* parameter indicating the id of the node
      that this edge points to.
 
@@ -618,7 +629,7 @@ handleFeatureStart(key, valueType)
 
 handleFeatureEnd()
 
-handleEdge(edgeType, targetId)
+handleEdge(edgeType, targetType, targetId)
 
 handleValueInteger(value)
 
@@ -687,6 +698,10 @@ getEdgeType
 :    Returns the type of the edge.
 :    Valid in EDGE.
 
+getEdgeTargetType
+:    Returns the type of the target node of the edge.
+:    Valid in EDGE.
+
 getEdgeTargetId
 :    Returns the id of the target node of the edge.
 :    Valid in EDGE.
@@ -733,7 +748,7 @@ Here is the general structure:
     <prop k="">
       <value int=""/>
     </prop>
-    <edge type="" to=""/>
+    <edge type="" toType="" to=""/>
     <feat k="">
       <val int=""/>
     </feat>
