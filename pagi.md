@@ -713,24 +713,6 @@ getEdgeTargetId
 :    Returns the id of the target node of the edge.
 :    Valid in EDGE.
 
-### Graph Query {#graph-query}
-
-This API is intended to provide an interface against which ad-hoc queries can be
-made. The syntax should be similar to that of 
-[Gremlin](https://github.com/tinkerpop/gremlin/wiki). No particular performance
-guarantees are given.
-
-### Streaming Graphical Querying (Hybrid) {#streaming-graphical-querying}
-
-This API is actually expected to be the most useful in production analytics. The
-notion here is to be able to provide a small set of concise queries (similar to
-the ones in the Graph Query API) and allow the library to efficiently pull back
-the requested information without incurring the overhead that would be required
-to provide ad-hoc query capabilities. This would not be an optimal API for doing
-"queries based on query results" in any depth, but the query language should be
-expressive enough to allow the important information to be gleaned in a single
-pass.
-
 Transfer Formats {#transfer-formats}
 ------------------------------------
 
@@ -847,23 +829,23 @@ presumed that this cache is large enough to prevent repetition to the point of
 a severe degredation to performance. The other events are defined below:
 
 
-| Code        | Name               | Event-Code-Specific Data                               |
-| ----------- | ------------------ | ------------------------------------------------------ |
-| ``0x01``    | __DOC_START__      | <__docId__[*string-ref*]>                              |
-| ``0x02``    | __DOC_END__        | <*empty*>                                              |
-| ``0x03``    | __NODE_START__     | <__nodeType__[*string-ref*]><__nodeId__[*string-ref*]> |
-| ``0x04``    | __NODE_END__       | <*empty*>                                              |
-| ``0x05``    | __PROPERTY_START__ | <__key__[*string-ref*]><__valueType__[*value-type*]>   |
-| ``0x06``    | __PROPERTY_END__   | <*empty*>                                              |
-| ``0x07``    | __EDGE__           | <__type__[*string-ref*]><__target__[*string-ref*]>     |
-| ``0x08``    | __FEATURE_START__  | <__key__[*string-ref*]><__valueType__[*value-type*]>   |
-| ``0x09``    | __FEATURE_END__    | <*empty*>                                              |
-| ``0x0A``    | __VALUE_INTEGER__  | 4-byte integer                                         |
-| ``0x0B``    | __VALUE_FLOAT__    | 4-byte [IEEE-754-2008][] floating-point                |
-| ``0x0C``    | __VALUE_BOOLEAN__  | ``0x0F`` (true) or ``0xF0`` (false)                    |
-| ``0x0D``    | __VALUE_STRING__   | <*string-ref*>                                         |
-| ``0x0E``    | __VALUE_ENUM__     | <*string-ref*>                                         |
-| ``0xOF``    | __USES_SCHEMA__    | <__schemaId__[*string-ref*]>
+| Code        | Name               | Event-Code-Specific Data                                                            |
+| ----------- | ------------------ | ------------------------------------------------------                              |
+| ``0x01``    | __DOC_START__      | <__docId__[*string-ref*]>                                                           |
+| ``0x02``    | __DOC_END__        | <*empty*>                                                                           |
+| ``0x03``    | __NODE_START__     | <__nodeType__[*string-ref*]><__nodeId__[*string-ref*]>                              |
+| ``0x04``    | __NODE_END__       | <*empty*>                                                                           |
+| ``0x05``    | __PROPERTY_START__ | <__key__[*string-ref*]><__valueType__[*value-type*]>                                |
+| ``0x06``    | __PROPERTY_END__   | <*empty*>                                                                           |
+| ``0x07``    | __EDGE__           | <__type__[*string-ref*]><__targetType__[*string-ref]><__target__[*string-ref*]>     |
+| ``0x08``    | __FEATURE_START__  | <__key__[*string-ref*]><__valueType__[*value-type*]>                                |
+| ``0x09``    | __FEATURE_END__    | <*empty*>                                                                           |
+| ``0x0A``    | __VALUE_INTEGER__  | 4-byte integer                                                                      |
+| ``0x0B``    | __VALUE_FLOAT__    | 4-byte [IEEE-754-2008][] floating-point                                             |
+| ``0x0C``    | __VALUE_BOOLEAN__  | ``0x0F`` (true) or ``0xF0`` (false)                                                 |
+| ``0x0D``    | __VALUE_STRING__   | <*string-ref*>                                                                      |
+| ``0x0E``    | __VALUE_ENUM__     | <*string-ref*>                                                                      |
+| ``0xOF``    | __USES_SCHEMA__    | <__schemaId__[*string-ref*]>                                                        |
 
 The __valueType__ that is referenced in __PROPERTY_START__ and __PROPERTY_END__ is as follows:
 
