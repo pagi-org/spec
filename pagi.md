@@ -830,14 +830,14 @@ a severe degredation to performance. The other events are defined below:
 
 
 | Code        | Name               | Event-Code-Specific Data                                                            |
-| ----------- | ------------------ | ------------------------------------------------------                              |
+| ----------- | ------------------ | ----------------------------------------------------------------------------------- |
 | ``0x01``    | __DOC_START__      | <__docId__[*string-ref*]>                                                           |
 | ``0x02``    | __DOC_END__        | <*empty*>                                                                           |
 | ``0x03``    | __NODE_START__     | <__nodeType__[*string-ref*]><__nodeId__[*string-ref*]>                              |
 | ``0x04``    | __NODE_END__       | <*empty*>                                                                           |
 | ``0x05``    | __PROPERTY_START__ | <__key__[*string-ref*]><__valueType__[*value-type*]>                                |
 | ``0x06``    | __PROPERTY_END__   | <*empty*>                                                                           |
-| ``0x07``    | __EDGE__           | <__type__[*string-ref*]><__targetType__[*string-ref]><__target__[*string-ref*]>     |
+| ``0x07``    | __EDGE__           | <__type__[*string-ref*]><__targetType__[*string-ref]><__targetId__[*string-ref*]>   |
 | ``0x08``    | __FEATURE_START__  | <__key__[*string-ref*]><__valueType__[*value-type*]>                                |
 | ``0x09``    | __FEATURE_END__    | <*empty*>                                                                           |
 | ``0x0A``    | __VALUE_INTEGER__  | 4-byte integer                                                                      |
