@@ -5,9 +5,9 @@ Portable Analytics Graphical Interchange
 
 #### J. Bunting, J. Swisher
 
-#### 10 September 2013
+#### 3 June 2014
 
-##### Draft 3
+##### Draft 4
 
 Abstract {#abstract}
 -------------------
