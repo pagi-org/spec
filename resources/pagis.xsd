@@ -3,8 +3,15 @@
             xmlns="http://pagi.digitalreasoning.com/pagis" elementFormDefault="qualified">
 	<xsd:element name="pagis" type="pagis"/>
 
+	<xsd:complexType name="description">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string"/>
+		</xsd:simpleContent>
+	</xsd:complexType>
+
 	<xsd:complexType name="pagis">
 		<xsd:sequence>
+			<xsd:element name="description" type="description" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="extends" type="extendsType" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:choice minOccurs="0" maxOccurs="unbounded">
 				<xsd:element name="nodeType" type="nodeType" minOccurs="0" maxOccurs="unbounded"/>
@@ -20,6 +27,7 @@
 
 	<xsd:complexType name="nodeType">
 		<xsd:sequence>
+			<xsd:element name="description" type="description" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="sequence" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="span" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="spanContainer" minOccurs="0" maxOccurs="1">
@@ -54,6 +62,7 @@
 
 	<xsd:complexType name="nodeTypeExtension">
 		<xsd:sequence>
+			<xsd:element name="description" type="description" minOccurs="0" maxOccurs="1"/>
 			<xsd:choice minOccurs="0" maxOccurs="unbounded">
 				<xsd:element name="integerProperty" type="integerProperty"/>
 				<xsd:element name="floatProperty" type="floatProperty"/>
@@ -68,27 +77,40 @@
 	</xsd:complexType>
 
 	<xsd:complexType name="integerProperty">
+		<xsd:sequence>
+			<xsd:element name="description" type="description" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
 		<xsd:attribute name="minRange" type="xsd:integer"/>
 		<xsd:attribute name="maxRange" type="xsd:integer"/>
 		<xsd:attributeGroup ref="propertyBase"/>
 	</xsd:complexType>
 
 	<xsd:complexType name="floatProperty">
+		<xsd:sequence>
+			<xsd:element name="description" type="description" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
 		<xsd:attribute name="minRange" type="xsd:float"/>
 		<xsd:attribute name="maxRange" type="xsd:float"/>
 		<xsd:attributeGroup ref="propertyBase"/>
 	</xsd:complexType>
 
 	<xsd:complexType name="booleanProperty">
+		<xsd:sequence>
+			<xsd:element name="description" type="description" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
 		<xsd:attributeGroup ref="propertyBase"/>
 	</xsd:complexType>
 
 	<xsd:complexType name="stringProperty">
+		<xsd:sequence>
+			<xsd:element name="description" type="description" minOccurs="0" maxOccurs="1"/>
+		</xsd:sequence>
 		<xsd:attributeGroup ref="propertyBase"/>
 	</xsd:complexType>
 
 	<xsd:complexType name="enumProperty">
 		<xsd:sequence>
+			<xsd:element name="description" type="description" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="item" minOccurs="1" maxOccurs="unbounded">
 				<xsd:complexType>
 					<xsd:attribute name="name" type="xsd:string"/>
@@ -106,6 +128,7 @@
 
 	<xsd:complexType name="edgeTypeExtension">
 		<xsd:sequence>
+			<xsd:element name="description" type="description" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="targetNodeType" minOccurs="0" maxOccurs="unbounded">
 				<xsd:complexType>
 					<xsd:attribute name="name" type="identifier" use="required"/>
@@ -117,6 +140,7 @@
 
 	<xsd:complexType name="edgeType">
 		<xsd:sequence>
+			<xsd:element name="description" type="description" minOccurs="0" maxOccurs="1"/>
 			<xsd:element name="targetNodeType" minOccurs="0" maxOccurs="unbounded">
 				<xsd:complexType>
 					<xsd:attribute name="name" type="identifier" use="required"/>
