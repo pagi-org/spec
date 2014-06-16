@@ -43,6 +43,7 @@
 
 	<xsd:complexType name="edge">
 		<xsd:attribute name="type" type="xsd:string" use="required"/>
+		<xsd:attribute name="toType" type="xsd:string" use="required"/>
 		<xsd:attribute name="to" type="xsd:string" use="required"/>
 	</xsd:complexType>
 

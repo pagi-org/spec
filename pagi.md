@@ -5,9 +5,9 @@ Portable Analytics Graphical Interchange
 
 #### J. Bunting, J. Swisher
 
-#### 10 September 2013
+#### 3 June 2014
 
-##### Draft 3
+##### Draft 4
 
 Abstract {#abstract}
 -------------------
@@ -290,28 +290,6 @@ Currently defined traits:
       type; this implies that there are no "previous" or "next" edges 
       connecting nodes of different Sequences.
 
-#### Container
-* Parameters
-    * **edgeType** -- edgeType to consider as referring to "contained" nodes. 
-      Exactly one edgeType must be specified. (A nodeType may have multiple
-      instances of the Container trait, together specifying multiple 
-      edgeTypes).
-
-* Properties
-    * *none*
-* Edges
-    * *none*
-* Semantic Description
-    * Describes a nodeType whose existence is defined as a container of 
-      another nodeType.
-    * Parameter **edgeType** specifies names of edges which refer to 
-      "contained" nodes.
-    * May be specified more than once on a given nodeType, each with a different
-      **edgeType**.
-    * Where multiple edgeTypes are specified for a nodeType by multiple 
-      instances of the Container trait, traversal APIs must enable referring to
-      all "contained" edge types as a single construct. 
-
 #### SpanContainer
 * Parameters
     * **spanType** -- the node type that is spanned/contained by this one - 
@@ -355,18 +333,24 @@ Here is the general structure:
     <enumProperty name="" minArity="" maxArity="">
       <item name=""/>
     </enum>
-    <edgeType name="" targetNodeType="" minArity="" maxArity=""/>
+    <edgeType name="" targetNodeType="" minArity="" maxArity="" targetMinArity="" targetMaxArity=""/>
+    <edgeType name="" minArity="" maxArity="" targetMinArity="" targetMaxArity="">
+      <targetNodeType name=""/>
+      <targetNodeType name=""/>
+    </edgeType>
   </nodeType>
 </pagis>
 ```
 
-The "min" and "max" XML attributes on property and edge XML elements refer to
-the number of times a property or edge of the specified name may occur on a
-single node of the specified nodeType. For instance, an optional property may
-be designated by the attributes min="0", max="1". A required edge that may occur
-an arbitrary number of times (for instance, designating children of a node with
-the Contains-Sequence trait) would be designated by the attributes min="1",
-max="unbounded".
+The "minArity" and "maxArity" XML attributes on property and edge XML elements
+refer to the number of times a property or edge of the specified name may occur
+on a single node of the specified nodeType. For instance, an optional property
+may be designated by the attributes min="0", max="1". A required edge that may
+occur an arbitrary number of times (for instance, designating children of a
+node with the Contains-Sequence trait) would be designated by the attributes
+min="1", max="unbounded". The "targetMinArity" and "targetMaxArity" attributes
+on the edge element specify the same limitations, except on the node type that
+the edge is targeting.
 
 #### Id Generator
 
@@ -386,11 +370,17 @@ or more of the following tokens:
     * `prop[:{delim}]:{name}` - the value of the named property, separated by
       optional specification `delim`
       * default delim is `,`
+    * `edge[:{delim}]:{name}` - the id of the node targeted by the named edge,
+      separated by optional specification `delim`
+      * default delim is `,`
 
 ### Extending Schemas {#extending-schemas}
 
 Any schema can be extended.  This is done by specifying the `extends` attribute
-in  the root `pagis` element. The new schema may only specify new nodeTypes or add edges and properties to an existing node type.  It may not modify existing properties.
+in  the root `pagis` element. The new schema may only specify new nodeTypes, add
+edges and properties to an existing node type, or add new target types to an
+edge. It may not modify existing
+properties.
 
 Here is the general structure:
 ```xml
@@ -400,7 +390,6 @@ Here is the general structure:
   <nodeType name="" id-generator="">
     <span/>
     <sequence/>
-    <container edgeType=""/>
     <spanContainer spanType=""/>
     <integerProperty name="" minRange="" maxRange="" minArity="" maxArity=""/>
     <floatProperty name="" minRange="" maxRange="" minArity="" maxArity=""/>
@@ -409,7 +398,7 @@ Here is the general structure:
     <enumProperty name="" minArity="" maxArity="">
       <item name=""/>
     </enumProperty>
-    <edgeType name="" targetNodeType="" minArity="" maxArity=""/>
+    <edgeType name="" targetNodeType="" minArity="" maxArity="" targetMinArity="" targetMaxArity=""/>
   </nodeType>
   <nodeTypeExtension extends="">
     <integerProperty name="" minRange="" maxRange="" minArity="" maxArity=""/>
@@ -419,7 +408,10 @@ Here is the general structure:
     <enumProperty name="" minArity="" maxArity="">
       <item name=""/>
     </enumProperty>
-    <edgeType name="" targetNodeType="" min="" max=""/>
+    <edgeType name="" targetNodeType="" min="" max="" targetMinArity="" targetMaxArity=""/>
+    <edgeTypeExtension extends="">
+      <targetNodeType name=""/>
+    </edgeTypeExtension>
   </nodeTypeExtension>
 </pagis>
 ```
@@ -486,9 +478,11 @@ style conventions in the appropriate language.
 #### EdgeSpec
 
 * String getName()
-* String getTargetNodeType()
+* String[] getTargetNodeTypes()
 * int getMinArity()
 * int getMaxArity()
+* int getTargetMinArity()
+* int getTargetMaxArity()
 
 Common APIs {#commons-apis}
 ---------------------------
@@ -540,6 +534,8 @@ EDGE
 :    Indicates an edge on the current node.
 :    Is only valid in the "NODE" context, prior to any FEATURE events.
 :    Has the string-typed *edgeType* parameter indicating the type of the edge.
+:    Has the string-typed "targetNodeType* parameter indicating the type of the
+     node that this edge points to.
 :    Has the string-typed *targetId* parameter indicating the id of the node
      that this edge points to.
 
@@ -640,7 +636,7 @@ handleFeatureStart(key, valueType)
 
 handleFeatureEnd()
 
-handleEdge(edgeType, targetId)
+handleEdge(edgeType, targetType, targetId)
 
 handleValueInteger(value)
 
@@ -709,27 +705,13 @@ getEdgeType
 :    Returns the type of the edge.
 :    Valid in EDGE.
 
+getEdgeTargetType
+:    Returns the type of the target node of the edge.
+:    Valid in EDGE.
+
 getEdgeTargetId
 :    Returns the id of the target node of the edge.
 :    Valid in EDGE.
-
-### Graph Query {#graph-query}
-
-This API is intended to provide an interface against which ad-hoc queries can be
-made. The syntax should be similar to that of 
-[Gremlin](https://github.com/tinkerpop/gremlin/wiki). No particular performance
-guarantees are given.
-
-### Streaming Graphical Querying (Hybrid) {#streaming-graphical-querying}
-
-This API is actually expected to be the most useful in production analytics. The
-notion here is to be able to provide a small set of concise queries (similar to
-the ones in the Graph Query API) and allow the library to efficiently pull back
-the requested information without incurring the overhead that would be required
-to provide ad-hoc query capabilities. This would not be an optimal API for doing
-"queries based on query results" in any depth, but the query language should be
-expressive enough to allow the important information to be gleaned in a single
-pass.
 
 Transfer Formats {#transfer-formats}
 ------------------------------------
@@ -755,7 +737,7 @@ Here is the general structure:
     <prop k="">
       <value int=""/>
     </prop>
-    <edge type="" to=""/>
+    <edge type="" toType="" to=""/>
     <feat k="">
       <val int=""/>
     </feat>
@@ -847,23 +829,23 @@ presumed that this cache is large enough to prevent repetition to the point of
 a severe degredation to performance. The other events are defined below:
 
 
-| Code        | Name               | Event-Code-Specific Data                               |
-| ----------- | ------------------ | ------------------------------------------------------ |
-| ``0x01``    | __DOC_START__      | <__docId__[*string-ref*]>                              |
-| ``0x02``    | __DOC_END__        | <*empty*>                                              |
-| ``0x03``    | __NODE_START__     | <__nodeType__[*string-ref*]><__nodeId__[*string-ref*]> |
-| ``0x04``    | __NODE_END__       | <*empty*>                                              |
-| ``0x05``    | __PROPERTY_START__ | <__key__[*string-ref*]><__valueType__[*value-type*]>   |
-| ``0x06``    | __PROPERTY_END__   | <*empty*>                                              |
-| ``0x07``    | __EDGE__           | <__type__[*string-ref*]><__target__[*string-ref*]>     |
-| ``0x08``    | __FEATURE_START__  | <__key__[*string-ref*]><__valueType__[*value-type*]>   |
-| ``0x09``    | __FEATURE_END__    | <*empty*>                                              |
-| ``0x0A``    | __VALUE_INTEGER__  | 4-byte integer                                         |
-| ``0x0B``    | __VALUE_FLOAT__    | 4-byte [IEEE-754-2008][] floating-point                |
-| ``0x0C``    | __VALUE_BOOLEAN__  | ``0x0F`` (true) or ``0xF0`` (false)                    |
-| ``0x0D``    | __VALUE_STRING__   | <*string-ref*>                                         |
-| ``0x0E``    | __VALUE_ENUM__     | <*string-ref*>                                         |
-| ``0xOF``    | __USES_SCHEMA__    | <__schemaId__[*string-ref*]>
+| Code        | Name               | Event-Code-Specific Data                                                            |
+| ----------- | ------------------ | ----------------------------------------------------------------------------------- |
+| ``0x01``    | __DOC_START__      | <__docId__[*string-ref*]>                                                           |
+| ``0x02``    | __DOC_END__        | <*empty*>                                                                           |
+| ``0x03``    | __NODE_START__     | <__nodeType__[*string-ref*]><__nodeId__[*string-ref*]>                              |
+| ``0x04``    | __NODE_END__       | <*empty*>                                                                           |
+| ``0x05``    | __PROPERTY_START__ | <__key__[*string-ref*]><__valueType__[*value-type*]>                                |
+| ``0x06``    | __PROPERTY_END__   | <*empty*>                                                                           |
+| ``0x07``    | __EDGE__           | <__type__[*string-ref*]><__targetType__[*string-ref]><__targetId__[*string-ref*]>   |
+| ``0x08``    | __FEATURE_START__  | <__key__[*string-ref*]><__valueType__[*value-type*]>                                |
+| ``0x09``    | __FEATURE_END__    | <*empty*>                                                                           |
+| ``0x0A``    | __VALUE_INTEGER__  | 4-byte integer                                                                      |
+| ``0x0B``    | __VALUE_FLOAT__    | 4-byte [IEEE-754-2008][] floating-point                                             |
+| ``0x0C``    | __VALUE_BOOLEAN__  | ``0x0F`` (true) or ``0xF0`` (false)                                                 |
+| ``0x0D``    | __VALUE_STRING__   | <*string-ref*>                                                                      |
+| ``0x0E``    | __VALUE_ENUM__     | <*string-ref*>                                                                      |
+| ``0xOF``    | __USES_SCHEMA__    | <__schemaId__[*string-ref*]>                                                        |
 
 The __valueType__ that is referenced in __PROPERTY_START__ and __PROPERTY_END__ is as follows:
 
