@@ -518,7 +518,7 @@ USES_SCHEMA
 
 CONTENT
 :    Provides the content of this document.
-:    Is only valid in the "DOC" context and before any "NODE_START" events.
+:    Is only valid in the "DOC" context, after all "USES_SCHEMA" events, and before any "NODE_START" events.
 :    Must occur exactly once.
 :    Has the string-typed *contentType* parameter indicating the type of the content.
 :    *contentType* should conform to the RFC-2046 rules
@@ -884,7 +884,7 @@ that the storage mechanism will provide the content to the parser prior to parsi
 a __CONTENT_CHKSUM__ event code is detected in the file, the checksum should be validated
 with the previously provided content and then a __CONTENT__ event should be generated on the
 stream, including the content itself (not the checksum). This is merely a storage mechanism,
-and its existence should not be exposed in the stream API.
+and its existence should not be exposed in the stream API. The checksum algorithm is crc32.
 
    [IEEE-754-2008]: http://ieeexplore.ieee.org/xpl/mostRecentIssue.jsp?punumber=4610933
 
