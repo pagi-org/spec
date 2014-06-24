@@ -865,7 +865,7 @@ a severe degredation to performance. The other events are defined below:
 | ``0x0E``    | __VALUE_ENUM__     | <*string-ref*>                                                                      |
 | ``0x0F``    | __USES_SCHEMA__    | <__schemaId__[*string-ref*]>                                                        |
 | ``0x10``    | __CONTENT__        | <__contentType__[*string*]><__content__[*string*]>                                  |
-| ``0x11``    | __CONTENT_CHKSUM__ | <__contentType__[*string*]><__checksum__[*string*]>                              |
+| ``0x11``    | __CONTENT_CHKSUM__ | <__contentType__[*string*]><__checksum__[*4-byte integer*]>                              |
 
 The __valueType__ that is referenced in __PROPERTY_START__ and __PROPERTY_END__ is as follows:
 
