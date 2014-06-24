@@ -314,6 +314,8 @@ A PAGI Schema is defined in an XML document. Note that this XML document, which
 represents a PAGI-compliant schema, is distinct from the XML transfer format
 used to represent a particular instance of a PAGI document graph.
 
+Its Internet Media Type is `application/vnd.dr.pagi.schema+xml`.
+
 Here is the general structure:
 
 ```xml
@@ -741,7 +743,7 @@ A PAGI document can be rendered as an xml document. This is intended as the
 primary storage and transfer format. It is simply structured and human-
 readable.
 
-Its Internet Media Type is `application/vnd.drs-pagif+xml`.
+Its Internet Media Type is `application/vnd.dr.pagi.stream+xml`.
 
 Here is the general structure:
 
@@ -772,7 +774,7 @@ analytic applications, we define a binary format.  The binary format is a
 simple, byte-wise representation of the event stream.  We have taken some
 steps to ensure robustness and future adaptability.
 
-Its Internet Media Type is `application/vnd.drs-pagif+bin`.
+Its Internet Media Type is `application/vnd.dr.pagi.stream`.
 Its extension is `pbf`.
 
 A `pbf` file is made up of three sections. The __preamble__, the the
