@@ -10,6 +10,7 @@
 	<xsd:complexType name="document">
 		<xsd:sequence>
 			<xsd:element name="schema" type="schema" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="content" type="content" minOccurs="1" maxOccurs="1"/>
 			<xsd:element name="node" type="node" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
 		<xsd:attribute name="id" type="xsd:string" use="required"/>
@@ -17,6 +18,19 @@
 
 	<xsd:complexType name="schema">
 		<xsd:attribute name="uri" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	
+	<xsd:complexType name="content">
+		<xsd:annotation>
+			<xsd:documentation>
+				It is important to not inject any extra whitespace into this string content.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute name="contentType" type="xsd:string" default="text/plain"/>
+			</xsd:extension>
+		</xsd:simpleContent>
 	</xsd:complexType>
 
 	<xsd:complexType name="node">

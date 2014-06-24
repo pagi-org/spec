@@ -34,8 +34,6 @@ Table of Contents {#toc}
     3. [Schema API](#schema-api)
 5. [Common APIs](#commons-apis)
     1. [Event-Based Streaming](#event-based-streaming)
-    2. [Graph Query](#graph-query)
-    3. [Streaming Graphical Querying (Hybrid)](#streaming-graphical-querying)
 6. [Transfer Formats](#transfer-formats)
     1. [XML](#xml-format)
     2. [Binary](#binary-format)
@@ -518,6 +516,15 @@ USES_SCHEMA
 :    Has the string-typed *uri* parameter indicating the pagi schema id.
 :    This event can occur 0 or more times with different schema ids.
 
+CONTENT
+:    Provides the content of this document.
+:    Is only valid in the "DOC" context, after all "USES_SCHEMA" events, and before any "NODE_START" events.
+:    Must occur exactly once.
+:    Has the string-typed *contentType* parameter indicating the type of the content.
+:    *contentType* should conform to the RFC-2046 rules
+:    Current supported values for *contentType* are ``text/plain``.
+:    Has the string-typed *content* parameter containing the content.
+
 NODE_START
 :    Represents the beginning of information about a node.
 :    Is only valid in the "DOC" context.
@@ -624,6 +631,8 @@ handleDocEnd()
 
 handleUsesSchema(uri)
 
+handleContent(contentType, content)
+
 handleNodeStart(nodeType, id)
 
 handleNodeEnd()
@@ -668,6 +677,14 @@ getId
 getSchemaId
 :    Returns a pagi schema uri.
 :    Valid in USES_SCHEMA.
+
+getContentType
+:    Returns the content type.
+:    Valid in CONTENT.
+
+getContent
+:    Returns the content.
+:    Valid in CONTENT.
 
 getNodeType
 :    Returns the type of the node.
@@ -732,6 +749,7 @@ Here is the general structure:
 <pagif xmlns="http://pagi.digitalreasoning.com/pagif/"
        id="">
   <schema uri="drs-pagis"/>
+  <content contentType="text/plain">Text content of graph.</content>
   <node type="" id="">
     <prop k="" int=""/>
     <prop k="">
@@ -845,7 +863,9 @@ a severe degredation to performance. The other events are defined below:
 | ``0x0C``    | __VALUE_BOOLEAN__  | ``0x0F`` (true) or ``0xF0`` (false)                                                 |
 | ``0x0D``    | __VALUE_STRING__   | <*string-ref*>                                                                      |
 | ``0x0E``    | __VALUE_ENUM__     | <*string-ref*>                                                                      |
-| ``0xOF``    | __USES_SCHEMA__    | <__schemaId__[*string-ref*]>                                                        |
+| ``0x0F``    | __USES_SCHEMA__    | <__schemaId__[*string-ref*]>                                                        |
+| ``0x10``    | __CONTENT__        | <__contentType__[*string*]><__content__[*string*]>                                  |
+| ``0x11``    | __CONTENT_CHKSUM__ | <__contentType__[*string*]><__checksum__[*4-byte integer*]>                              |
 
 The __valueType__ that is referenced in __PROPERTY_START__ and __PROPERTY_END__ is as follows:
 
@@ -857,6 +877,14 @@ The __valueType__ that is referenced in __PROPERTY_START__ and __PROPERTY_END__ 
 | ``0x04``    | __STRING__    |
 | ``0x05``    | __ENUM__      |
 
+The __CONTENT_CHKSUM__ event code is used in situations where the storage mechanism wishes
+to store the content externally. This is often the case when content should be accessible
+both in the context of the graph and outside of that context. In this case, it is expected
+that the storage mechanism will provide the content to the parser prior to parsing. When
+a __CONTENT_CHKSUM__ event code is detected in the file, the checksum should be validated
+with the previously provided content and then a __CONTENT__ event should be generated on the
+stream, including the content itself (not the checksum). This is merely a storage mechanism,
+and its existence should not be exposed in the stream API. The checksum algorithm is crc32.
 
    [IEEE-754-2008]: http://ieeexplore.ieee.org/xpl/mostRecentIssue.jsp?punumber=4610933
 
