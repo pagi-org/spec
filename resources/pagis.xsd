@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1.0-draft2" targetNamespace="http://pagi.digitalreasoning.com/pagis"
-            xmlns="http://pagi.digitalreasoning.com/pagis" elementFormDefault="qualified">
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1.0-draft2" targetNamespace="http://pagi.org/schema"
+            xmlns="http://pagi.org/schema" elementFormDefault="qualified">
 	<xsd:element name="pagis" type="pagis"/>
 
 	<xsd:complexType name="description">

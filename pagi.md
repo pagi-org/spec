@@ -317,7 +317,7 @@ used to represent a particular instance of a PAGI document graph.
 Here is the general structure:
 
 ```xml
-<pagis xmlns="http://pagi.digitalreasoning.com/pagis/" 
+<pagis xmlns="http://pagi.org/schema/" 
        pagis-uri="http://www.example.com/spec-example-1">
   <nodeType name="" idGenerator="">
     <span/>
@@ -382,9 +382,9 @@ properties.
 
 Here is the general structure:
 ```xml
-<pagis xmlns="http://pagi.digitalreasoning.com/pagis/"
+<pagis xmlns="http://pagi.org/schema/"
        pagis-uri="http://www.example.com/spec-extension-example-1"
-       extends="http://pagi.digitalreasoning.com/spec-example-1">
+       extends="http://pagi.org/spec-example-1">
   <nodeType name="" id-generator="">
     <span/>
     <sequence/>
@@ -746,7 +746,7 @@ Its Internet Media Type is `application/vnd.drs-pagif+xml`.
 Here is the general structure:
 
 ```xml 
-<pagif xmlns="http://pagi.digitalreasoning.com/pagif/"
+<pagif xmlns="http://pagi.org/stream/"
        id="">
   <schema uri="drs-pagis"/>
   <content contentType="text/plain">Text content of graph.</content>
