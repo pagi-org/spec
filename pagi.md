@@ -314,10 +314,12 @@ A PAGI Schema is defined in an XML document. Note that this XML document, which
 represents a PAGI-compliant schema, is distinct from the XML transfer format
 used to represent a particular instance of a PAGI document graph.
 
+Its Internet Media Type is `application/vnd.dr.pagi.schema+xml`.
+
 Here is the general structure:
 
 ```xml
-<pagis xmlns="http://pagi.digitalreasoning.com/pagis/" 
+<pagis xmlns="http://pagi.org/schema/" 
        pagis-uri="http://www.example.com/spec-example-1">
   <nodeType name="" idGenerator="">
     <span/>
@@ -382,9 +384,9 @@ properties.
 
 Here is the general structure:
 ```xml
-<pagis xmlns="http://pagi.digitalreasoning.com/pagis/"
+<pagis xmlns="http://pagi.org/schema/"
        pagis-uri="http://www.example.com/spec-extension-example-1"
-       extends="http://pagi.digitalreasoning.com/spec-example-1">
+       extends="http://pagi.org/spec-example-1">
   <nodeType name="" id-generator="">
     <span/>
     <sequence/>
@@ -741,12 +743,12 @@ A PAGI document can be rendered as an xml document. This is intended as the
 primary storage and transfer format. It is simply structured and human-
 readable.
 
-Its Internet Media Type is `application/vnd.drs-pagif+xml`.
+Its Internet Media Type is `application/vnd.dr.pagi.stream+xml`.
 
 Here is the general structure:
 
 ```xml 
-<pagif xmlns="http://pagi.digitalreasoning.com/pagif/"
+<pagif xmlns="http://pagi.org/stream/"
        id="">
   <schema uri="drs-pagis"/>
   <content contentType="text/plain">Text content of graph.</content>
@@ -772,7 +774,7 @@ analytic applications, we define a binary format.  The binary format is a
 simple, byte-wise representation of the event stream.  We have taken some
 steps to ensure robustness and future adaptability.
 
-Its Internet Media Type is `application/vnd.drs-pagif+bin`.
+Its Internet Media Type is `application/vnd.dr.pagi.stream`.
 Its extension is `pbf`.
 
 A `pbf` file is made up of three sections. The __preamble__, the the
