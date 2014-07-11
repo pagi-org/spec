@@ -10,6 +10,9 @@
 	<xsd:complexType name="document">
 		<xsd:sequence>
 			<xsd:element name="schema" type="schema" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="asSpan" type="asSpan" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="asSequence" type="asSequence" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="asSpanContainer" type="asSpanContainer" minOccurs="0" maxOccurs="unbounded"/>
 			<xsd:element name="content" type="content" minOccurs="1" maxOccurs="1"/>
 			<xsd:element name="node" type="node" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
@@ -19,7 +22,20 @@
 	<xsd:complexType name="schema">
 		<xsd:attribute name="uri" type="xsd:string" use="required"/>
 	</xsd:complexType>
-	
+
+	<xsd:complexType name="asSpan">
+		<xsd:attribute name="nodeType" type="xsd:string" use="required"/>
+	</xsd:complexType>
+
+	<xsd:complexType name="asSequence">
+		<xsd:attribute name="nodeType" type="xsd:string" use="required"/>
+	</xsd:complexType>
+
+	<xsd:complexType name="asSpanContainer">
+		<xsd:attribute name="nodeType" type="xsd:string" use="required"/>
+		<xsd:attribute name="spanType" type="xsd:string" use="required"/>
+	</xsd:complexType>
+
 	<xsd:complexType name="content">
 		<xsd:annotation>
 			<xsd:documentation>
