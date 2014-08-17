@@ -9,14 +9,14 @@ Portable Analytics Graphical Interchange
 
 ##### Draft 4
 
-Abstract {#abstract}
+Abstract 
 -------------------
 
 The document describes a specification for the interchange of analytic
 information on textual data, represented as a graph. It describes a model, a
 schema format, several transfer formats, and a set of common APIs.
 
-Table of Contents {#toc}
+Table of Contents 
 ------------------------
 
 1. [Introduction](#introduction)
@@ -45,7 +45,7 @@ Table of Contents {#toc}
     * [Appendix B: PAGI Schema XSD](#pagi-schema-xsd)
 
 
-Introduction {#introduction}
+Introduction 
 ----------------------------
 
 The basic data model used to perform analytics on a document is a graph. Each
@@ -72,7 +72,7 @@ with three powerful tools for future growth:
    future iterations of the schema
 
 
-Definitions {#definitions}
+Definitions 
 --------------------------
 
 node
@@ -137,16 +137,16 @@ source-document
 :   A single instance of text that is subject to analysis. Typically a single
     file within a filesystem.
 
-Graph Representation {#graph-representation}
+Graph Representation 
 ----------------------------------
 
-### Document Structure {#doc-structure}
+### Document Structure 
 
 A document is represented as a graph. Each node in this graph represents a 
 single piece of analytic information as described in the schema. The document 
 also references an id and the document text.
 
-### Node Structure {#node-structure}
+### Node Structure 
 
 Nodes are the pivotal structures in this model. 
 
@@ -166,7 +166,7 @@ Nodes are the pivotal structures in this model.
   the schema. APIs may provide efficient ways to handle features such as 
   generating them on demand.
 
-### Property Types {#property-types}
+### Property Types 
 
 * Every property has a type. The allowable types are:
     * integer
@@ -185,14 +185,14 @@ Nodes are the pivotal structures in this model.
     * string - a list of possible values may be specified. If so, these are
       the only allowable values
 
-### Features {#features}
+### Features 
 
 * Every feature has a type. The allowable types are the same as those for a 
   property.
 * Due to the lack of a schema definition, a feature may have zero or more 
   values.
 
-### ID Generation {#id-generation}
+### ID Generation 
 
 * A nodeType is responsible for defining how IDs are to be generated for nodes
   of that type.
@@ -222,7 +222,7 @@ Pattern
      may contain raw strings and also may incorporate any of the other 
      generation strategies
 
-### Traits {#traits}
+### Traits 
 
 A trait is a set of characteristics that may be assigned to a nodeType. Each
 trait will define properties that it imports to a node type, edge types that it
@@ -305,10 +305,10 @@ Currently defined traits:
     * Traversal APIs must enable referring to the entire spanned text of a 
       "SpanContainer".
 
-Schema Syntax {#schema-syntax}
+Schema Syntax 
 ------------------------------
 
-### Core Syntax {#core-schema}
+### Core Syntax 
 
 A PAGI Schema is defined in an XML document. Note that this XML document, which
 represents a PAGI-compliant schema, is distinct from the XML transfer format
@@ -374,7 +374,7 @@ or more of the following tokens:
       separated by optional specification `delim`
       * default delim is `,`
 
-### Extending Schemas {#extending-schemas}
+### Extending Schemas 
 
 Any schema can be extended.  This is done by specifying the `extends` attribute
 in  the root `pagis` element. The new schema may only specify new nodeTypes, add
@@ -416,7 +416,7 @@ Here is the general structure:
 </pagis>
 ```
 
-### Schema API {#schema-api}
+### Schema API 
 
 For the purposes of interacting with a graph within code, it is necessary to
 have knowledge of the schema that applies to that graph. It is necessary that a
@@ -484,7 +484,7 @@ style conventions in the appropriate language.
 * int getTargetMinArity()
 * int getTargetMaxArity()
 
-Common APIs {#commons-apis}
+Common APIs 
 ---------------------------
 
 The notion of defining Common APIs is to define a common way of working with
@@ -492,7 +492,7 @@ the data no matter the language, in much the same way that SAX and DOM do for
 XML. One key difference between these APIs and the XML APIs is that writing
 should be accounted for in all of these.
 
-### Event-Based Streaming {#event-based-streaming}
+### Event-Based Streaming 
 
 This API is intended as a computationally cheap way to walk through a document
 and make decisions based on the content. The Stream is the lowest level API
@@ -758,7 +758,7 @@ getEdgeTargetId
 :    Returns the id of the target node of the edge.
 :    Valid in EDGE.
 
-Transfer Formats {#transfer-formats}
+Transfer Formats 
 ------------------------------------
 
 In order to store and transfer PAGIM models, we must define formats. 
@@ -796,7 +796,7 @@ Here is the general structure:
 
 The actual xsd is referenced [in the appendix](#xml-format-xsd).
 
-### Binary {#binary-format}
+### Binary 
 
 In order to facilitate efficient transfer and storage between components of
 analytic applications, we define a binary format.  The binary format is a
@@ -932,10 +932,10 @@ and its existence should not be exposed in the stream API. The checksum algorith
    [IEEE-754-2008]: http://ieeexplore.ieee.org/xpl/mostRecentIssue.jsp?punumber=4610933
 
 
-Corpus-Scoped Analytics {#corpus-scoped-analytics}
+Corpus-Scoped Analytics 
 --------------------------------------------------
 
-Future Scope {#future-scope}
+Future Scope 
 ----------------------------
 
  * Representing non-textual data (Audio or Visual)
@@ -943,7 +943,7 @@ Future Scope {#future-scope}
  * Visualization
  * Views in CSV and GraphML
 
-Appendices {#appendices}
+Appendices 
 ------------------------
 
 ###XML Format XSD {#xml-format-xsd}
