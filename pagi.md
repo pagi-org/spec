@@ -173,7 +173,6 @@ Nodes are the pivotal structures in this model.
     * float
     * boolean
     * string
-    * enumeration
 * A property may be single or multiple valued. Minimum and Maximum arity
   may be specified as part of the schema.
 
@@ -183,7 +182,8 @@ Nodes are the pivotal structures in this model.
       being the default
     * float - minimum and maximum values may be specified, with `unbounded`
       being the default
-    * enumeration - a list of possible values must be specified
+    * string - a list of possible values may be specified. If so, these are
+      the only allowable values
 
 ### Features {#features}
 
@@ -459,7 +459,7 @@ style conventions in the appropriate language.
   representation
 * IntegerRestrictions getIntegerRestrictions()
 * FloatRestrictions getFloatRestrictions()
-* EnumRestrictions getEnumRestrictions()
+* StringRestrictions getStringRestrictions()
 
 #### IntegerRestrictions
 
@@ -471,7 +471,7 @@ style conventions in the appropriate language.
 * float getMinRange()
 * float getMaxRange()
 
-#### EnumRestrictions
+#### StringRestrictions
 
 * String[] getItems()
 
@@ -518,6 +518,32 @@ USES_SCHEMA
 :    Has the string-typed *uri* parameter indicating the pagi schema id.
 :    This event can occur 0 or more times with different schema ids.
 
+AS_SPAN
+:    Indicates that a given node type should be treated as a span.
+:    Is only valid in the DOC context and before any "NODE_START" events.
+:    Has the string-typed *nodeType* parameter indicating the node type.
+:    This event can occur 0 or more times, each with different node types.
+:    Provided as a supplement to consumers loading the graph when a schema
+     is not available.
+
+AS_SEQUENCE
+:    Indicates that a given node type should be treated as a sequence.
+:    Is only valid in the DOC context and before any "NODE_START" events.
+:    Has the string-typed *nodeType* parameter indicating the node type.
+:    This event can occur 0 or more times, each with different node types.
+:    Provided as a supplement to consumers loading the graph when a schema
+     is not available.
+
+AS_SPAN_CONTAINER
+:    Indicates that a given node type should be treated as a span container.
+:    Is only valid in the DOC context and before any "NODE_START" events.
+:    Has the string-typed *nodeType* parameter indicating the node type.
+:    Has the string-typed *spanType* parameter indicating the type that this
+     node type spans.
+:    This event can occur 0 or more times, each with different node types.
+:    Provided as a supplement to consumers loading the graph when a schema
+     is not available.
+
 CONTENT
 :    Provides the content of this document.
 :    Is only valid in the "DOC" context, after all "USES_SCHEMA" events, and before any "NODE_START" events.
@@ -553,7 +579,7 @@ PROPERTY_START
 :    Is only valid in the "NODE" context, prior to any EDGE events.
 :    Has the string-typed *key* parameter indicating the property key.
 :    Has the ValueType-typed *valueType* parameter indicating the type of the
-     property values. Valid values are INTEGER, FLOAT, BOOLEAN, STRING, ENUM.
+     property values. Valid values are INTEGER, FLOAT, BOOLEAN, STRING.
 :    Indicates the beginning of a "PROPERTY" context.
 
 PROPERTY_END
@@ -566,7 +592,7 @@ FEATURE_START
 :    Is only valid in the "NODE" context.
 :    Has the string-typed *key* parameter indicating the feature key.
 :    Has the ValueType-typed *valueType* parameter indicating the type of the
-     feature values. Valid values are INTEGER, FLOAT, BOOLEAN, STRING, ENUM.
+     feature values. Valid values are INTEGER, FLOAT, BOOLEAN, STRING.
 :    Indicates the beginning of a "FEATURE" context.
 
 FEATURE_END
@@ -598,12 +624,6 @@ VALUE_STRING
      "STRING".
 :    Has the string-typed *value* parameter that has the value.
 
-VALUE_ENUM
-:    Indicates a enum value on the current property or feature.
-:    Is only valid in a "PROPERTY" or "FEATURE" context where *valueType* is 
-     "ENUM".
-:    Has the string-typed *value* parameter that has the value.
-
 There are two sides to interacting with a stream - a program may produce events
 or consume events.
 
@@ -632,6 +652,12 @@ handleDocStart(id)
 handleDocEnd()
 
 handleUsesSchema(uri)
+
+handleAsSpan(nodeType)
+
+handleAsSequence(nodeType)
+
+handleAsSpanContainer(nodeType, spanType)
 
 handleContent(contentType, content)
 
@@ -690,7 +716,11 @@ getContent
 
 getNodeType
 :    Returns the type of the node.
-:    Valid in NODE_START.
+:    Valid in NODE_START, AS_SPAN, AS_SEQUENCE and AS_SPAN_CONTAINER.
+
+getSpanType
+:    Returns the type of the span.
+:    Valid in AS_SPAN_CONTAINER
 
 getKey
 :    Returns the key of the property or feature.
@@ -715,10 +745,6 @@ getBooleanValue
 getStringValue
 :    Returns the string value.
 :    Valid in VALUE_STRING.
-
-getEnumValue
-:    Returns the enum value.
-:    Valid in VALUE_ENUM.
 
 getEdgeType
 :    Returns the type of the edge.
@@ -751,6 +777,9 @@ Here is the general structure:
 <pagif xmlns="http://pagi.org/stream/"
        id="">
   <schema uri="drs-pagis"/>
+  <asSpan nt=""/>
+  <asSequence nt=""/>
+  <asSpanContainer nt="" st=""/>
   <content contentType="text/plain">Text content of graph.</content>
   <node type="" id="">
     <prop k="" int=""/>
@@ -854,25 +883,27 @@ presumed that this cache is large enough to prevent repetition to the point of
 a severe degredation to performance. The other events are defined below:
 
 
-| Code        | Name               | Event-Code-Specific Data                                                            |
-| ----------- | ------------------ | ----------------------------------------------------------------------------------- |
-| ``0x01``    | __DOC_START__      | <__docId__[*string-ref*]>                                                           |
-| ``0x02``    | __DOC_END__        | <*empty*>                                                                           |
-| ``0x03``    | __NODE_START__     | <__nodeType__[*string-ref*]><__nodeId__[*string-ref*]>                              |
-| ``0x04``    | __NODE_END__       | <*empty*>                                                                           |
-| ``0x05``    | __PROPERTY_START__ | <__key__[*string-ref*]><__valueType__[*value-type*]>                                |
-| ``0x06``    | __PROPERTY_END__   | <*empty*>                                                                           |
-| ``0x07``    | __EDGE__           | <__type__[*string-ref*]><__targetType__[*string-ref]><__targetId__[*string-ref*]>   |
-| ``0x08``    | __FEATURE_START__  | <__key__[*string-ref*]><__valueType__[*value-type*]>                                |
-| ``0x09``    | __FEATURE_END__    | <*empty*>                                                                           |
-| ``0x0A``    | __VALUE_INTEGER__  | 4-byte integer                                                                      |
-| ``0x0B``    | __VALUE_FLOAT__    | 4-byte [IEEE-754-2008][] floating-point                                             |
-| ``0x0C``    | __VALUE_BOOLEAN__  | ``0x0F`` (true) or ``0xF0`` (false)                                                 |
-| ``0x0D``    | __VALUE_STRING__   | <*string-ref*>                                                                      |
-| ``0x0E``    | __VALUE_ENUM__     | <*string-ref*>                                                                      |
-| ``0x0F``    | __USES_SCHEMA__    | <__schemaId__[*string-ref*]>                                                        |
-| ``0x10``    | __CONTENT__        | <__contentType__[*string*]><__content__[*block_seq*]>                           |
-| ``0x11``    | __CONTENT_CHKSUM__ | <__contentType__[*string*]><__checksum__[*4-byte integer*]>                         |
+| Code        | Name                  | Event-Code-Specific Data                                                            |
+| ----------- | --------------------- | ----------------------------------------------------------------------------------- |
+| ``0x01``    | __DOC_START__         | <__docId__[*string-ref*]>                                                           |
+| ``0x02``    | __DOC_END__           | <*empty*>                                                                           |
+| ``0x03``    | __NODE_START__        | <__nodeType__[*string-ref*]><__nodeId__[*string-ref*]>                              |
+| ``0x04``    | __NODE_END__          | <*empty*>                                                                           |
+| ``0x05``    | __PROPERTY_START__    | <__key__[*string-ref*]><__valueType__[*value-type*]>                                |
+| ``0x06``    | __PROPERTY_END__      | <*empty*>                                                                           |
+| ``0x07``    | __EDGE__              | <__type__[*string-ref*]><__targetType__[*string-ref]><__targetId__[*string-ref*]>   |
+| ``0x08``    | __FEATURE_START__     | <__key__[*string-ref*]><__valueType__[*value-type*]>                                |
+| ``0x09``    | __FEATURE_END__       | <*empty*>                                                                           |
+| ``0x0A``    | __VALUE_INTEGER__     | 4-byte integer                                                                      |
+| ``0x0B``    | __VALUE_FLOAT__       | 4-byte [IEEE-754-2008][] floating-point                                             |
+| ``0x0C``    | __VALUE_BOOLEAN__     | ``0x0F`` (true) or ``0xF0`` (false)                                                 |
+| ``0x0D``    | __VALUE_STRING__      | <*string-ref*>                                                                      |
+| ``0x0F``    | __USES_SCHEMA__       | <__schemaId__[*string-ref*]>                                                        |
+| ``0x10``    | __CONTENT__           | <__contentType__[*string*]><__content__[*block_seq*]>                               |
+| ``0x11``    | __CONTENT_CHKSUM__    | <__contentType__[*string*]><__checksum__[*4-byte integer*]>                         |
+| ``0x12``    | __AS_SPAN__           | <__nodeType__[*string-ref*]>                                                        |
+| ``0x13``    | __AS_SEQUENCE__       | <__nodeType__[*string-ref*]>                                                        |
+| ``0x14``    | __AS_SPAN_CONTAINER__ | <__nodeType__[*string-ref*]><__spanType__[*string-ref*]>                            |
 
 The __valueType__ that is referenced in __PROPERTY_START__ and __PROPERTY_END__ is as follows:
 
@@ -882,7 +913,6 @@ The __valueType__ that is referenced in __PROPERTY_START__ and __PROPERTY_END__ 
 | ``0x02``    | __FLOAT__     |
 | ``0x03``    | __BOOLEAN__   |
 | ``0x04``    | __STRING__    |
-| ``0x05``    | __ENUM__      |
 
 The *block_seq* type is a mechanism to allow string content of unlimited length. It is basically
 the same data structure as a string, with one exception. If the string length is equal to the
