@@ -824,6 +824,11 @@ string
 :    a short value [``l``]
 :    followed by ``l`` *UTF-8* encoded bytes
 
+block_seq
+:    recursive data structure
+:    a string w/ length == 0xFF + a block_seq OR
+:    a string w/ length < 0xFF
+
 lrc
 :    a 1-byte checksum for a short record
 :    comes at the end of a record, and input is the entire preceding portion of the record
@@ -894,7 +899,7 @@ a severe degredation to performance. The other events are defined below:
 | ``0x0C``    | __VALUE_BOOLEAN__     | ``0x0F`` (true) or ``0xF0`` (false)                                                 |
 | ``0x0D``    | __VALUE_STRING__      | <*string-ref*>                                                                      |
 | ``0x0F``    | __USES_SCHEMA__       | <__schemaId__[*string-ref*]>                                                        |
-| ``0x10``    | __CONTENT__           | <__contentType__[*string*]><__content__[*string*]>                                  |
+| ``0x10``    | __CONTENT__           | <__contentType__[*string*]><__content__[*block_seq*]>                               |
 | ``0x11``    | __CONTENT_CHKSUM__    | <__contentType__[*string*]><__checksum__[*4-byte integer*]>                         |
 | ``0x12``    | __AS_SPAN__           | <__nodeType__[*string-ref*]>                                                        |
 | ``0x13``    | __AS_SEQUENCE__       | <__nodeType__[*string-ref*]>                                                        |
@@ -908,6 +913,12 @@ The __valueType__ that is referenced in __PROPERTY_START__ and __PROPERTY_END__ 
 | ``0x02``    | __FLOAT__     |
 | ``0x03``    | __BOOLEAN__   |
 | ``0x04``    | __STRING__    |
+
+The *block_seq* type is a mechanism to allow string content of unlimited length. It is basically
+the same data structure as a string, with one exception. If the string length is equal to the
+max (0xFF) then we expect another string to follow it. This content is simply intended to be 
+appended to the preceding content. This pattern is repeated until a block is reached where the
+length is less than the max. This is the final block in the content.
 
 The __CONTENT_CHKSUM__ event code is used in situations where the storage mechanism wishes
 to store the content externally. This is often the case when content should be accessible
