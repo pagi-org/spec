@@ -548,13 +548,13 @@ SOURCE_TARGET_NODE
 
 USES_SCHEMA
 :    Indicates that this document uses a particular pagi schema.
-:    Is only valid in the "DOC" or "FRAGMENT" context and before any "NODE_START" events.
+:    Is only valid in the "DOC", "FRAGMENT" or "DIFF" context and before any "NODE_START" events.
 :    Has the string-typed *uri* parameter indicating the pagi schema id.
 :    This event can occur 0 or more times with different schema ids.
 
 AS_SPAN
 :    Indicates that a given node type should be treated as a span.
-:    Is only valid in the DOC context and before any "NODE_START" events.
+:    Is only valid in the DOC or DIFF context and before any "NODE_START" events.
 :    Has the string-typed *nodeType* parameter indicating the node type.
 :    This event can occur 0 or more times, each with different node types.
 :    Provided as a supplement to consumers loading the graph when a schema
@@ -562,7 +562,7 @@ AS_SPAN
 
 AS_SEQUENCE
 :    Indicates that a given node type should be treated as a sequence.
-:    Is only valid in the DOC context and before any "NODE_START" events.
+:    Is only valid in the DOC or DIFF context and before any "NODE_START" events.
 :    Has the string-typed *nodeType* parameter indicating the node type.
 :    This event can occur 0 or more times, each with different node types.
 :    Provided as a supplement to consumers loading the graph when a schema
@@ -570,7 +570,7 @@ AS_SEQUENCE
 
 AS_SPAN_CONTAINER
 :    Indicates that a given node type should be treated as a span container.
-:    Is only valid in the DOC context and before any "NODE_START" events.
+:    Is only valid in the DOC or DIFF context and before any "NODE_START" events.
 :    Has the string-typed *nodeType* parameter indicating the node type.
 :    Has the string-typed *spanType* parameter indicating the type that this
      node type spans.
