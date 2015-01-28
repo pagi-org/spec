@@ -3,6 +3,8 @@
             xmlns="http://pagi.org/schema" elementFormDefault="qualified">
 	<xsd:element name="pagis" type="pagis"/>
 
+	<xsd:element name="pagis-fragment" type="pagis-fragment"/>
+
 	<xsd:complexType name="description">
 		<xsd:simpleContent>
 			<xsd:extension base="xsd:string"/>
@@ -16,6 +18,17 @@
 			<xsd:choice minOccurs="0" maxOccurs="unbounded">
 				<xsd:element name="nodeType" type="nodeType" minOccurs="0" maxOccurs="unbounded"/>
 				<xsd:element name="nodeTypeExtension" type="nodeTypeExtension" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:choice>
+		</xsd:sequence>
+		<xsd:attribute name="id" type="xsd:anyURI" use="required"/>
+	</xsd:complexType>
+
+	<xsd:complexType name="pagis-fragment">
+		<xsd:sequence>
+			<xsd:element name="description" type="description" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="extends" type="extendsType" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:choice minOccurs="0" maxOccurs="unbounded">
+				<xsd:element name="nodeType" type="fragmentNodeType" minOccurs="0" maxOccurs="unbounded"/>
 			</xsd:choice>
 		</xsd:sequence>
 		<xsd:attribute name="id" type="xsd:anyURI" use="required"/>
@@ -46,6 +59,21 @@
 		</xsd:sequence>
 		<xsd:attribute name="name" type="identifier" use="required"/>
 		<xsd:attribute name="idGenerator" type="idGenerator" use="required"/>
+	</xsd:complexType>
+
+	<xsd:complexType name="fragmentNodeType">
+		<xsd:sequence>
+			<xsd:element name="description" type="description" minOccurs="0" maxOccurs="1"/>
+			<xsd:choice minOccurs="0" maxOccurs="unbounded">
+				<xsd:element name="integerProperty" type="integerProperty"/>
+				<xsd:element name="floatProperty" type="floatProperty"/>
+				<xsd:element name="booleanProperty" type="booleanProperty"/>
+				<xsd:element name="stringProperty" type="stringProperty"/>
+				<xsd:element name="enumProperty" type="enumProperty"/>
+			</xsd:choice>
+			<xsd:element name="edgeType" type="complexEdgeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="identifier" use="required"/>
 	</xsd:complexType>
 
 	<xsd:simpleType name="idGenerator">
@@ -146,6 +174,30 @@
 					<xsd:attribute name="name" type="identifier" use="required"/>
 				</xsd:complexType>
 			</xsd:element>
+		</xsd:sequence>
+		<xsd:attribute name="name" type="identifier"/>
+		<xsd:attribute name="targetNodeType" type="identifier"/>
+		<xsd:attribute name="minArity" type="xsd:nonNegativeInteger"/>
+		<xsd:attribute name="maxArity" type="maxArity"/>
+		<xsd:attribute name="targetMinArity" type="xsd:nonNegativeInteger"/>
+		<xsd:attribute name="targetMaxArity" type="maxArity"/>
+	</xsd:complexType>
+
+	<xsd:complexType name="complexEdgeType">
+		<xsd:sequence>
+			<xsd:element name="description" type="description" minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="targetNodeType" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:attribute name="name" type="identifier" use="required"/>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:choice minOccurs="0" maxOccurs="unbounded">
+				<xsd:element name="integerProperty" type="integerProperty"/>
+				<xsd:element name="floatProperty" type="floatProperty"/>
+				<xsd:element name="booleanProperty" type="booleanProperty"/>
+				<xsd:element name="stringProperty" type="stringProperty"/>
+				<xsd:element name="enumProperty" type="enumProperty"/>
+			</xsd:choice>
 		</xsd:sequence>
 		<xsd:attribute name="name" type="identifier"/>
 		<xsd:attribute name="targetNodeType" type="identifier"/>
