@@ -38,9 +38,10 @@ Table of Contents {#toc}
     1. [XML](#xml-format)
     2. [Binary](#binary-format)
     3. [JSON](#json-format)
-7. [Corpus-Scoped Analytics](#corpus-scoped-analytics)
-8. [Future Scope](#future-scope)
-9. [Appendices](#appendices)
+7. [Graph Fragment](#graph-fragment)
+8. [Corpus-Scoped Analytics](#corpus-scoped-analytics)
+9. [Future Scope](#future-scope)
+10. [Appendices](#appendices)
     * [Appendix A: XML Format XSD](#xml-format-xsd)
     * [Appendix B: PAGI Schema XSD](#pagi-schema-xsd)
 
@@ -483,6 +484,7 @@ style conventions in the appropriate language.
 * int getMaxArity()
 * int getTargetMinArity()
 * int getTargetMaxArity()
+* Map<String, PropertySpec> getPropertySpecs() // only valid for graph fragments, otherwise empty
 
 Common APIs {#commons-apis}
 ---------------------------
@@ -512,9 +514,20 @@ DOC_END
 :    Is only valid in the "DOC" context.
 :    Indicates the ending of a "DOC" context.
 
+FRAGMENT_START
+:    Indicates the start of a graph fragment.
+:    Is only valid outside of any context.
+:    Has the string-typed *id* parameter indicating the graph fragment id.
+:    Indicates the beginning of a "FRAGMENT" context.
+
+FRAGMENT_END
+:    Indicates the end of a graph fragment.
+:    Is only valid in the "FRAGMENT" context.
+:    Indicates the ending of a "FRAGMENT" context.
+
 USES_SCHEMA
 :    Indicates that this document uses a particular pagi schema.
-:    Is only valid in the "DOC" context and before any "NODE_START" events.
+:    Is only valid in the "DOC" or "FRAGMENT" context and before any "NODE_START" events.
 :    Has the string-typed *uri* parameter indicating the pagi schema id.
 :    This event can occur 0 or more times with different schema ids.
 
@@ -555,7 +568,7 @@ CONTENT
 
 NODE_START
 :    Represents the beginning of information about a node.
-:    Is only valid in the "DOC" context.
+:    Is only valid in the "DOC" or "FRAGMENT" context.
 :    Has the string-typed *id* parameter indicating the node id.
 :    Has the string-typed *nodeType* parameter indicating the node type.
 :    Indicates the beginning of a "NODE" context.
@@ -574,9 +587,27 @@ EDGE
 :    Has the string-typed *targetId* parameter indicating the id of the node
      that this edge points to.
 
+EDGE_START
+:    Indicates an edge on the current node.
+:    Is only valid in the "NODE" context, prior to any FEATURE events.
+:    Has the string-typed *edgeType* parameter indicating the type of the edge.
+:    Has the string-typed "targetNodeType* parameter indicating the type of the
+     node that this edge points to.
+:    Has the string-typed *targetId* parameter indicating the id of the node
+     that this edge points to.
+:    Indicates the beginning of a "EDGE" context.
+
+EDGE_END
+:    Indicates that there is no more information about the current edge.
+:    Is only valid in the "EDGE" context.
+:    Indicates the ending of a "EDGE" context.
+
+
 PROPERTY_START
 :    Indicates the beginning of information about a property.
-:    Is only valid in the "NODE" context, prior to any EDGE events.
+:    Is only valid in the "NODE" context with the exception of (#graph-fragment).
+     Event must be prior to any EDGE events.
+:    In a #graph-fragment, event is valid in "EDGE" context.
 :    Has the string-typed *key* parameter indicating the property key.
 :    Has the ValueType-typed *valueType* parameter indicating the type of the
      property values. Valid values are INTEGER, FLOAT, BOOLEAN, STRING.
@@ -651,6 +682,10 @@ handleDocStart(id)
 
 handleDocEnd()
 
+handleGraphFragmentStart(id, sourceGraph)
+
+handleGraphFragmentEnd()
+
 handleUsesSchema(uri)
 
 handleAsSpan(nodeType)
@@ -674,6 +709,10 @@ handleFeatureStart(key, valueType)
 handleFeatureEnd()
 
 handleEdge(edgeType, targetType, targetId)
+
+handleEdgeStart(edgeType, targetType, targetId)
+
+handleEdgeEnd(edgeType, targetType, targetId)
 
 handleValueInteger(value)
 
@@ -700,7 +739,11 @@ getEventType
 
 getId
 :    Returns the ID of the document or node.
-:    Valid in DOC_START and NODE_START.
+:    Valid in DOC_START or NODE_START or FRAGMENT_START.
+
+getSourceGraphId
+:    Returns the source graph identifier for a graph fragment.
+:    Valid in FRAGMENT_START.
 
 getSchemaId
 :    Returns a pagi schema uri.
@@ -887,11 +930,15 @@ a severe degredation to performance. The other events are defined below:
 | ----------- | --------------------- | ----------------------------------------------------------------------------------- |
 | ``0x01``    | __DOC_START__         | <__docId__[*string-ref*]>                                                           |
 | ``0x02``    | __DOC_END__           | <*empty*>                                                                           |
+| ``0x17``    | __FRAGMENT_START__    | <__fragmentId__[*string-ref*]><__sourceGraphId__[*string-ref*]>                     |
+| ``0x18``    | __FRAGMENT_END__      | <*empty*>                                                                           |
 | ``0x03``    | __NODE_START__        | <__nodeType__[*string-ref*]><__nodeId__[*string-ref*]>                              |
 | ``0x04``    | __NODE_END__          | <*empty*>                                                                           |
 | ``0x05``    | __PROPERTY_START__    | <__key__[*string-ref*]><__valueType__[*value-type*]>                                |
 | ``0x06``    | __PROPERTY_END__      | <*empty*>                                                                           |
 | ``0x07``    | __EDGE__              | <__type__[*string-ref*]><__targetType__[*string-ref]><__targetId__[*string-ref*]>   |
+| ``0x15``    | __EDGE_START__        | <__type__[*string-ref*]><__targetType__[*string-ref]><__targetId__[*string-ref*]>   |
+| ``0x16``    | __EDGE_END__          | <*empty*>                                                                           |
 | ``0x08``    | __FEATURE_START__     | <__key__[*string-ref*]><__valueType__[*value-type*]>                                |
 | ``0x09``    | __FEATURE_END__       | <*empty*>                                                                           |
 | ``0x0A``    | __VALUE_INTEGER__     | 4-byte integer                                                                      |
@@ -930,6 +977,24 @@ stream, including the content itself (not the checksum). This is merely a storag
 and its existence should not be exposed in the stream API. The checksum algorithm is crc32.
 
    [IEEE-754-2008]: http://ieeexplore.ieee.org/xpl/mostRecentIssue.jsp?punumber=4610933
+
+Graph Fragment {#graph-fragment}
+--------------------------------
+
+A graph fragment is an format and schema specification in extension to the core document specification.
+It is a means of representing graph based information that is tied to an external source graph.
+Node and edge specification for fragments largely remains identical with a few modifications for
+flexibility.
+
+The following document graph specifications do not apply to graph fragments:
+ * document content
+ * (#traits)
+ * (#id-generation) pattern
+
+Edge specification has been expanded to support typed properties identical to Node specification.
+
+A schema can be specified at a graph fragment level similar to the core document schema with
+adjustments to support edge property definition and exclusion of trait and node id pattern definition.
 
 
 Corpus-Scoped Analytics {#corpus-scoped-analytics}

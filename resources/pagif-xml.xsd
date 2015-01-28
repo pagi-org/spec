@@ -6,6 +6,7 @@
             elementFormDefault="qualified">
 	<!-- the root element 'document' -->
 	<xsd:element name="document" type="document"/>
+	<xsd:element name="graphFragment" type="graphFragment"/>
 
 	<xsd:complexType name="document">
 		<xsd:sequence>
@@ -17,6 +18,15 @@
 			<xsd:element name="node" type="node" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
 		<xsd:attribute name="id" type="xsd:string" use="required"/>
+	</xsd:complexType>
+
+	<xsd:complexType name="graphFragment">
+		<xsd:sequence>
+			<xsd:element name="schema" type="schema" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="node" type="fragmentNode" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="sourceGraph" type="xsd:string" use="required"/>
+		<xsd:attribute name="fragmentIdentifier" type="xsd:string" use="required"/>
 	</xsd:complexType>
 
 	<xsd:complexType name="schema">
@@ -69,7 +79,35 @@
 		<xsd:attribute name="id" type="xsd:string" use="required"/>
 	</xsd:complexType>
 
+	<xsd:complexType name="fragmentNode">
+		<xsd:sequence>
+			<xsd:choice minOccurs="0" maxOccurs="unbounded">
+				<xsd:element name="intProp" type="integerValued"/>
+				<xsd:element name="floatProp" type="floatValued"/>
+				<xsd:element name="boolProp" type="booleanValued"/>
+				<xsd:element name="strProp" type="stringValued"/>
+			</xsd:choice>
+			<xsd:element name="edge" type="complexEdge" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="type" type="xsd:string" use="required"/>
+		<xsd:attribute name="id" type="xsd:string" use="required"/>
+	</xsd:complexType>
+
 	<xsd:complexType name="edge">
+		<xsd:attribute name="type" type="xsd:string" use="required"/>
+		<xsd:attribute name="toType" type="xsd:string" use="required"/>
+		<xsd:attribute name="to" type="xsd:string" use="required"/>
+	</xsd:complexType>
+
+	<xsd:complexType name="complexEdge">
+		<xsd:sequence>
+			<xsd:choice minOccurs="0" maxOccurs="unbounded">
+				<xsd:element name="intProp" type="integerValued"/>
+				<xsd:element name="floatProp" type="floatValued"/>
+				<xsd:element name="boolProp" type="booleanValued"/>
+				<xsd:element name="strProp" type="stringValued"/>
+			</xsd:choice>
+		</xsd:sequence>
 		<xsd:attribute name="type" type="xsd:string" use="required"/>
 		<xsd:attribute name="toType" type="xsd:string" use="required"/>
 		<xsd:attribute name="to" type="xsd:string" use="required"/>
