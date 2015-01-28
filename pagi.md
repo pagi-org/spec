@@ -993,9 +993,6 @@ The following document graph specifications do not apply to graph fragments:
 
 Edge specification has been expanded to support typed properties identical to Node specification.
 
-A graph network within a fragment must be self contained in that edge targets must refer
-to nodes within the same graph fragment.
-
 A schema can be specified at a graph fragment level similar to the core document schema with
 adjustments to support edge property definition and exclusion of trait and node id pattern definition.
 
