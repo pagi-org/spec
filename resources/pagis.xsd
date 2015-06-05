@@ -59,6 +59,7 @@
 		</xsd:sequence>
 		<xsd:attribute name="name" type="identifier" use="required"/>
 		<xsd:attribute name="idGenerator" type="idGenerator" use="required"/>
+		<xsd:attribute name="readableName" type="xsd:string" use="optional" /> <!-- The human readable name -->
 	</xsd:complexType>
 
 	<xsd:complexType name="fragmentNodeType">
@@ -74,6 +75,7 @@
 			<xsd:element name="edgeType" type="complexEdgeType" minOccurs="0" maxOccurs="unbounded"/>
 		</xsd:sequence>
 		<xsd:attribute name="name" type="identifier" use="required"/>
+		<xsd:attribute name="readableName" type="xsd:string" use="optional" /> <!-- The human readable name -->
 	</xsd:complexType>
 
 	<xsd:simpleType name="idGenerator">
@@ -150,6 +152,7 @@
 
 	<xsd:attributeGroup name="propertyBase">
 		<xsd:attribute name="name" type="identifier"/>
+		<xsd:attribute name="readableName" type="xsd:string" use="optional" /> <!-- The human readable name -->
 		<xsd:attribute name="minArity" type="xsd:nonNegativeInteger"/>
 		<xsd:attribute name="maxArity" type="maxArity"/>
 	</xsd:attributeGroup>
@@ -176,6 +179,7 @@
 			</xsd:element>
 		</xsd:sequence>
 		<xsd:attribute name="name" type="identifier"/>
+		<xsd:attribute name="readableName" type="xsd:string" use="optional" /> <!-- The human readable name -->
 		<xsd:attribute name="targetNodeType" type="identifier"/>
 		<xsd:attribute name="minArity" type="xsd:nonNegativeInteger"/>
 		<xsd:attribute name="maxArity" type="maxArity"/>
@@ -200,6 +204,7 @@
 			</xsd:choice>
 		</xsd:sequence>
 		<xsd:attribute name="name" type="identifier"/>
+		<xsd:attribute name="readableName" type="xsd:string" use="optional" /> <!-- The human readable name -->
 		<xsd:attribute name="targetNodeType" type="identifier"/>
 		<xsd:attribute name="minArity" type="xsd:nonNegativeInteger"/>
 		<xsd:attribute name="maxArity" type="maxArity"/>
