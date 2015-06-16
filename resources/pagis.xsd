@@ -145,6 +145,7 @@
 			<xsd:element name="item" minOccurs="1" maxOccurs="unbounded">
 				<xsd:complexType>
 					<xsd:attribute name="name" type="xsd:string"/>
+					<xsd:attribute name="readableName" type="xsd:string" use="optional"/>
 				</xsd:complexType>
 			</xsd:element>
 		</xsd:sequence>
