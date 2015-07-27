@@ -39,9 +39,10 @@ Table of Contents {#toc}
     2. [Binary](#binary-format)
     3. [JSON](#json-format)
 7. [Graph Fragment](#graph-fragment)
-8. [Corpus-Scoped Analytics](#corpus-scoped-analytics)
-9. [Future Scope](#future-scope)
-10. [Appendices](#appendices)
+8. [Graph Diff](#graph-diff)
+9. [Corpus-Scoped Analytics](#corpus-scoped-analytics)
+10. [Future Scope](#future-scope)
+11. [Appendices](#appendices)
     * [Appendix A: XML Format XSD](#xml-format-xsd)
     * [Appendix B: PAGI Schema XSD](#pagi-schema-xsd)
 
@@ -484,7 +485,7 @@ style conventions in the appropriate language.
 * int getMaxArity()
 * int getTargetMinArity()
 * int getTargetMaxArity()
-* Map<String, PropertySpec> getPropertySpecs() // only valid for graph fragments, otherwise empty
+* Map<String, PropertySpec> getPropertySpecs()
 
 Common APIs {#commons-apis}
 ---------------------------
@@ -525,15 +526,35 @@ FRAGMENT_END
 :    Is only valid in the "FRAGMENT" context.
 :    Indicates the ending of a "FRAGMENT" context.
 
+DIFF_START
+:    Indicates the start of a graph diff.
+:    Is only valid outside of any context.
+:    Has the string-typed *sourceId* parameter indicating the id of source graph.
+:    Has the string-typed *targetId* parameter indicating the id of target graph.
+:    Indicates the beginning of a "DIFF" context.
+
+DIFF_END
+:    Indicates the end of a graph diff.
+:    Is only valid in the "DIFF" context.
+:    Indicates the ending of a "DIFF" context.
+
+SOURCE_TARGET_NODE
+:    Indicates node id equality between source and target graphs in a diff.
+:    Is only valid in the "DIFF" context and before any "NODE_*" events.
+:    Has the string-typed *nodeType* parameter indicating type of node.
+:    Has the string-typed *sourceId* parameter indicating the node id of source node.
+:    Has the string-typed *targetId* parameter indicating the node id of target node.
+:    This event can occur 0 or more times with different mappings.
+
 USES_SCHEMA
 :    Indicates that this document uses a particular pagi schema.
-:    Is only valid in the "DOC" or "FRAGMENT" context and before any "NODE_START" events.
+:    Is only valid in the "DOC", "FRAGMENT" or "DIFF" context and before any "NODE_START" events.
 :    Has the string-typed *uri* parameter indicating the pagi schema id.
 :    This event can occur 0 or more times with different schema ids.
 
 AS_SPAN
 :    Indicates that a given node type should be treated as a span.
-:    Is only valid in the DOC context and before any "NODE_START" events.
+:    Is only valid in the DOC or DIFF context and before any "NODE_START" events.
 :    Has the string-typed *nodeType* parameter indicating the node type.
 :    This event can occur 0 or more times, each with different node types.
 :    Provided as a supplement to consumers loading the graph when a schema
@@ -541,7 +562,7 @@ AS_SPAN
 
 AS_SEQUENCE
 :    Indicates that a given node type should be treated as a sequence.
-:    Is only valid in the DOC context and before any "NODE_START" events.
+:    Is only valid in the DOC or DIFF context and before any "NODE_START" events.
 :    Has the string-typed *nodeType* parameter indicating the node type.
 :    This event can occur 0 or more times, each with different node types.
 :    Provided as a supplement to consumers loading the graph when a schema
@@ -549,7 +570,7 @@ AS_SEQUENCE
 
 AS_SPAN_CONTAINER
 :    Indicates that a given node type should be treated as a span container.
-:    Is only valid in the DOC context and before any "NODE_START" events.
+:    Is only valid in the DOC or DIFF context and before any "NODE_START" events.
 :    Has the string-typed *nodeType* parameter indicating the node type.
 :    Has the string-typed *spanType* parameter indicating the type that this
      node type spans.
@@ -578,9 +599,44 @@ NODE_END
 :    Is only valid in the "NODE" context.
 :    Indicates the ending of a "NODE" context.
 
+NODE_REMOVE_START
+:    Represents the beginning of information about removing a node.
+:    Is only valid in the "DIFF" context.
+:    Has the string-typed *id* parameter indicating the node id.
+:    Has the string-typed *nodeType* parameter indicating the node type.
+:    Indicates the beginning of a "NODE_REMOVE" context.
+:    Subsequent events before the next "NODE_REMOVE_END" are meant to capture information
+     about the node being removed.
+
+NODE_REMOVE_END
+:    Indicates that there is no more information about the current node.
+:    Is only valid in the "NODE_REMOVE" context.
+:    Indicates the ending of a "NODE_REMOVE" context.
+
+NODE_UPDATE_START
+:    Represents the beginning of information about modifying an existing node.
+:    Is only valid in the "DIFF" context.
+:    Has the string-typed *id* parameter indicating the node id.
+:    Has the string-typed *nodeType* parameter indicating the node type.
+:    Indicates the beginning of a "NODE_UPDATE" context.
+
+NODE_UPDATE_END
+:    Indicates that there is no more information about the current node.
+:    Is only valid in the "NODE_UPDATE" context.
+:    Indicates the ending of a "NODE_UPDATE" context.
+
 EDGE
 :    Indicates an edge on the current node.
 :    Is only valid in the "NODE" context, prior to any FEATURE events.
+:    Has the string-typed *edgeType* parameter indicating the type of the edge.
+:    Has the string-typed "targetNodeType* parameter indicating the type of the
+     node that this edge points to.
+:    Has the string-typed *targetId* parameter indicating the id of the node
+     that this edge points to.
+
+EDGE_REMOVE
+:    Indicates an removal of an edge on the current node.
+:    Is only valid in the "NODE_UPDATE" context.
 :    Has the string-typed *edgeType* parameter indicating the type of the edge.
 :    Has the string-typed "targetNodeType* parameter indicating the type of the
      node that this edge points to.
@@ -602,7 +658,6 @@ EDGE_END
 :    Is only valid in the "EDGE" context.
 :    Indicates the ending of a "EDGE" context.
 
-
 PROPERTY_START
 :    Indicates the beginning of information about a property.
 :    Is only valid in the "NODE" context with the exception of (#graph-fragment).
@@ -617,6 +672,22 @@ PROPERTY_END
 :    Indicates that there are no more values for the current property.
 :    Is only valid in the "PROPERTY" context.
 :    Indicates the ending of a "PROPERTY" context.
+
+PROPERTY_REMOVE_START
+:    Indicates the removal of a property from node.
+:    Is only valid in the "NODE_UPDATE" context.
+     Event must be prior to any EDGE events.
+:    Has the string-typed *key* parameter indicating the property key.
+:    Has the ValueType-typed *valueType* parameter indicating the type of the
+     property values. Valid values are INTEGER, FLOAT, BOOLEAN, STRING.
+:    Indicates the beginning of a "PROPERTY_REMOVE" context.
+:    Subsequent events before the next "PROPERTY_REMOVE_END" are meant to capture
+     information about property being removed.
+
+PROPERTY_REMOVE_END
+:    Indicates that there are no information for the current property being removed.
+:    Is only valid in the "PROPERTY_REMOVE" context.
+:    Indicates the ending of a "PROPERTY_REMOVE" context.
 
 FEATURE_START
 :    Indicates the beginning of information about a feature.
@@ -633,26 +704,26 @@ FEATURE_END
 
 VALUE_INTEGER
 :    Indicates an integer value on the current property or feature.
-:    Is only valid in a "PROPERTY" or "FEATURE" context where *valueType* is
-     "INTEGER".
+:    Is only valid in a "PROPERTY", "PROPERTY_REMOVE" or "FEATURE" context
+     where *valueType* is "INTEGER".
 :    Has the int-typed *value* parameter that has the value.
 
 VALUE_FLOAT
 :    Indicates a float value on the current property or feature.
-:    Is only valid in a "PROPERTY" or "FEATURE" context where *valueType* is
-     "FLOAT".
+:    Is only valid in a "PROPERTY", "PROPERTY_REMOVE" or "FEATURE" context
+     where *valueType* is "FLOAT".
 :    Has the float-typed *value* parameter that has the value.
 
 VALUE_BOOLEAN
 :    Indicates a boolean value on the current property or feature.
-:    Is only valid in a "PROPERTY" or "FEATURE" context where *valueType* is
-     "BOOLEAN".
+:    Is only valid in a "PROPERTY", "PROPERTY_REMOVE" or "FEATURE" context
+     where *valueType* is "BOOLEAN".
 :    Has the boolean-typed *value* parameter that has the value.
 
 VALUE_STRING
 :    Indicates a string value on the current property or feature.
-:    Is only valid in a "PROPERTY" or "FEATURE" context where *valueType* is
-     "STRING".
+:    Is only valid in a "PROPERTY", "PROPERTY_REMOVE" or "FEATURE" context
+     where *valueType* is "STRING".
 :    Has the string-typed *value* parameter that has the value.
 
 There are two sides to interacting with a stream - a program may produce events
@@ -686,6 +757,12 @@ handleGraphFragmentStart(id, sourceGraph)
 
 handleGraphFragmentEnd()
 
+handleDiffStart(sourceId, targetId)
+
+handleDiffEnd()
+
+handleSourceTargetNode(nodeType, sourceId, targetId)
+
 handleUsesSchema(uri)
 
 handleAsSpan(nodeType)
@@ -700,15 +777,31 @@ handleNodeStart(nodeType, id)
 
 handleNodeEnd()
 
+handleNodeRemoveStart(nodeType, id)
+
+handleNodeRemoveEnd()
+
+handleNodeUpdateStart(nodeType, id)
+
+handleNodeUpdateEnd()
+
 handlePropertyStart(key, valueType)
 
 handlePropertyEnd()
+
+handlePropertyRemoveStart(key, valueType)
+
+handlePropertyRemoveEnd()
 
 handleFeatureStart(key, valueType)
 
 handleFeatureEnd()
 
+handleFeatureRemove(key)
+
 handleEdge(edgeType, targetType, targetId)
+
+handleEdgeRemove(edgeType, targetType, targetId)
 
 handleEdgeStart(edgeType, targetType, targetId)
 
@@ -767,7 +860,7 @@ getSpanType
 
 getKey
 :    Returns the key of the property or feature.
-:    Valid in PROPERTY_START or FEATURE_START.
+:    Valid in PROPERTY_START, PROPERTY_REMOVE, FEATURE_START, or FEATURE_REMOVE
 
 getValueType
 :    Returns the type of the property or feature.
@@ -791,15 +884,15 @@ getStringValue
 
 getEdgeType
 :    Returns the type of the edge.
-:    Valid in EDGE.
+:    Valid in EDGE or EDGE_REMOVE.
 
 getEdgeTargetType
 :    Returns the type of the target node of the edge.
-:    Valid in EDGE.
+:    Valid in EDGE or EDGE_REMOVE.
 
 getEdgeTargetId
 :    Returns the id of the target node of the edge.
-:    Valid in EDGE.
+:    Valid in EDGE or EDGE_REMOVE.
 
 Transfer Formats {#transfer-formats}
 ------------------------------------
@@ -926,31 +1019,41 @@ presumed that this cache is large enough to prevent repetition to the point of
 a severe degredation to performance. The other events are defined below:
 
 
-| Code        | Name                  | Event-Code-Specific Data                                                            |
-| ----------- | --------------------- | ----------------------------------------------------------------------------------- |
-| ``0x01``    | __DOC_START__         | <__docId__[*string-ref*]>                                                           |
-| ``0x02``    | __DOC_END__           | <*empty*>                                                                           |
-| ``0x17``    | __FRAGMENT_START__    | <__fragmentId__[*string-ref*]><__sourceGraphId__[*string-ref*]>                     |
-| ``0x18``    | __FRAGMENT_END__      | <*empty*>                                                                           |
-| ``0x03``    | __NODE_START__        | <__nodeType__[*string-ref*]><__nodeId__[*string-ref*]>                              |
-| ``0x04``    | __NODE_END__          | <*empty*>                                                                           |
-| ``0x05``    | __PROPERTY_START__    | <__key__[*string-ref*]><__valueType__[*value-type*]>                                |
-| ``0x06``    | __PROPERTY_END__      | <*empty*>                                                                           |
-| ``0x07``    | __EDGE__              | <__type__[*string-ref*]><__targetType__[*string-ref]><__targetId__[*string-ref*]>   |
-| ``0x15``    | __EDGE_START__        | <__type__[*string-ref*]><__targetType__[*string-ref]><__targetId__[*string-ref*]>   |
-| ``0x16``    | __EDGE_END__          | <*empty*>                                                                           |
-| ``0x08``    | __FEATURE_START__     | <__key__[*string-ref*]><__valueType__[*value-type*]>                                |
-| ``0x09``    | __FEATURE_END__       | <*empty*>                                                                           |
-| ``0x0A``    | __VALUE_INTEGER__     | 4-byte integer                                                                      |
-| ``0x0B``    | __VALUE_FLOAT__       | 4-byte [IEEE-754-2008][] floating-point                                             |
-| ``0x0C``    | __VALUE_BOOLEAN__     | ``0x0F`` (true) or ``0xF0`` (false)                                                 |
-| ``0x0D``    | __VALUE_STRING__      | <*string-ref*>                                                                      |
-| ``0x0F``    | __USES_SCHEMA__       | <__schemaId__[*string-ref*]>                                                        |
-| ``0x10``    | __CONTENT__           | <__contentType__[*string*]><__content__[*block_seq*]>                               |
-| ``0x11``    | __CONTENT_CHKSUM__    | <__contentType__[*string*]><__checksum__[*4-byte integer*]>                         |
-| ``0x12``    | __AS_SPAN__           | <__nodeType__[*string-ref*]>                                                        |
-| ``0x13``    | __AS_SEQUENCE__       | <__nodeType__[*string-ref*]>                                                        |
-| ``0x14``    | __AS_SPAN_CONTAINER__ | <__nodeType__[*string-ref*]><__spanType__[*string-ref*]>                            |
+| Code        | Name                        | Event-Code-Specific Data                                                             |
+| ----------- | ----------------------------| -------------------------------------------------------------------------------------|
+| ``0x01``    | __DOC_START__               | <__docId__[*string-ref*]>                                                            |
+| ``0x02``    | __DOC_END__                 | <*empty*>                                                                            |
+| ``0x17``    | __FRAGMENT_START__          | <__fragmentId__[*string-ref*]><__sourceGraphId__[*string-ref*]>                      |
+| ``0x18``    | __FRAGMENT_END__            | <*empty*>                                                                            |
+| ``0x19``    | __DIFF_START__              | <__sourceDocId__[*string-ref*]><__targetDocId__[*string-ref*]>                       |
+| ``0x1A``    | __DIFF_END__                | <*empty*>                                                                            |
+| ``0x1B``    | __SOURCE_TARGET_NODE__      | <__nodeType__[*string-ref*]><__sourceId__[*string-ref*]><__sourceId__[*string-ref*]> |
+| ``0x03``    | __NODE_START__              | <__nodeType__[*string-ref*]><__nodeId__[*string-ref*]>                               |
+| ``0x04``    | __NODE_END__                | <*empty*>                                                                            |
+| ``0x1C``    | __NODE_REMOVE_START__       | <__nodeType__[*string-ref*]><__nodeId__[*string-ref*]>                               |
+| ``0x1D``    | __NODE_REMOVE_END__         | <*empty*>                                                                            |
+| ``0x1E``    | __NODE_UPDATE_START__       | <__nodeType__[*string-ref*]><__nodeId__[*string-ref*]>                               |
+| ``0x1F``    | __NODE_UPDATE_END__         | <*empty*>                                                                            |
+| ``0x05``    | __PROPERTY_START__          | <__key__[*string-ref*]><__valueType__[*value-type*]>                                 |
+| ``0x06``    | __PROPERTY_END__            | <*empty*>                                                                            |
+| ``0x20``    | __PROPERTY_REMOVE_START__   | <__key__[*string-ref*]><__valueType__[*value-type*]>                                 |
+| ``0x21``    | __PROPERTY_REMOVE_END__     | <*empty*>                                                                            |
+| ``0x07``    | __EDGE__                    | <__type__[*string-ref*]><__targetType__[*string-ref]><__targetId__[*string-ref*]>    |
+| ``0x15``    | __EDGE_START__              | <__type__[*string-ref*]><__targetType__[*string-ref]><__targetId__[*string-ref*]>    |
+| ``0x16``    | __EDGE_END__                | <*empty*>                                                                            |
+| ``0x22``    | __EDGE_REMOVE__             | <__type__[*string-ref*]><__targetType__[*string-ref]><__targetId__[*string-ref*]>    |
+| ``0x08``    | __FEATURE_START__           | <__key__[*string-ref*]><__valueType__[*value-type*]>                                 |
+| ``0x09``    | __FEATURE_END__             | <*empty*>                                                                            |
+| ``0x0A``    | __VALUE_INTEGER__           | 4-byte integer                                                                       |
+| ``0x0B``    | __VALUE_FLOAT__             | 4-byte [IEEE-754-2008][] floating-point                                              |
+| ``0x0C``    | __VALUE_BOOLEAN__           | ``0x0F`` (true) or ``0xF0`` (false)                                                  |
+| ``0x0D``    | __VALUE_STRING__            | <*string-ref*>                                                                       |
+| ``0x0F``    | __USES_SCHEMA__             | <__schemaId__[*string-ref*]>                                                         |
+| ``0x10``    | __CONTENT__                 | <__contentType__[*string*]><__content__[*block_seq*]>                                |
+| ``0x11``    | __CONTENT_CHKSUM__          | <__contentType__[*string*]><__checksum__[*4-byte integer*]>                          |
+| ``0x12``    | __AS_SPAN__                 | <__nodeType__[*string-ref*]>                                                         |
+| ``0x13``    | __AS_SEQUENCE__             | <__nodeType__[*string-ref*]>                                                         |
+| ``0x14``    | __AS_SPAN_CONTAINER__       | <__nodeType__[*string-ref*]><__spanType__[*string-ref*]>                             |
 
 The __valueType__ that is referenced in __PROPERTY_START__ and __PROPERTY_END__ is as follows:
 
@@ -996,6 +1099,16 @@ Edge specification has been expanded to support typed properties identical to No
 A schema can be specified at a graph fragment level similar to the core document schema with
 adjustments to support edge property definition and exclusion of trait and node id pattern definition.
 
+Graph Diff {#graph-diff}
+--------------------------------
+
+Graph diff is a format specification which captures differences between a source and target graph as
+an event stream relative to modifications made on source graph. The diff format includes enough
+information to be reversible such that a diff can be unapplied from a targetGraph to get back to
+source graph. This is achieved by preserving all information that is removed in the diff and also
+keeping node id equality mappings between source and target graphs.
+
+Diff information can be stored using the standard (#transfer-formats).
 
 Corpus-Scoped Analytics {#corpus-scoped-analytics}
 --------------------------------------------------

@@ -7,6 +7,7 @@
 	<!-- the root element 'document' -->
 	<xsd:element name="document" type="document"/>
 	<xsd:element name="graphFragment" type="graphFragment"/>
+	<xsd:element name="graphDiff" type="graphDiff"/>
 
 	<xsd:complexType name="document">
 		<xsd:sequence>
@@ -27,6 +28,29 @@
 		</xsd:sequence>
 		<xsd:attribute name="sourceGraph" type="xsd:string" use="required"/>
 		<xsd:attribute name="fragmentIdentifier" type="xsd:string" use="required"/>
+	</xsd:complexType>
+
+	<xsd:complexType name="graphDiff">
+		<xsd:sequence>
+			<xsd:element name="schema" type="schema" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="asSpan" type="asSpan" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="asSequence" type="asSequence" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="asSpanContainer" type="asSpanContainer" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="sourceTargetNode" type="sourceTargetNode" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:choice minOccurs="0" maxOccurs="unbounded">
+				<xsd:element name="node" type="node"/>
+				<xsd:element name="nodeUpdate" type="nodeUpdate"/>
+				<xsd:element name="nodeRemove" type="node"/>
+			</xsd:choice>
+		</xsd:sequence>
+		<xsd:attribute name="sourceId" type="xsd:string" use="required"/>
+		<xsd:attribute name="targetId" type="xsd:string" use="required"/>
+	</xsd:complexType>
+
+	<xsd:complexType name="sourceTargetNode">
+		<xsd:attribute name="nodeType" type="xsd:string" use="required"/>
+		<xsd:attribute name="sourceId" type="xsd:string" use="required"/>
+		<xsd:attribute name="targetId" type="xsd:string" use="required"/>
 	</xsd:complexType>
 
 	<xsd:complexType name="schema">
@@ -73,6 +97,27 @@
 				<xsd:element name="floatFeat" type="floatValued"/>
 				<xsd:element name="boolFeat" type="booleanValued"/>
 				<xsd:element name="strFeat" type="stringValued"/>
+			</xsd:choice>
+		</xsd:sequence>
+		<xsd:attribute name="type" type="xsd:string" use="required"/>
+		<xsd:attribute name="id" type="xsd:string" use="required"/>
+	</xsd:complexType>
+
+	<xsd:complexType name="nodeUpdate">
+		<xsd:sequence>
+			<xsd:choice minOccurs="0" maxOccurs="unbounded">
+				<xsd:element name="intPropRemove" type="integerValued"/>
+				<xsd:element name="floatPropRemove" type="floatValued"/>
+				<xsd:element name="boolPropRemove" type="booleanValued"/>
+				<xsd:element name="strPropRemove" type="stringValued"/>
+				<xsd:element name="intProp" type="integerValued"/>
+				<xsd:element name="floatProp" type="floatValued"/>
+				<xsd:element name="boolProp" type="booleanValued"/>
+				<xsd:element name="strProp" type="stringValued"/>
+			</xsd:choice>
+			<xsd:choice minOccurs="0" maxOccurs="unbounded">
+				<xsd:element name="edge" type="edge"/>
+				<xsd:element name="edgeRemove" type="edge"/>
 			</xsd:choice>
 		</xsd:sequence>
 		<xsd:attribute name="type" type="xsd:string" use="required"/>
