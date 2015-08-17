@@ -322,20 +322,20 @@ Here is the general structure:
 
 ```xml
 <pagis xmlns="http://pagi.org/schema/" 
-       pagis-uri="http://www.example.com/spec-example-1">
-  <nodeType name="" idGenerator="">
+       pagis-uri="http://www.example.com/spec-example-1" readableName="">
+  <nodeType name="" readableName="" idGenerator="">
     <span/>
     <sequence/>
     <container edgeType=""/>
     <spanContainer spanType=""/>
-    <integerProperty name="" minRange="" maxRange="" minArity="" maxArity=""/>
-    <floatProperty name="" minRange="" maxRange="" minArity="" maxArity=""/>
-    <booleanProperty name="" minArity="" maxArity=""/>
-    <stringProperty name="" minArity="" maxArity=""/>
-    <enumProperty name="" minArity="" maxArity="">
-      <item name=""/>
+    <integerProperty name="" readableName=""  minRange="" maxRange="" minArity="" maxArity=""/>
+    <floatProperty name="" readableName="" minRange="" maxRange="" minArity="" maxArity=""/>
+    <booleanProperty name="" readableName="" minArity="" maxArity=""/>
+    <stringProperty name="" readableName="" minArity="" maxArity=""/>
+    <enumProperty name="" readableName="" minArity="" maxArity="">
+      <item name="" readableName=""/>
     </enum>
-    <edgeType name="" targetNodeType="" minArity="" maxArity="" targetMinArity="" targetMaxArity=""/>
+    <edgeType name="" readableName="" targetNodeType="" minArity="" maxArity="" targetMinArity="" targetMaxArity=""/>
     <edgeType name="" minArity="" maxArity="" targetMinArity="" targetMaxArity="">
       <targetNodeType name=""/>
       <targetNodeType name=""/>
@@ -353,6 +353,13 @@ node with the Contains-Sequence trait) would be designated by the attributes
 min="1", max="unbounded". The "targetMinArity" and "targetMaxArity" attributes
 on the edge element specify the same limitations, except on the node type that
 the edge is targeting.
+
+The "readableName" attributes on pagis, nodeType, edge, property, and item XML
+elements each defines an alias for its element, allowing the "name" to be more
+of an abbreviation and the "readableName" to be more clear. The "readableName"
+is optional and unimportant in the implementation of the data structure. In all
+references to nodeTypes, the "name" attribute will define the String value to
+be used, NOT the "readableName" attribute.
 
 #### Id Generator
 
@@ -437,12 +444,14 @@ style conventions in the appropriate language.
 #### Schema
 
 * String getName()
+* String getReadableName()
 * Map(String, NodeType) getNodeTypes()
 * Schema getParentSchema()
 
 #### NodeType
 
 * String getName()
+* String getReadableName()
 * boolean isSpan()
 * boolean isSequence()
 * boolean isContainer()
@@ -456,6 +465,7 @@ style conventions in the appropriate language.
 
 * ValueType getValueType()
 * String getName()
+* String getReadableName()
 * int getMinArity()
 * int getMaxArity() // -1 represents unbounded unless a language has a better 
   representation
@@ -477,9 +487,15 @@ style conventions in the appropriate language.
 
 * String[] getItems()
 
+###### Items
+
+* String getName()
+* String getReadableName()
+
 #### EdgeSpec
 
 * String getName()
+* String getReadableName()
 * String[] getTargetNodeTypes()
 * int getMinArity()
 * int getMaxArity()
